@@ -15,6 +15,14 @@ class ListScreen extends StatefulWidget {
 
 class _ListScreenState extends State<ListScreen> {
   bool isExpandedProfessorsList = true;
+  List<Map<dynamic,dynamic>> listofMap = [
+    {
+      "name":"name",
+      "demo":"demo",
+      "first":"first",
+      "second":"second",
+    }
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -200,133 +208,144 @@ class _ListScreenState extends State<ListScreen> {
                 ),
       body: ResponsiveWidget.isLargeScreen(context) ||
               ResponsiveWidget.isMediumScreen(context)
-          ? Stack(
-              children: [
-                Container(
-                  height: double.infinity,
-                  color: CommonColorConstants.backgroundColor,
-                  padding: EdgeInsets.all(24.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Professors List",
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+          ? Container(
+              height: double.infinity,
+              color: CommonColorConstants.backgroundColor,
+              padding: EdgeInsets.all(24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Professors List",
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        6.0,
                       ),
-                      const SizedBox(
-                        height: 20.0,
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 8.0,
                       ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            6.0,
-                          ),
-                        ),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16.0,
-                            vertical: 8.0,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisSize: MainAxisSize.min,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "All Professors",
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Spacer(),
-                                  GestureDetector(
-                                    onTap: () {
-                                      isExpandedProfessorsList =
-                                          !isExpandedProfessorsList;
-                                      setState(() {});
-                                    },
-                                    child: Icon(
-                                      isExpandedProfessorsList == true
-                                          ? Icons.keyboard_arrow_down_outlined
-                                          : Icons.keyboard_arrow_up_outlined,
-                                    ),
-                                  ),
-                                ],
+                              Text(
+                                "All Professors",
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              isExpandedProfessorsList == true
-                                  ? Container(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Divider(
-                                            thickness: 2.0,
-                                          ),
-                                          Align(
-                                            alignment: Alignment.centerLeft,
-
-                                            // child: ElevatedButton.icon(
-                                            //   onPressed: () {
-                                            //     Navigator.pushNamed(context,
-                                            //         AdmissionForm.routeName);
-                                            //   },
-                                            //   label: Text("Add New"),
-                                            //   icon: Icon(
-                                            //     Icons.add,
-                                            //   ),
-                                            // ),
-                                            child: ElevatedButton(
-                                              onPressed: () {},
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                  vertical: 6.0,
-                                                ),
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Text(
-                                                      "Add New",
-                                                      style: TextStyle(
-                                                        fontSize: 14.0,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 6.0,
-                                                    ),
-                                                    Icon(
-                                                      Icons.add,
-                                                      size: 20.0,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              style: ElevatedButton.styleFrom(
-                                                primary: CommonColorConstants
-                                                    .blueLightColor,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : SizedBox(),
+                              Spacer(),
+                              GestureDetector(
+                                onTap: () {
+                                  isExpandedProfessorsList =
+                                      !isExpandedProfessorsList;
+                                  setState(() {});
+                                },
+                                child: Icon(
+                                  isExpandedProfessorsList == true
+                                      ? Icons.keyboard_arrow_down_outlined
+                                      : Icons.keyboard_arrow_up_outlined,
+                                ),
+                              ),
                             ],
                           ),
-                        ),
+                          isExpandedProfessorsList == true
+                              ? Container(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Divider(
+                                        thickness: 2.0,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+
+                                        // child: ElevatedButton.icon(
+                                        //   onPressed: () {
+                                        //     Navigator.pushNamed(context,
+                                        //         AdmissionForm.routeName);
+                                        //   },
+                                        //   label: Text("Add New"),
+                                        //   icon: Icon(
+                                        //     Icons.add,
+                                        //   ),
+                                        // ),
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.pushNamed(context,
+                                                AdmissionForm.routeName);
+                                          },
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 6.0,
+                                            ),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  "Add New",
+                                                  style: TextStyle(
+                                                    fontSize: 14.0,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 6.0,
+                                                ),
+                                                Icon(
+                                                  Icons.add,
+                                                  size: 20.0,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            primary: CommonColorConstants
+                                                .blueLightColor,
+                                          ),
+                                        ),
+                                      ),
+                                      Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Text("${listofMap[0]}"),
+                                              Text("${listofMap[1]}"),
+                                              Text("${listofMap[2]}"),
+                                              Text("${listofMap[3]}"),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : SizedBox(),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             )
           : Container(
               color: Colors.white,
