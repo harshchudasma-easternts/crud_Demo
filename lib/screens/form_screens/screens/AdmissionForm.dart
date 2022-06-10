@@ -74,31 +74,13 @@ class _AdmissionFormState extends State<AdmissionForm> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Add Professors",
-                              style: TextStyle(
-                                fontSize: 24.0,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.grey.shade700,
-                              ),
-                            ),
-                            Spacer(),
-                            Container(
-                              padding: EdgeInsets.all(12.0),
-                              decoration: BoxDecoration(
-                                color: CommonColorConstants.blueLightColor,
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              child: Icon(
-                                Icons.phone,
-                                size: 16.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
+                        Text(
+                          "Add Professors",
+                          style: TextStyle(
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey.shade700,
+                          ),
                         ),
                         const SizedBox(
                           height: 16.0,
@@ -150,6 +132,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                           if (value!.isEmpty) {
                                             return "value is Empty";
                                           }
+                                          return null;
                                         },
                                       ),
                                     ),
@@ -634,18 +617,42 @@ class _AdmissionFormState extends State<AdmissionForm> {
                               ),
                             ),
                             Spacer(),
-                            Container(
-                              padding: EdgeInsets.all(12.0),
-                              decoration: BoxDecoration(
-                                color: CommonColorConstants.blueLightColor,
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              child: Icon(
-                                Icons.phone,
-                                size: 16.0,
-                                color: Colors.white,
-                              ),
-                            ),
+                            ResponsiveWidget.isMobileScreen(context)
+                                ? Padding(
+                                    padding: const EdgeInsets.only(right: 16.0),
+                                    child: Icon(
+                                      Icons.notifications_outlined,
+                                      size: 24.0,
+                                    ),
+                                  )
+                                : SizedBox(),
+                            ResponsiveWidget.isMobileScreen(context)
+                                ? Padding(
+                                    padding: const EdgeInsets.only(right: 16.0),
+                                    child: Icon(
+                                      Icons.mail_outline,
+                                      size: 24.0,
+                                    ),
+                                  )
+                                : SizedBox(),
+                            ResponsiveWidget.isMobileScreen(context)
+                                ? Padding(
+                                    padding: const EdgeInsets.only(right: 16.0),
+                                    child: Container(
+                                      height: 32.0,
+                                      width: 32.0,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: AssetImage(
+                                            CommonImageConstats.profileImage,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox(),
                           ],
                         ),
                         const SizedBox(height: 16.0),
