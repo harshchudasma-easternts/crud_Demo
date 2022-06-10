@@ -16,72 +16,46 @@ class ListScreen extends StatefulWidget {
 class _ListScreenState extends State<ListScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: ResponsiveWidget.isMobileScreen(context)
-            ? Size.fromHeight(50.0)
-            : Size.fromHeight(60.0),
-        child: HeaderNavigationBar(),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: CommonColorConstants.backgroundColor,
-          padding: EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "Professors List",
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    6.0,
+    return SafeArea(
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: ResponsiveWidget.isMobileScreen(context)
+              ? Size.fromHeight(50.0)
+              : Size.fromHeight(60.0),
+          child: HeaderNavigationBar(),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Professors List",
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 8.0,
-                  ),
-                  child: AllProfessorsList(),
+                const SizedBox(
+                  height: 20.0,
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      floatingActionButton: ElevatedButton.icon(
-        onPressed: () {
-          Navigator.pushNamed(context, AdmissionForm.routeName);
-        },
-        icon: Icon(
-          Icons.add,
-          size: 24.0,
-        ),
-        label: Text(
-          "Admission",
-          style: TextStyle(
-            fontSize: 16.0,
-          ),
-        ),
-        style: ElevatedButton.styleFrom(
-          primary: Colors.teal,
-          padding: EdgeInsets.symmetric(
-            horizontal: 16.0,
-            vertical: 8.0,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              50.0,
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      6.0,
+                    ),
+                  ),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
+                    child: AllProfessorsList(),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
