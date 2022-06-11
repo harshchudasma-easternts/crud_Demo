@@ -40,11 +40,17 @@ class _AdmissionFormState extends State<AdmissionForm> {
       TextEditingController();
   late final TextEditingController _emailTextEditingController =
       TextEditingController();
+  late final TextEditingController _joiningDateTextEditingController =
+      TextEditingController();
   late final TextEditingController _passwordTextEditingController =
       TextEditingController();
   late final TextEditingController _confirmTextEditingController =
       TextEditingController();
   late final TextEditingController _designationTExtEdtitingcontroller =
+      TextEditingController();
+  late final TextEditingController _departmentTextEditingController =
+      TextEditingController();
+  late final TextEditingController _genderTextEditingController =
       TextEditingController();
   late final TextEditingController _mobileNoTextEditingController =
       TextEditingController();
@@ -186,6 +192,8 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     ),
                                     Expanded(
                                       child: TextFormField(
+                                        controller:
+                                            _joiningDateTextEditingController,
                                         cursorColor:
                                             CommonColorConstants.blueLightColor,
                                         decoration: InputDecoration(
