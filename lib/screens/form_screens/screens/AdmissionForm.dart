@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:animation_demo/common_widgets/header_navbar_widget.dart';
 import 'package:animation_demo/constants/color_constants.dart';
 import 'package:animation_demo/constants/image_constants.dart';
+import 'package:animation_demo/utils/permission_utils.dart';
 import 'package:animation_demo/utils/responsive_widget.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
 
 class AdmissionForm extends StatefulWidget {
   static const routeName = "/admissionForm";
@@ -30,6 +35,10 @@ class _AdmissionFormState extends State<AdmissionForm> {
     "Male",
     "Female",
   ];
+  final picker = ImagePicker();
+  late String filePath;
+  late String fileName;
+  static const String UPLOAD_IMAGE = 'Upload Image';
   String? selectedCourse;
   String? selectedDepartment;
   String? selectedGender;
@@ -61,6 +70,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
 
   @override
   Widget build(BuildContext context) {
+    TargetPlatform platform = Theme.of(context).platform;
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
@@ -133,6 +143,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             fontSize: 16.0,
                                             color: Colors.grey,
                                           ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: CommonColorConstants
+                                                  .blueLightColor,
+                                            ),
+                                          ),
                                         ),
                                         validator: (value) {
                                           if (value!.isEmpty) {
@@ -159,6 +175,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             fontSize: 16.0,
                                             color: Colors.grey,
                                           ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: CommonColorConstants
+                                                  .blueLightColor,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     )
@@ -184,6 +206,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             fontSize: 16.0,
                                             color: Colors.grey,
                                           ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: CommonColorConstants
+                                                  .blueLightColor,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -203,6 +231,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                           labelStyle: TextStyle(
                                             fontSize: 16.0,
                                             color: Colors.grey,
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: CommonColorConstants
+                                                  .blueLightColor,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -230,6 +264,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             fontSize: 16.0,
                                             color: Colors.grey,
                                           ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: CommonColorConstants
+                                                  .blueLightColor,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -249,6 +289,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                           labelStyle: TextStyle(
                                             fontSize: 16.0,
                                             color: Colors.grey,
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: CommonColorConstants
+                                                  .blueLightColor,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -275,6 +321,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                           labelStyle: TextStyle(
                                             fontSize: 16.0,
                                             color: Colors.grey,
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: CommonColorConstants
+                                                  .blueLightColor,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -428,6 +480,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             fontSize: 16.0,
                                             color: Colors.grey,
                                           ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: CommonColorConstants
+                                                  .blueLightColor,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -448,6 +506,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     hintStyle: TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.grey,
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color:
+                                            CommonColorConstants.blueLightColor,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -474,7 +538,22 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       strokeWidth: 1,
                                       dashPattern: [10, 6],
                                       child: GestureDetector(
-                                        onTap: () {},
+                                        onTap: () {
+                                          PermissionUtil.checkPermission(
+                                                  platform)
+                                              .then(
+                                            (isGranted) async {
+                                              if (isGranted) {
+                                                print(
+                                                    "Image related filename and filepath is tapped");
+                                                _selectImageFromGallary();
+                                              } else {
+                                                print(
+                                                    'perimssion nont granted...........');
+                                              }
+                                            },
+                                          );
+                                        },
                                         child: Container(
                                           alignment: Alignment.center,
                                           height: 100.0,
@@ -506,6 +585,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     hintStyle: TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.grey,
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color:
+                                            CommonColorConstants.blueLightColor,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -581,38 +666,6 @@ class _AdmissionFormState extends State<AdmissionForm> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Container(
-                        //   height: 320.0,
-                        //   decoration: BoxDecoration(
-                        //     gradient: LinearGradient(
-                        //       begin: Alignment.topRight,
-                        //       end: Alignment.bottomLeft,
-                        //       stops: const [
-                        //         0.1,
-                        //         0.4,
-                        //         0.6,
-                        //         0.9,
-                        //       ],
-                        //       colors: [
-                        //         CommonColorConstants.dark_blue_70,
-                        //         CommonColorConstants.dark_blue_65,
-                        //         CommonColorConstants.dark_blue_60,
-                        //         CommonColorConstants.dark_blue_58,
-                        //       ],
-                        //     ),
-                        //   ),
-                        //   child: Stack(
-                        //     children: [
-                        //       Container(
-                        //         height: double.infinity,
-                        //         width: double.infinity,
-                        //         child: CustomPaint(
-                        //           painter: CurvePainter(),
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -700,6 +753,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       fontSize: 16.0,
                                       color: Colors.grey,
                                     ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color:
+                                            CommonColorConstants.blueLightColor,
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(
@@ -716,6 +775,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.grey,
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color:
+                                            CommonColorConstants.blueLightColor,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -734,6 +799,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       fontSize: 16.0,
                                       color: Colors.grey,
                                     ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color:
+                                            CommonColorConstants.blueLightColor,
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(
@@ -749,6 +820,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.grey,
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color:
+                                            CommonColorConstants.blueLightColor,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -767,6 +844,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       fontSize: 16.0,
                                       color: Colors.grey,
                                     ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color:
+                                            CommonColorConstants.blueLightColor,
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(
@@ -783,6 +866,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.grey,
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color:
+                                            CommonColorConstants.blueLightColor,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -801,6 +890,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.grey,
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color:
+                                            CommonColorConstants.blueLightColor,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -938,6 +1033,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       fontSize: 16.0,
                                       color: Colors.grey,
                                     ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color:
+                                            CommonColorConstants.blueLightColor,
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(
@@ -955,6 +1056,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     hintStyle: TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.grey,
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color:
+                                            CommonColorConstants.blueLightColor,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -981,7 +1088,22 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       strokeWidth: 1,
                                       dashPattern: [10, 6],
                                       child: GestureDetector(
-                                        onTap: () {},
+                                        onTap: () {
+                                          PermissionUtil.checkPermission(
+                                                  platform)
+                                              .then(
+                                            (isGranted) async {
+                                              if (isGranted) {
+                                                print(
+                                                    "Image related filename and filepath is tapped");
+                                                _selectImageFromGallary();
+                                              } else {
+                                                print(
+                                                    'perimssion nont granted...........');
+                                              }
+                                            },
+                                          );
+                                        },
                                         child: Container(
                                           alignment: Alignment.center,
                                           height: 100.0,
@@ -1013,6 +1135,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     hintStyle: TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.grey,
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color:
+                                            CommonColorConstants.blueLightColor,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -1083,9 +1211,19 @@ class _AdmissionFormState extends State<AdmissionForm> {
     );
   }
 
-  // void _formValidation() {
-  //   if(_firstNameTextEditingController.text.isEmpty){
-  //     print("Hello ");
-  //   }
-  // }
+  void _selectImageFromGallary() async {
+    print(
+        "Image related filename and filepath is tapped in selecte from gallery");
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    print("Image related filename and filepath is tapped $pickedFile");
+    File image = File(pickedFile!.path);
+    print("Image related filename and 
+    
+    
+    filepath is tapped after image file");
+    filePath = image.path;
+    fileName = path.basename(image.path);
+    print(
+        "Image related filename and filepath $fileName,$filePath"); // handwriting upload api call
+  }
 }

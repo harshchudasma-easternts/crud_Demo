@@ -235,6 +235,41 @@ class _AllProfessorsListState extends State<AllProfessorsList> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, AdmissionForm.routeName);
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 6.0,
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Add New",
+                            style: TextStyle(
+                              fontSize: 14.0,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 6.0,
+                          ),
+                          Icon(
+                            Icons.add,
+                            size: 20.0,
+                          ),
+                        ],
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: CommonColorConstants.blueLightColor,
+                    ),
+                  ),
+                ),
                 const SizedBox(
                   height: 24.0,
                 ),
