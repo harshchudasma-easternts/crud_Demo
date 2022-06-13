@@ -24,9 +24,6 @@ class PermissionUtil {
   static Future<bool> _requestPermission() async {
     Map<Permission, PermissionStatus> permissionStatusesMap = await [
       Permission.storage,
-      Permission.requestInstallPackages,
-      Permission.camera,
-      Permission.microphone
     ].request();
 
     bool isAllPermissionGranted = true;
