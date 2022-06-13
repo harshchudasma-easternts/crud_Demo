@@ -11,6 +11,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
@@ -48,7 +49,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
   final picker = ImagePicker();
   late String filePath;
   late String fileName;
-  String base64Image = "";
+  Uint8List webImage = Uint8List(0);
 
   String? selectedCourse;
   String? selectedDepartment;
@@ -605,8 +606,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             CommonColorConstants.blueLightColor,
                                         focusNode: _mobileNoFocusNode,
                                         maxLength: 15,
+                                        inputFormatters: [
+                                          
+                                        ],
                                         keyboardType: TextInputType.phone,
                                         decoration: InputDecoration(
+                                          
                                           contentPadding: EdgeInsets.symmetric(
                                               vertical: 6.0),
                                           labelText: "Mobile No.",
@@ -665,7 +670,10 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 const SizedBox(
                                   height: 24.0,
                                 ),
-                                Column(
+                                webImage.isNotEmpty ? Container(
+                                  height: 50.0,
+                                  child: Image.memory(webImage),
+                                ) : Column(
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
                                   mainAxisSize: MainAxisSize.min,
@@ -1492,24 +1500,30 @@ class _AdmissionFormState extends State<AdmissionForm> {
   }
 
   void _selectImageFromGallary() async {
-    Uint8List webImage = Uint8List(10);
-    if(!kIsWeb){
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-      File image = File(pickedFile!.path);
-      filePath = image.path;
-      fileName = path.basename(image.path);
-    }else{
-      print("this is web");
-      final ImagePicker _picker = ImagePicker();
-      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-      if (image != null) {
-        var f = await image.readAsBytes();
-        setState(() {
-          webImage = f;
-          base64Image = base64Encode(webImage);
-        });
-      }
-    }
+
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    File image = File(pickedFile!.path);
+    filePath = image.path;
+    fileName = path.basename(image.path);
+    print("${fileName},${filePath}");
+    setState(() {});
+    // if(!kIsWeb){
+    //   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    //   File image = File(pickedFile!.path);
+    //   filePath = image.path;
+    //   fileName = path.basename(image.path);
+    //   setState(() {});
+    // }else{
+    //   print("this is web");
+    //   final ImagePicker _picker = ImagePicker();
+    //   XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    //   if (image != null) {
+    //     var f = await image.readAsBytes();
+    //     setState(() {
+    //       webImage = f;
+    //     });
+    //   }
+    // }
 
 
   }
