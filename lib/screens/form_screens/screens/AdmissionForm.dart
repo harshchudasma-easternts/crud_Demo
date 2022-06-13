@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:animation_demo/common_widgets/header_navbar_widget.dart';
 import 'package:animation_demo/constants/color_constants.dart';
@@ -7,10 +9,12 @@ import 'package:animation_demo/utils/permission_utils.dart';
 import 'package:animation_demo/utils/responsive_widget.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AdmissionForm extends StatefulWidget {
   static const routeName = "/admissionForm";
@@ -24,6 +28,9 @@ class AdmissionForm extends StatefulWidget {
 class _AdmissionFormState extends State<AdmissionForm> {
   DateTime currentDate = DateTime.now();
   String formattedDate = DateFormat('dd-mm-yyyy').format(DateTime.now());
+
+  bool password = true;
+  bool confirmPassword = true;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -41,6 +48,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
   final picker = ImagePicker();
   late String filePath;
   late String fileName;
+  String base64Image = "";
 
   String? selectedCourse;
   String? selectedDepartment;
@@ -74,6 +82,8 @@ class _AdmissionFormState extends State<AdmissionForm> {
   late final _passwordFocusNode = FocusNode();
   late final _confirmPasswordFocusNode = FocusNode();
   late final _designationFocusNode = FocusNode();
+  late final _departmentFocusNode = FocusNode();
+  late final _genderFocusNode = FocusNode();
   late final _mobileNoFocusNode = FocusNode();
   late final _addressFocusNode = FocusNode();
   late final _educationFocusNode = FocusNode();
@@ -94,6 +104,8 @@ class _AdmissionFormState extends State<AdmissionForm> {
     _passwordFocusNode.addListener(() { setState(() {});});
     _confirmPasswordFocusNode.addListener(() { setState(() {});});
     _designationFocusNode.addListener(() { setState(() {});});
+    _departmentFocusNode.addListener(() {setState(() {});});
+    _genderFocusNode.addListener(() {setState(() {}); });
     _mobileNoFocusNode.addListener(() { setState(() {});});
     _addressFocusNode.addListener(() { setState(() {});});
     _educationFocusNode.addListener(() { setState(() {});});
@@ -171,7 +183,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.symmetric(
                                               vertical: 6.0),
-                                          labelText: "FirstName*",
+                                          labelText: "FirstName",
                                           labelStyle: TextStyle(
                                             fontSize: 16.0,
                                             color: _firstNameFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
@@ -184,9 +196,9 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             ),
                                           ),
                                         ),
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return "value is Empty";
+                                        validator: (firstNameValue) {
+                                          if (firstNameValue!.isEmpty) {
+                                            return "Please enter the firstname";
                                           }
                                           return null;
                                         },
@@ -202,6 +214,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                         cursorColor:
                                             CommonColorConstants.blueLightColor,
                                         focusNode: _lastNameFocusNode,
+                                        maxLength: 20,
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.symmetric(
                                               vertical: 6.0),
@@ -210,6 +223,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             fontSize: 16.0,
                                             color: _lastNameFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
                                           ),
+                                          counterText: "",
                                           focusedBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
                                               color: CommonColorConstants
@@ -217,6 +231,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             ),
                                           ),
                                         ),
+                                        validator: (lastNameValue) {
+                                          if (lastNameValue!.isEmpty) {
+                                            return "Please enter the lastname";
+                                          }
+                                          return null;
+                                        },
                                       ),
                                     )
                                   ],
@@ -234,6 +254,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                         cursorColor:
                                             CommonColorConstants.blueLightColor,
                                         focusNode: _emailFocusNode,
+                                        keyboardType: TextInputType.emailAddress,
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.symmetric(
                                               vertical: 6.0),
@@ -249,6 +270,15 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             ),
                                           ),
                                         ),
+                                        validator: (String? email){
+                                          if(email!.isEmpty){
+                                            return "Please enter the email";
+                                          }else
+                                          if(!EmailValidator.validate(email!)){
+                                            return "Please enter the valid email";
+                                          }
+                                          return null;
+                                        },
                                       ),
                                     ),
                                     const SizedBox(
@@ -289,11 +319,13 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                   children: [
                                     Expanded(
                                       child: TextFormField(
+                                        obscureText: password,
                                         controller:
                                             _passwordTextEditingController,
                                         cursorColor:
                                             CommonColorConstants.blueLightColor,
                                         focusNode: _passwordFocusNode,
+                                        maxLength: 15,
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.symmetric(
                                               vertical: 6.0),
@@ -308,7 +340,26 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                                   .blueLightColor,
                                             ),
                                           ),
+                                          suffixIcon: GestureDetector(
+                                            onTap: (){
+                                              password = !password;
+                                              setState(() {});
+                                            },
+                                            child: Icon(
+                                              password ? Icons.visibility : Icons.visibility_off,
+                                              color: _passwordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                            ),
+                                          ),
+                                          counterText: "",
                                         ),
+                                        validator: (passValue){
+                                          if(passValue!.isEmpty){
+                                            return "password is empty";
+                                          }else if(passValue!.length < 8 || passValue!.length > 15){
+                                            return "password must be minimum 8 and maximum 15 character required";
+                                          }
+                                          return null;
+                                        },
                                       ),
                                     ),
                                     const SizedBox(
@@ -316,11 +367,13 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     ),
                                     Expanded(
                                       child: TextFormField(
+                                        obscureText: confirmPassword,
                                         controller:
                                             _confirmTextEditingController,
                                         cursorColor:
                                             CommonColorConstants.blueLightColor,
                                         focusNode: _confirmPasswordFocusNode,
+                                        maxLength: 15,
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.symmetric(
                                               vertical: 6.0),
@@ -329,6 +382,17 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             fontSize: 16.0,
                                             color: _confirmPasswordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
                                           ),
+                                          suffixIcon: GestureDetector(
+                                            onTap: (){
+                                              confirmPassword = !confirmPassword;
+                                              setState(() {});
+                                            },
+                                            child: Icon(
+                                                confirmPassword ? Icons.visibility : Icons.visibility_off,
+                                                color: _confirmPasswordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                            ),
+                                          ),
+                                          counterText: "",
                                           focusedBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
                                               color: CommonColorConstants
@@ -336,6 +400,16 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             ),
                                           ),
                                         ),
+                                        validator: (confirmPassValue){
+                                          if(confirmPassValue!.isEmpty){
+                                            return "confirm password is empty";
+                                          }else if(confirmPassValue!.length < 8 || confirmPassValue!.length > 15){
+                                            return "password must be minimum 8 and maximum 15 character required";
+                                          }else if(confirmPassValue != _passwordTextEditingController.text){
+                                            return "password must be same as above";
+                                          }
+                                          return null;
+                                        },
                                       ),
                                     ),
                                   ],
@@ -369,68 +443,76 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             ),
                                           ),
                                         ),
+                                        validator: (designationValue){
+                                          if(designationValue!.isEmpty){
+                                            return "Please enter the designation";
+                                          }
+                                          return null;
+                                        },
                                       ),
                                     ),
                                     const SizedBox(
                                       width: 12.0,
                                     ),
                                     Expanded(
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 4.0,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          border: Border(
-                                            bottom: BorderSide(
-                                              width: 3.0,
-                                              color: Colors.grey.shade300,
+                                      child: DropdownButtonHideUnderline(
+                                        child: DropdownButtonFormField2(
+                                          icon: Icon(Icons
+                                              .keyboard_arrow_down_outlined),
+                                          isExpanded: true,
+                                          focusNode: _departmentFocusNode,
+                                          decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.symmetric(
+                                                vertical: 0.0),
+                                            labelText: "Department",
+                                            labelStyle: TextStyle(
+                                              fontSize: 16.0,
+                                              color: _departmentFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
                                             ),
-                                          ),
-                                        ),
-                                        child: DropdownButtonHideUnderline(
-                                          child: DropdownButton2(
-                                            icon: Icon(Icons
-                                                .keyboard_arrow_down_outlined),
-                                            isExpanded: true,
-                                            hint: Text(
-                                              'Department',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.grey,
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: CommonColorConstants
+                                                    .blueLightColor,
                                               ),
                                             ),
-                                            items: departmentList
-                                                .map((item) =>
-                                                    DropdownMenuItem<String>(
-                                                      value: item,
-                                                      child: Text(
-                                                        item,
-                                                        style: const TextStyle(
-                                                          fontSize: 14,
-                                                          color: Colors.black,
-                                                        ),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ))
-                                                .toList(),
-                                            customItemsHeight: 4,
-                                            value: selectedDepartment,
-                                            onChanged: (value) {
-                                              setState(
-                                                () {
-                                                  selectedDepartment =
-                                                      value as String;
-                                                },
-                                              );
-                                            },
-                                            buttonHeight: 40,
-                                            buttonWidth: 140,
-                                            itemHeight: 40,
-                                            itemPadding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 8.0),
                                           ),
+                                          validator: (departmentValue){
+                                            if(departmentValue == null){
+                                              return "Please select the department";
+                                            }
+                                            return null;
+                                          },
+                                          items: departmentList
+                                              .map((item) =>
+                                                  DropdownMenuItem<String>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item,
+                                                      style: const TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.black,
+                                                      ),
+                                                      overflow: TextOverflow
+                                                          .ellipsis,
+                                                    ),
+                                                  ))
+                                              .toList(),
+                                          customItemsHeight: 4,
+                                          value: selectedDepartment,
+                                          onChanged: (value) {
+                                            setState(
+                                              () {
+                                                selectedDepartment =
+                                                    value as String;
+                                              },
+                                            );
+                                          },
+                                          buttonHeight: 40,
+                                          buttonWidth: 140,
+                                          itemHeight: 40,
+                                          itemPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 8.0),
                                         ),
                                       ),
                                     ),
@@ -444,62 +526,71 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Expanded(
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 4.0,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          border: Border(
-                                            bottom: BorderSide(
-                                              width: 3.0,
-                                              color: Colors.grey.shade300,
+                                      child: DropdownButtonHideUnderline(
+                                        child: DropdownButtonFormField2(
+                                          focusNode: _genderFocusNode,
+                                          icon: Icon(Icons
+                                              .keyboard_arrow_down_outlined),
+                                          isExpanded: true,
+                                          decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.symmetric(
+                                                vertical: 0.0),
+                                            labelText: "Gender",
+                                            labelStyle: TextStyle(
+                                              fontSize: 16.0,
+                                              color: _genderFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
                                             ),
-                                          ),
-                                        ),
-                                        child: DropdownButtonHideUnderline(
-                                          child: DropdownButton2(
-                                            icon: Icon(Icons
-                                                .keyboard_arrow_down_outlined),
-                                            isExpanded: true,
-                                            hint: Text(
-                                              'Gender',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.grey,
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: CommonColorConstants
+                                                    .blueLightColor,
                                               ),
                                             ),
-                                            items: genderList
-                                                .map((item) =>
-                                                    DropdownMenuItem<String>(
-                                                      value: item,
-                                                      child: Text(
-                                                        item,
-                                                        style: const TextStyle(
-                                                          fontSize: 14,
-                                                          color: Colors.black,
-                                                        ),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ))
-                                                .toList(),
-                                            customItemsHeight: 4,
-                                            value: selectedGender,
-                                            onChanged: (value) {
-                                              setState(
-                                                () {
-                                                  selectedGender =
-                                                      value as String;
-                                                },
-                                              );
-                                            },
-                                            buttonHeight: 40,
-                                            buttonWidth: 140,
-                                            itemHeight: 40,
-                                            itemPadding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 8.0),
                                           ),
+                                          validator: (genderValue){
+                                            if(genderValue == null){
+                                              return "Please select the gender";
+                                            }
+                                            return null;
+                                          },
+                                          hint: Text(
+                                            'Gender',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          items: genderList
+                                              .map((item) =>
+                                                  DropdownMenuItem<String>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item,
+                                                      style: const TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.black,
+                                                      ),
+                                                      overflow: TextOverflow
+                                                          .ellipsis,
+                                                    ),
+                                                  ))
+                                              .toList(),
+                                          customItemsHeight: 4,
+                                          value: selectedGender,
+                                          onChanged: (value) {
+                                            setState(
+                                              () {
+                                                selectedGender =
+                                                    value as String;
+                                              },
+                                            );
+                                          },
+                                          buttonHeight: 40,
+                                          buttonWidth: 140,
+                                          itemHeight: 40,
+                                          itemPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 8.0),
                                         ),
                                       ),
                                     ),
@@ -513,6 +604,8 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                         cursorColor:
                                             CommonColorConstants.blueLightColor,
                                         focusNode: _mobileNoFocusNode,
+                                        maxLength: 15,
+                                        keyboardType: TextInputType.phone,
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.symmetric(
                                               vertical: 6.0),
@@ -527,7 +620,19 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                                   .blueLightColor,
                                             ),
                                           ),
+                                          counterText: "",
                                         ),
+                                        validator: (value){
+                                          String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+                                          RegExp regExp = new RegExp(patttern);
+                                          if (value!.length == 0) {
+                                            return 'Please enter mobile number';
+                                          }
+                                          else if (!regExp.hasMatch(value)) {
+                                            return 'Please enter valid mobile number';
+                                          }
+                                          return null;
+                                        },
                                       ),
                                     ),
                                   ],
@@ -634,6 +739,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       ),
                                     ),
                                   ),
+                                  validator: (educationValue){
+                                    if(educationValue!.isEmpty){
+                                      return "Please enter the Education Details";
+                                    }
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(
                                   height: 20.0,
@@ -783,49 +894,67 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                   height: 24.0,
                                 ),
                                 TextFormField(
-                                  controller: _firstNameTextEditingController,
+                                  controller:
+                                  _firstNameTextEditingController,
                                   cursorColor:
-                                      CommonColorConstants.blueLightColor,
+                                  CommonColorConstants.blueLightColor,
+                                  maxLength: 20,
                                   focusNode: _firstNameFocusNode,
                                   decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 6.0),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 6.0),
                                     labelText: "FirstName",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
                                       color: _firstNameFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
                                     ),
+                                    counterText: "",
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                        color:
-                                            CommonColorConstants.blueLightColor,
+                                        color: CommonColorConstants
+                                            .blueLightColor,
                                       ),
                                     ),
                                   ),
+                                  validator: (firstNameValue) {
+                                    if (firstNameValue!.isEmpty) {
+                                      return "Please enter the firstname";
+                                    }
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(
                                   height: 24.0,
                                 ),
                                 TextFormField(
-                                  controller: _lastNameTextEditingController,
+                                  controller:
+                                  _lastNameTextEditingController,
                                   cursorColor:
-                                      CommonColorConstants.blueLightColor,
+                                  CommonColorConstants.blueLightColor,
                                   focusNode: _lastNameFocusNode,
+                                  maxLength: 20,
                                   decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 6.0),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 6.0),
                                     labelText: "LastName",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
                                       color: _lastNameFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
                                     ),
+                                    counterText: "",
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                        color:
-                                            CommonColorConstants.blueLightColor,
+                                        color: CommonColorConstants
+                                            .blueLightColor,
                                       ),
                                     ),
                                   ),
+                                  validator: (lastNameValue) {
+                                    if (lastNameValue!.isEmpty) {
+                                      return "Please enter the lastname";
+                                    }
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(
                                   height: 24.0,
@@ -833,11 +962,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 TextFormField(
                                   controller: _emailTextEditingController,
                                   cursorColor:
-                                      CommonColorConstants.blueLightColor,
+                                  CommonColorConstants.blueLightColor,
                                   focusNode: _emailFocusNode,
+                                  keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 6.0),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 6.0),
                                     labelText: "Email",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
@@ -845,23 +975,33 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     ),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                        color:
-                                            CommonColorConstants.blueLightColor,
+                                        color: CommonColorConstants
+                                            .blueLightColor,
                                       ),
                                     ),
                                   ),
+                                  validator: (String? email){
+                                    if(email!.isEmpty){
+                                      return "Please enter the email";
+                                    }else
+                                    if(!EmailValidator.validate(email!)){
+                                      return "Please enter the valid email";
+                                    }
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(
                                   height: 24.0,
                                 ),
                                 TextFormField(
+                                  controller:
+                                  _joiningDateTextEditingController,
                                   cursorColor:
-                                      CommonColorConstants.blueLightColor,
-                                  controller: _joiningDateTextEditingController,
+                                  CommonColorConstants.blueLightColor,
                                   focusNode: _joiningDateFocusNode,
                                   decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 6.0),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 6.0),
                                     labelText: "Joining Date",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
@@ -869,8 +1009,8 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     ),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                        color:
-                                            CommonColorConstants.blueLightColor,
+                                        color: CommonColorConstants
+                                            .blueLightColor,
                                       ),
                                     ),
                                   ),
@@ -879,13 +1019,16 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                   height: 24.0,
                                 ),
                                 TextFormField(
-                                  controller: _passwordTextEditingController,
+                                  obscureText: password,
+                                  controller:
+                                  _passwordTextEditingController,
                                   cursorColor:
-                                      CommonColorConstants.blueLightColor,
+                                  CommonColorConstants.blueLightColor,
                                   focusNode: _passwordFocusNode,
+                                  maxLength: 15,
                                   decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 6.0),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 6.0),
                                     labelText: "Password",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
@@ -893,48 +1036,91 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     ),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                        color:
-                                            CommonColorConstants.blueLightColor,
+                                        color: CommonColorConstants
+                                            .blueLightColor,
                                       ),
                                     ),
+                                    suffixIcon: GestureDetector(
+                                      onTap: (){
+                                        password = !password;
+                                        setState(() {});
+                                      },
+                                      child: Icon(
+                                        password ? Icons.visibility : Icons.visibility_off,
+                                        color: _passwordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                      ),
+                                    ),
+                                    counterText: "",
                                   ),
+                                  validator: (passValue){
+                                    if(passValue!.isEmpty){
+                                      return "password is empty";
+                                    }else if(passValue!.length < 8 || passValue!.length > 15){
+                                      return "password must be minimum 8 and maximum 15 character required";
+                                    }
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(
                                   height: 24.0,
                                 ),
                                 TextFormField(
-                                  controller: _confirmTextEditingController,
+                                  obscureText: confirmPassword,
+                                  controller:
+                                  _confirmTextEditingController,
                                   cursorColor:
-                                      CommonColorConstants.blueLightColor,
+                                  CommonColorConstants.blueLightColor,
                                   focusNode: _confirmPasswordFocusNode,
+                                  maxLength: 15,
                                   decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 6.0),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 6.0),
                                     labelText: "Confirm Password",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
                                       color: _confirmPasswordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
                                     ),
+                                    suffixIcon: GestureDetector(
+                                      onTap: (){
+                                        confirmPassword = !confirmPassword;
+                                        setState(() {});
+                                      },
+                                      child: Icon(
+                                        confirmPassword ? Icons.visibility : Icons.visibility_off,
+                                        color: _confirmPasswordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                      ),
+                                    ),
+                                    counterText: "",
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                        color:
-                                            CommonColorConstants.blueLightColor,
+                                        color: CommonColorConstants
+                                            .blueLightColor,
                                       ),
                                     ),
                                   ),
+                                  validator: (confirmPassValue){
+                                    if(confirmPassValue!.isEmpty){
+                                      return "confirm password is empty";
+                                    }else if(confirmPassValue!.length < 8 || confirmPassValue!.length > 15){
+                                      return "password must be minimum 8 and maximum 15 character required";
+                                    }else if(confirmPassValue != _passwordTextEditingController.text){
+                                      return "password must be same as above";
+                                    }
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(
                                   height: 24.0,
                                 ),
                                 TextFormField(
                                   controller:
-                                      _designationTExtEdtitingcontroller,
+                                  _designationTExtEdtitingcontroller,
                                   cursorColor:
-                                      CommonColorConstants.blueLightColor,
+                                  CommonColorConstants.blueLightColor,
                                   focusNode: _designationFocusNode,
                                   decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 6.0),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 6.0),
                                     labelText: "Designation",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
@@ -942,142 +1128,165 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     ),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                        color:
-                                            CommonColorConstants.blueLightColor,
+                                        color: CommonColorConstants
+                                            .blueLightColor,
                                       ),
                                     ),
+                                  ),
+                                  validator: (designationValue){
+                                    if(designationValue!.isEmpty){
+                                      return "Please enter the designation";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 24.0,
+                                ),
+                                DropdownButtonHideUnderline(
+                                  child: DropdownButtonFormField2(
+                                    icon: Icon(Icons
+                                        .keyboard_arrow_down_outlined),
+                                    isExpanded: true,
+                                    focusNode: _departmentFocusNode,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 0.0),
+                                      labelText: "Department",
+                                      labelStyle: TextStyle(
+                                        fontSize: 16.0,
+                                        color: _departmentFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: CommonColorConstants
+                                              .blueLightColor,
+                                        ),
+                                      ),
+                                    ),
+                                    validator: (departmentValue){
+                                      if(departmentValue == null){
+                                        return "Please select the department";
+                                      }
+                                      return null;
+                                    },
+                                    items: departmentList
+                                        .map((item) =>
+                                        DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                            ),
+                                            overflow: TextOverflow
+                                                .ellipsis,
+                                          ),
+                                        ))
+                                        .toList(),
+                                    customItemsHeight: 4,
+                                    value: selectedDepartment,
+                                    onChanged: (value) {
+                                      setState(
+                                            () {
+                                          selectedDepartment =
+                                          value as String;
+                                        },
+                                      );
+                                    },
+                                    buttonHeight: 40,
+                                    buttonWidth: 140,
+                                    itemHeight: 40,
+                                    itemPadding:
+                                    const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
                                   ),
                                 ),
                                 const SizedBox(
                                   height: 24.0,
                                 ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 4.0,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        width: 3.0,
-                                        color: Colors.grey.shade300,
+                                DropdownButtonHideUnderline(
+                                  child: DropdownButtonFormField2(
+                                    focusNode: _genderFocusNode,
+                                    icon: Icon(Icons
+                                        .keyboard_arrow_down_outlined),
+                                    isExpanded: true,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 0.0),
+                                      labelText: "Gender",
+                                      labelStyle: TextStyle(
+                                        fontSize: 16.0,
+                                        color: _genderFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
                                       ),
-                                    ),
-                                  ),
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton2(
-                                      icon: Icon(
-                                          Icons.keyboard_arrow_down_outlined),
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Department',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey,
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: CommonColorConstants
+                                              .blueLightColor,
                                         ),
                                       ),
-                                      items: departmentList
-                                          .map((item) =>
-                                              DropdownMenuItem<String>(
-                                                value: item,
-                                                child: Text(
-                                                  item,
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.black,
-                                                  ),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ))
-                                          .toList(),
-                                      customItemsHeight: 4,
-                                      value: selectedDepartment,
-                                      onChanged: (value) {
-                                        setState(
-                                          () {
-                                            selectedDepartment =
-                                                value as String;
-                                          },
-                                        );
-                                      },
-                                      buttonHeight: 40,
-                                      buttonWidth: 140,
-                                      itemHeight: 40,
-                                      itemPadding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
                                     ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 24.0,
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 4.0,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        width: 3.0,
-                                        color: Colors.grey.shade300,
+                                    validator: (genderValue){
+                                      if(genderValue == null){
+                                        return "Please select the gender";
+                                      }
+                                      return null;
+                                    },
+                                    hint: Text(
+                                      'Gender',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey,
                                       ),
                                     ),
-                                  ),
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton2(
-                                      icon: Icon(
-                                          Icons.keyboard_arrow_down_outlined),
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Gender',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      items: genderList
-                                          .map((item) =>
-                                              DropdownMenuItem<String>(
-                                                value: item,
-                                                child: Text(
-                                                  item,
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.black,
-                                                  ),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ))
-                                          .toList(),
-                                      customItemsHeight: 4,
-                                      value: selectedGender,
-                                      onChanged: (value) {
-                                        setState(
-                                          () {
-                                            selectedGender = value as String;
-                                          },
-                                        );
-                                      },
-                                      buttonHeight: 40,
-                                      buttonWidth: 140,
-                                      itemHeight: 40,
-                                      itemPadding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                    ),
+                                    items: genderList
+                                        .map((item) =>
+                                        DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                            ),
+                                            overflow: TextOverflow
+                                                .ellipsis,
+                                          ),
+                                        ))
+                                        .toList(),
+                                    customItemsHeight: 4,
+                                    value: selectedGender,
+                                    onChanged: (value) {
+                                      setState(
+                                            () {
+                                          selectedGender =
+                                          value as String;
+                                        },
+                                      );
+                                    },
+                                    buttonHeight: 40,
+                                    buttonWidth: 140,
+                                    itemHeight: 40,
+                                    itemPadding:
+                                    const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
                                   ),
                                 ),
                                 const SizedBox(
                                   height: 24.0,
                                 ),
                                 TextFormField(
-                                  controller: _mobileNoTextEditingController,
+                                  controller:
+                                  _mobileNoTextEditingController,
                                   cursorColor:
-                                      CommonColorConstants.blueLightColor,
+                                  CommonColorConstants.blueLightColor,
                                   focusNode: _mobileNoFocusNode,
+                                  maxLength: 15,
+                                  keyboardType: TextInputType.phone,
                                   decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 6.0),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 6.0),
                                     labelText: "Mobile No.",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
@@ -1085,11 +1294,24 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     ),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                        color:
-                                            CommonColorConstants.blueLightColor,
+                                        color: CommonColorConstants
+                                            .blueLightColor,
                                       ),
                                     ),
+                                    counterText:
+                                      "",
                                   ),
+                                  validator: (value){
+                                    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+                                    RegExp regExp = new RegExp(patttern);
+                                    if (value!.length == 0) {
+                                      return 'Please enter mobile number';
+                                    }
+                                    else if (!regExp.hasMatch(value)) {
+                                      return 'Please enter valid mobile number';
+                                    }
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(
                                   height: 24.0,
@@ -1097,12 +1319,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 TextFormField(
                                   controller: _addressTextEditingController,
                                   cursorColor:
-                                      CommonColorConstants.blueLightColor,
-                                  focusNode: _addressFocusNode,
+                                  CommonColorConstants.blueLightColor,
                                   maxLines: 4,
+                                  focusNode: _addressFocusNode,
                                   decoration: InputDecoration(
                                     contentPadding:
-                                        EdgeInsets.symmetric(vertical: 6.0),
+                                    EdgeInsets.symmetric(vertical: 6.0),
                                     hintText: "Address",
                                     hintStyle: TextStyle(
                                       fontSize: 16.0,
@@ -1111,7 +1333,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
                                         color:
-                                            CommonColorConstants.blueLightColor,
+                                        CommonColorConstants.blueLightColor,
                                       ),
                                     ),
                                   ),
@@ -1177,12 +1399,12 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 TextFormField(
                                   controller: _educationTextEditingController,
                                   cursorColor:
-                                      CommonColorConstants.blueLightColor,
+                                  CommonColorConstants.blueLightColor,
                                   focusNode: _educationFocusNode,
                                   maxLines: 4,
                                   decoration: InputDecoration(
                                     contentPadding:
-                                        EdgeInsets.symmetric(vertical: 6.0),
+                                    EdgeInsets.symmetric(vertical: 6.0),
                                     hintText: "Education",
                                     hintStyle: TextStyle(
                                       fontSize: 16.0,
@@ -1191,10 +1413,16 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
                                         color:
-                                            CommonColorConstants.blueLightColor,
+                                        CommonColorConstants.blueLightColor,
                                       ),
                                     ),
                                   ),
+                                  validator: (educationValue){
+                                    if(educationValue!.isEmpty){
+                                      return "Please enter the Education Details";
+                                    }
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(
                                   height: 20.0,
@@ -1264,17 +1492,25 @@ class _AdmissionFormState extends State<AdmissionForm> {
   }
 
   void _selectImageFromGallary() async {
-    print(
-        "Image related filename and filepath is tapped in selecte from gallery");
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    print(
-        "Image related filename and filepath is tapped ${pickedFile!.path}, ${pickedFile!.name}");
-    File image = File(pickedFile!.path);
-    print(
-        "Image related filename and filepath is tapped after image file ${image}");
-    filePath = image.path;
-    fileName = path.basename(image.path);
-    print(
-        "Image related filename and filepath $fileName,$filePath"); // handwriting upload api call
+    Uint8List webImage = Uint8List(10);
+    if(!kIsWeb){
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      File image = File(pickedFile!.path);
+      filePath = image.path;
+      fileName = path.basename(image.path);
+    }else{
+      print("this is web");
+      final ImagePicker _picker = ImagePicker();
+      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        var f = await image.readAsBytes();
+        setState(() {
+          webImage = f;
+          base64Image = base64Encode(webImage);
+        });
+      }
+    }
+
+
   }
 }
