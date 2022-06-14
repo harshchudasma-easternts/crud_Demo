@@ -1499,6 +1499,33 @@ class _AdmissionFormState extends State<AdmissionForm> {
     );
   }
 
+  @override
+  void dispose() {
+    _firstNameTextEditingController.dispose();
+    _lastNameTextEditingController.dispose();
+    _addressTextEditingController.dispose();
+    _emailTextEditingController.dispose();
+    _joiningDateTextEditingController.dispose();
+    _passwordTextEditingController.dispose();
+    _confirmTextEditingController.dispose();
+    _mobileNoTextEditingController.dispose();
+    _designationTExtEdtitingcontroller.dispose();
+    _educationTextEditingController.dispose();
+    _firstNameFocusNode.dispose();
+    _lastNameFocusNode.dispose();
+    _emailFocusNode.dispose();
+    _joiningDateFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    _confirmPasswordFocusNode.dispose();
+    _addressFocusNode.dispose();
+    _designationFocusNode.dispose();
+    _departmentFocusNode.dispose();
+    _educationFocusNode.dispose();
+    _genderFocusNode.dispose();
+    _mobileNoFocusNode.dispose();
+    super.dispose();
+  }
+
   void _selectImageFromGallary() async {
 
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
