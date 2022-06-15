@@ -1,10 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:animation_demo/common_widgets/custom_textfield_widget.dart';
 import 'package:animation_demo/common_widgets/header_navbar_widget.dart';
 import 'package:animation_demo/constants/color_constants.dart';
 import 'package:animation_demo/constants/image_constants.dart';
+import 'package:animation_demo/dbhelper/tables/add_professors.dart';
 import 'package:animation_demo/utils/permission_utils.dart';
 import 'package:animation_demo/utils/responsive_widget.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -15,7 +16,6 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AdmissionForm extends StatefulWidget {
   static const routeName = "/admissionForm";
@@ -88,28 +88,72 @@ class _AdmissionFormState extends State<AdmissionForm> {
   late final _mobileNoFocusNode = FocusNode();
   late final _addressFocusNode = FocusNode();
   late final _educationFocusNode = FocusNode();
+  var dbHelper;
 
   @override
   void initState() {
     super.initState();
+    dbHelper = DBHelper.instance;
     _textFieldFocusNode();
   }
 
-  void _textFieldFocusNode(){
+  void insertData() async {
+    Map<String, dynamic> insertRow = {
+      DBHelper.firstName: "Harsh",
+      DBHelper.lastName: "Chudasma",
+      DBHelper.emailAddress: "harshchudasma010@gmail.com",
+      DBHelper.joiningDate: "4456",
+      DBHelper.password: "fadfasdfadf",
+      DBHelper.confirmPassword: "fadfasdfadf",
+      DBHelper.designation: "Computer",
+      DBHelper.department: "Cfadsf",
+      DBHelper.gender: "male",
+      DBHelper.mobileNo: "1156456165646",
+      DBHelper.address: "fasdfasdfasfasdf",
+      DBHelper.imageFile: "fadsfasdfasdfasdf",
+      DBHelper.education: "fadsfadsfasdfasd",
+    };
+    final id = await dbHelper.insert(insertRow);
+    print("insert database value ${id}");
+  }
+
+  void _textFieldFocusNode() {
     _firstNameFocusNode.addListener(() {
       setState(() {});
     });
-    _lastNameFocusNode.addListener(() { setState(() {});});
-    _emailFocusNode.addListener(() { setState(() {});});
-    _joiningDateFocusNode.addListener(() { setState(() {});});
-    _passwordFocusNode.addListener(() { setState(() {});});
-    _confirmPasswordFocusNode.addListener(() { setState(() {});});
-    _designationFocusNode.addListener(() { setState(() {});});
-    _departmentFocusNode.addListener(() {setState(() {});});
-    _genderFocusNode.addListener(() {setState(() {}); });
-    _mobileNoFocusNode.addListener(() { setState(() {});});
-    _addressFocusNode.addListener(() { setState(() {});});
-    _educationFocusNode.addListener(() { setState(() {});});
+    _lastNameFocusNode.addListener(() {
+      setState(() {});
+    });
+    _emailFocusNode.addListener(() {
+      setState(() {});
+    });
+    _joiningDateFocusNode.addListener(() {
+      setState(() {});
+    });
+    _passwordFocusNode.addListener(() {
+      setState(() {});
+    });
+    _confirmPasswordFocusNode.addListener(() {
+      setState(() {});
+    });
+    _designationFocusNode.addListener(() {
+      setState(() {});
+    });
+    _departmentFocusNode.addListener(() {
+      setState(() {});
+    });
+    _genderFocusNode.addListener(() {
+      setState(() {});
+    });
+    _mobileNoFocusNode.addListener(() {
+      setState(() {});
+    });
+    _addressFocusNode.addListener(() {
+      setState(() {});
+    });
+    _educationFocusNode.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -174,30 +218,15 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Expanded(
-                                      child: TextFormField(
+                                      child: CustomTextFieldWidget(
                                         controller:
                                             _firstNameTextEditingController,
-                                        cursorColor:
-                                            CommonColorConstants.blueLightColor,
-                                        maxLength: 20,
-                                        focusNode: _firstNameFocusNode,
-                                        decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              vertical: 6.0),
-                                          labelText: "FirstName",
-                                          labelStyle: TextStyle(
-                                            fontSize: 16.0,
-                                            color: _firstNameFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
-                                          ),
-                                          counterText: "",
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: CommonColorConstants
-                                                  .blueLightColor,
-                                            ),
-                                          ),
-                                        ),
-                                        validator: (firstNameValue) {
+                                        textfiledFocusNode: _firstNameFocusNode,
+                                        textFieldLableName: "FirstName",
+                                        maximumLengthOfField: 20,
+                                        textFieldCounterText: "",
+                                        textformFieldValidator:
+                                            (firstNameValue) {
                                           if (firstNameValue!.isEmpty) {
                                             return "Please enter the firstname";
                                           }
@@ -209,30 +238,15 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       width: 12.0,
                                     ),
                                     Expanded(
-                                      child: TextFormField(
+                                      child: CustomTextFieldWidget(
                                         controller:
                                             _lastNameTextEditingController,
-                                        cursorColor:
-                                            CommonColorConstants.blueLightColor,
-                                        focusNode: _lastNameFocusNode,
-                                        maxLength: 20,
-                                        decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              vertical: 6.0),
-                                          labelText: "LastName",
-                                          labelStyle: TextStyle(
-                                            fontSize: 16.0,
-                                            color: _lastNameFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
-                                          ),
-                                          counterText: "",
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: CommonColorConstants
-                                                  .blueLightColor,
-                                            ),
-                                          ),
-                                        ),
-                                        validator: (lastNameValue) {
+                                        textfiledFocusNode: _lastNameFocusNode,
+                                        textFieldLableName: "LastName",
+                                        maximumLengthOfField: 20,
+                                        textFieldCounterText: "",
+                                        textformFieldValidator:
+                                            (lastNameValue) {
                                           if (lastNameValue!.isEmpty) {
                                             return "Please enter the lastname";
                                           }
@@ -250,32 +264,16 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Expanded(
-                                      child: TextFormField(
+                                      child: CustomTextFieldWidget(
                                         controller: _emailTextEditingController,
-                                        cursorColor:
-                                            CommonColorConstants.blueLightColor,
-                                        focusNode: _emailFocusNode,
-                                        keyboardType: TextInputType.emailAddress,
-                                        decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              vertical: 6.0),
-                                          labelText: "Email",
-                                          labelStyle: TextStyle(
-                                            fontSize: 16.0,
-                                            color: _emailFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
-                                          ),
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: CommonColorConstants
-                                                  .blueLightColor,
-                                            ),
-                                          ),
-                                        ),
-                                        validator: (String? email){
-                                          if(email!.isEmpty){
+                                        textfiledFocusNode: _emailFocusNode,
+                                        textFieldLableName: "Email",
+                                        textformFieldValidator:
+                                            (String? email) {
+                                          if (email!.isEmpty) {
                                             return "Please enter the email";
-                                          }else
-                                          if(!EmailValidator.validate(email!)){
+                                          } else if (!EmailValidator.validate(
+                                              email!)) {
                                             return "Please enter the valid email";
                                           }
                                           return null;
@@ -298,7 +296,11 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                           labelText: "Joining Date",
                                           labelStyle: TextStyle(
                                             fontSize: 16.0,
-                                            color: _joiningDateFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                            color:
+                                                _joiningDateFocusNode.hasFocus
+                                                    ? CommonColorConstants
+                                                        .blueLightColor
+                                                    : Colors.grey,
                                           ),
                                           focusedBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
@@ -319,44 +321,33 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Expanded(
-                                      child: TextFormField(
-                                        obscureText: password,
+                                      child: CustomTextFieldWidget(
                                         controller:
                                             _passwordTextEditingController,
-                                        cursorColor:
-                                            CommonColorConstants.blueLightColor,
-                                        focusNode: _passwordFocusNode,
-                                        maxLength: 15,
-                                        decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              vertical: 6.0),
-                                          labelText: "Password",
-                                          labelStyle: TextStyle(
-                                            fontSize: 16.0,
-                                            color: _passwordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                        textfiledFocusNode: _passwordFocusNode,
+                                        textFieldLableName: "Password",
+                                        maximumLengthOfField: 15,
+                                        textFieldCounterText: "",
+                                        suffixIconWidget: GestureDetector(
+                                          onTap: () {
+                                            password = !password;
+                                            setState(() {});
+                                          },
+                                          child: Icon(
+                                            password
+                                                ? Icons.visibility
+                                                : Icons.visibility_off,
+                                            color: _passwordFocusNode.hasFocus
+                                                ? CommonColorConstants
+                                                    .blueLightColor
+                                                : Colors.grey,
                                           ),
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: CommonColorConstants
-                                                  .blueLightColor,
-                                            ),
-                                          ),
-                                          suffixIcon: GestureDetector(
-                                            onTap: (){
-                                              password = !password;
-                                              setState(() {});
-                                            },
-                                            child: Icon(
-                                              password ? Icons.visibility : Icons.visibility_off,
-                                              color: _passwordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
-                                            ),
-                                          ),
-                                          counterText: "",
                                         ),
-                                        validator: (passValue){
-                                          if(passValue!.isEmpty){
+                                        textformFieldValidator: (passValue) {
+                                          if (passValue!.isEmpty) {
                                             return "password is empty";
-                                          }else if(passValue!.length < 8 || passValue!.length > 15){
+                                          } else if (passValue!.length < 8 ||
+                                              passValue!.length > 15) {
                                             return "password must be minimum 8 and maximum 15 character required";
                                           }
                                           return null;
@@ -367,50 +358,44 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       width: 12.0,
                                     ),
                                     Expanded(
-                                      child: TextFormField(
-                                        obscureText: confirmPassword,
+                                      child: CustomTextFieldWidget(
                                         controller:
                                             _confirmTextEditingController,
-                                        cursorColor:
-                                            CommonColorConstants.blueLightColor,
-                                        focusNode: _confirmPasswordFocusNode,
-                                        maxLength: 15,
-                                        decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              vertical: 6.0),
-                                          labelText: "Confirm Password",
-                                          labelStyle: TextStyle(
-                                            fontSize: 16.0,
-                                            color: _confirmPasswordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
-                                          ),
-                                          suffixIcon: GestureDetector(
-                                            onTap: (){
-                                              confirmPassword = !confirmPassword;
-                                              setState(() {});
-                                            },
-                                            child: Icon(
-                                                confirmPassword ? Icons.visibility : Icons.visibility_off,
-                                                color: _confirmPasswordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
-                                            ),
-                                          ),
-                                          counterText: "",
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: CommonColorConstants
-                                                  .blueLightColor,
-                                            ),
-                                          ),
-                                        ),
-                                        validator: (confirmPassValue){
-                                          if(confirmPassValue!.isEmpty){
+                                        textfiledFocusNode:
+                                            _confirmPasswordFocusNode,
+                                        textFieldLableName: "Confirm Password",
+                                        textformFieldValidator:
+                                            (confirmPassValue) {
+                                          if (confirmPassValue!.isEmpty) {
                                             return "confirm password is empty";
-                                          }else if(confirmPassValue!.length < 8 || confirmPassValue!.length > 15){
+                                          } else if (confirmPassValue!.length <
+                                                  8 ||
+                                              confirmPassValue!.length > 15) {
                                             return "password must be minimum 8 and maximum 15 character required";
-                                          }else if(confirmPassValue != _passwordTextEditingController.text){
+                                          } else if (confirmPassValue !=
+                                              _passwordTextEditingController
+                                                  .text) {
                                             return "password must be same as above";
                                           }
                                           return null;
                                         },
+                                        suffixIconWidget: GestureDetector(
+                                          onTap: () {
+                                            confirmPassword = !confirmPassword;
+                                            setState(() {});
+                                          },
+                                          child: Icon(
+                                            confirmPassword
+                                                ? Icons.visibility
+                                                : Icons.visibility_off,
+                                            color:
+                                                _confirmPasswordFocusNode
+                                                        .hasFocus
+                                                    ? CommonColorConstants
+                                                        .blueLightColor
+                                                    : Colors.grey,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -423,29 +408,15 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Expanded(
-                                      child: TextFormField(
+                                      child: CustomTextFieldWidget(
                                         controller:
                                             _designationTExtEdtitingcontroller,
-                                        cursorColor:
-                                            CommonColorConstants.blueLightColor,
-                                        focusNode: _designationFocusNode,
-                                        decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              vertical: 6.0),
-                                          labelText: "Designation",
-                                          labelStyle: TextStyle(
-                                            fontSize: 16.0,
-                                            color: _designationFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
-                                          ),
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: CommonColorConstants
-                                                  .blueLightColor,
-                                            ),
-                                          ),
-                                        ),
-                                        validator: (designationValue){
-                                          if(designationValue!.isEmpty){
+                                        textfiledFocusNode:
+                                            _designationFocusNode,
+                                        textFieldLableName: "Designation",
+                                        textformFieldValidator:
+                                            (designationValue) {
+                                          if (designationValue!.isEmpty) {
                                             return "Please enter the designation";
                                           }
                                           return null;
@@ -463,12 +434,17 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                           isExpanded: true,
                                           focusNode: _departmentFocusNode,
                                           decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.symmetric(
-                                                vertical: 0.0),
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 0.0),
                                             labelText: "Department",
                                             labelStyle: TextStyle(
                                               fontSize: 16.0,
-                                              color: _departmentFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                              color:
+                                                  _departmentFocusNode.hasFocus
+                                                      ? CommonColorConstants
+                                                          .blueLightColor
+                                                      : Colors.grey,
                                             ),
                                             focusedBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -477,8 +453,8 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                               ),
                                             ),
                                           ),
-                                          validator: (departmentValue){
-                                            if(departmentValue == null){
+                                          validator: (departmentValue) {
+                                            if (departmentValue == null) {
                                               return "Please select the department";
                                             }
                                             return null;
@@ -493,8 +469,8 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                                         fontSize: 14,
                                                         color: Colors.black,
                                                       ),
-                                                      overflow: TextOverflow
-                                                          .ellipsis,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                     ),
                                                   ))
                                               .toList(),
@@ -534,12 +510,16 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                               .keyboard_arrow_down_outlined),
                                           isExpanded: true,
                                           decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.symmetric(
-                                                vertical: 0.0),
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 0.0),
                                             labelText: "Gender",
                                             labelStyle: TextStyle(
                                               fontSize: 16.0,
-                                              color: _genderFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                              color: _genderFocusNode.hasFocus
+                                                  ? CommonColorConstants
+                                                      .blueLightColor
+                                                  : Colors.grey,
                                             ),
                                             focusedBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -548,8 +528,8 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                               ),
                                             ),
                                           ),
-                                          validator: (genderValue){
-                                            if(genderValue == null){
+                                          validator: (genderValue) {
+                                            if (genderValue == null) {
                                               return "Please select the gender";
                                             }
                                             return null;
@@ -571,8 +551,8 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                                         fontSize: 14,
                                                         color: Colors.black,
                                                       ),
-                                                      overflow: TextOverflow
-                                                          .ellipsis,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                     ),
                                                   ))
                                               .toList(),
@@ -599,41 +579,24 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       width: 12.0,
                                     ),
                                     Expanded(
-                                      child: TextFormField(
+                                      child: CustomTextFieldWidget(
                                         controller:
                                             _mobileNoTextEditingController,
-                                        cursorColor:
-                                            CommonColorConstants.blueLightColor,
-                                        focusNode: _mobileNoFocusNode,
-                                        maxLength: 15,
-                                        inputFormatters: [
-                                          
+                                        textfiledFocusNode: _mobileNoFocusNode,
+                                        textFieldLableName: "Mobile No.",
+                                        textFieldInputFormater: [
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
                                         ],
-                                        keyboardType: TextInputType.phone,
-                                        decoration: InputDecoration(
-                                          
-                                          contentPadding: EdgeInsets.symmetric(
-                                              vertical: 6.0),
-                                          labelText: "Mobile No.",
-                                          labelStyle: TextStyle(
-                                            fontSize: 16.0,
-                                            color: _mobileNoFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
-                                          ),
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: CommonColorConstants
-                                                  .blueLightColor,
-                                            ),
-                                          ),
-                                          counterText: "",
-                                        ),
-                                        validator: (value){
-                                          String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+                                        maximumLengthOfField: 15,
+                                        textFieldCounterText: "",
+                                        textformFieldValidator: (value) {
+                                          String patttern =
+                                              r'(^(?:[+0]9)?[0-9]{10,12}$)';
                                           RegExp regExp = new RegExp(patttern);
                                           if (value!.length == 0) {
                                             return 'Please enter mobile number';
-                                          }
-                                          else if (!regExp.hasMatch(value)) {
+                                          } else if (!regExp.hasMatch(value)) {
                                             return 'Please enter valid mobile number';
                                           }
                                           return null;
@@ -645,110 +608,80 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 const SizedBox(
                                   height: 24.0,
                                 ),
-                                TextFormField(
+                                CustomTextFieldWidget(
                                   controller: _addressTextEditingController,
-                                  cursorColor:
-                                      CommonColorConstants.blueLightColor,
-                                  maxLines: 4,
-                                  focusNode: _addressFocusNode,
-                                  decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 6.0),
-                                    hintText: "Address",
-                                    hintStyle: TextStyle(
-                                      fontSize: 16.0,
-                                      color: _addressFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color:
-                                            CommonColorConstants.blueLightColor,
-                                      ),
-                                    ),
-                                  ),
+                                  textfiledFocusNode: _addressFocusNode,
+                                  textFieldLableName: "Address",
+                                  textFieldMaximumLines: 4,
                                 ),
                                 const SizedBox(
                                   height: 24.0,
                                 ),
-                                webImage.isNotEmpty ? Container(
-                                  height: 50.0,
-                                  child: Image.memory(webImage),
-                                ) : Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      "UploadPhoto",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16.0,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 4.0,
-                                    ),
-                                    DottedBorder(
-                                      color: Colors.black,
-                                      strokeWidth: 1,
-                                      dashPattern: [10, 6],
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          PermissionUtil.checkPermission(
-                                                  platform)
-                                              .then((isGranted) async {
-                                            if (isGranted) {
-                                              print(
-                                                  "Image related filename and filepath is tapped");
-                                              _selectImageFromGallary();
-                                            } else {
-                                              print(
-                                                  'perimssion nont granted...........');
-                                            }
-                                          });
-                                        },
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          height: 100.0,
-                                          color: Colors.white,
-                                          child: Text(
-                                            "Drop File Here to Upload",
+                                webImage.isNotEmpty
+                                    ? Container(
+                                        height: 50.0,
+                                        child: Image.memory(webImage),
+                                      )
+                                    : Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            "UploadPhoto",
                                             style: TextStyle(
+                                              color: Colors.black,
                                               fontSize: 16.0,
-                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                        ),
+                                          const SizedBox(
+                                            height: 4.0,
+                                          ),
+                                          DottedBorder(
+                                            color: Colors.black,
+                                            strokeWidth: 1,
+                                            dashPattern: [10, 6],
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                PermissionUtil.checkPermission(
+                                                        platform)
+                                                    .then((isGranted) async {
+                                                  if (isGranted) {
+                                                    print(
+                                                        "Image related filename and filepath is tapped");
+                                                    _selectImageFromGallary();
+                                                  } else {
+                                                    print(
+                                                        'perimssion nont granted...........');
+                                                  }
+                                                });
+                                              },
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                height: 100.0,
+                                                color: Colors.white,
+                                                child: Text(
+                                                  "Drop File Here to Upload",
+                                                  style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
-                                ),
                                 const SizedBox(
                                   height: 24.0,
                                 ),
-                                TextFormField(
+                                CustomTextFieldWidget(
                                   controller: _educationTextEditingController,
-                                  cursorColor:
-                                      CommonColorConstants.blueLightColor,
-                                  focusNode: _educationFocusNode,
-                                  maxLines: 4,
-                                  decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 6.0),
-                                    hintText: "Education",
-                                    hintStyle: TextStyle(
-                                      fontSize: 16.0,
-                                      color: _educationFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color:
-                                            CommonColorConstants.blueLightColor,
-                                      ),
-                                    ),
-                                  ),
-                                  validator: (educationValue){
-                                    if(educationValue!.isEmpty){
+                                  textfiledFocusNode: _educationFocusNode,
+                                  textFieldLableName: "Education",
+                                  textFieldMaximumLines: 4,
+                                  textformFieldValidator: (educationValue) {
+                                    if (educationValue!.isEmpty) {
                                       return "Please enter the Education Details";
                                     }
                                     return null;
@@ -902,25 +835,26 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                   height: 24.0,
                                 ),
                                 TextFormField(
-                                  controller:
-                                  _firstNameTextEditingController,
+                                  controller: _firstNameTextEditingController,
                                   cursorColor:
-                                  CommonColorConstants.blueLightColor,
+                                      CommonColorConstants.blueLightColor,
                                   maxLength: 20,
                                   focusNode: _firstNameFocusNode,
                                   decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 6.0),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 6.0),
                                     labelText: "FirstName",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
-                                      color: _firstNameFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                      color: _firstNameFocusNode.hasFocus
+                                          ? CommonColorConstants.blueLightColor
+                                          : Colors.grey,
                                     ),
                                     counterText: "",
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: CommonColorConstants
-                                            .blueLightColor,
+                                        color:
+                                            CommonColorConstants.blueLightColor,
                                       ),
                                     ),
                                   ),
@@ -935,25 +869,26 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                   height: 24.0,
                                 ),
                                 TextFormField(
-                                  controller:
-                                  _lastNameTextEditingController,
+                                  controller: _lastNameTextEditingController,
                                   cursorColor:
-                                  CommonColorConstants.blueLightColor,
+                                      CommonColorConstants.blueLightColor,
                                   focusNode: _lastNameFocusNode,
                                   maxLength: 20,
                                   decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 6.0),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 6.0),
                                     labelText: "LastName",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
-                                      color: _lastNameFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                      color: _lastNameFocusNode.hasFocus
+                                          ? CommonColorConstants.blueLightColor
+                                          : Colors.grey,
                                     ),
                                     counterText: "",
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: CommonColorConstants
-                                            .blueLightColor,
+                                        color:
+                                            CommonColorConstants.blueLightColor,
                                       ),
                                     ),
                                   ),
@@ -970,29 +905,31 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 TextFormField(
                                   controller: _emailTextEditingController,
                                   cursorColor:
-                                  CommonColorConstants.blueLightColor,
+                                      CommonColorConstants.blueLightColor,
                                   focusNode: _emailFocusNode,
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 6.0),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 6.0),
                                     labelText: "Email",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
-                                      color: _emailFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                      color: _emailFocusNode.hasFocus
+                                          ? CommonColorConstants.blueLightColor
+                                          : Colors.grey,
                                     ),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: CommonColorConstants
-                                            .blueLightColor,
+                                        color:
+                                            CommonColorConstants.blueLightColor,
                                       ),
                                     ),
                                   ),
-                                  validator: (String? email){
-                                    if(email!.isEmpty){
+                                  validator: (String? email) {
+                                    if (email!.isEmpty) {
                                       return "Please enter the email";
-                                    }else
-                                    if(!EmailValidator.validate(email!)){
+                                    } else if (!EmailValidator.validate(
+                                        email!)) {
                                       return "Please enter the valid email";
                                     }
                                     return null;
@@ -1002,23 +939,24 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                   height: 24.0,
                                 ),
                                 TextFormField(
-                                  controller:
-                                  _joiningDateTextEditingController,
+                                  controller: _joiningDateTextEditingController,
                                   cursorColor:
-                                  CommonColorConstants.blueLightColor,
+                                      CommonColorConstants.blueLightColor,
                                   focusNode: _joiningDateFocusNode,
                                   decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 6.0),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 6.0),
                                     labelText: "Joining Date",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
-                                      color: _joiningDateFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                      color: _joiningDateFocusNode.hasFocus
+                                          ? CommonColorConstants.blueLightColor
+                                          : Colors.grey,
                                     ),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: CommonColorConstants
-                                            .blueLightColor,
+                                        color:
+                                            CommonColorConstants.blueLightColor,
                                       ),
                                     ),
                                   ),
@@ -1028,42 +966,49 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 ),
                                 TextFormField(
                                   obscureText: password,
-                                  controller:
-                                  _passwordTextEditingController,
+                                  controller: _passwordTextEditingController,
                                   cursorColor:
-                                  CommonColorConstants.blueLightColor,
+                                      CommonColorConstants.blueLightColor,
                                   focusNode: _passwordFocusNode,
                                   maxLength: 15,
                                   decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 6.0),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 6.0),
                                     labelText: "Password",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
-                                      color: _passwordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                      color: _passwordFocusNode.hasFocus
+                                          ? CommonColorConstants.blueLightColor
+                                          : Colors.grey,
                                     ),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: CommonColorConstants
-                                            .blueLightColor,
+                                        color:
+                                            CommonColorConstants.blueLightColor,
                                       ),
                                     ),
                                     suffixIcon: GestureDetector(
-                                      onTap: (){
+                                      onTap: () {
                                         password = !password;
                                         setState(() {});
                                       },
                                       child: Icon(
-                                        password ? Icons.visibility : Icons.visibility_off,
-                                        color: _passwordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                        password
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: _passwordFocusNode.hasFocus
+                                            ? CommonColorConstants
+                                                .blueLightColor
+                                            : Colors.grey,
                                       ),
                                     ),
                                     counterText: "",
                                   ),
-                                  validator: (passValue){
-                                    if(passValue!.isEmpty){
+                                  validator: (passValue) {
+                                    if (passValue!.isEmpty) {
                                       return "password is empty";
-                                    }else if(passValue!.length < 8 || passValue!.length > 15){
+                                    } else if (passValue!.length < 8 ||
+                                        passValue!.length > 15) {
                                       return "password must be minimum 8 and maximum 15 character required";
                                     }
                                     return null;
@@ -1074,44 +1019,53 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 ),
                                 TextFormField(
                                   obscureText: confirmPassword,
-                                  controller:
-                                  _confirmTextEditingController,
+                                  controller: _confirmTextEditingController,
                                   cursorColor:
-                                  CommonColorConstants.blueLightColor,
+                                      CommonColorConstants.blueLightColor,
                                   focusNode: _confirmPasswordFocusNode,
                                   maxLength: 15,
                                   decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 6.0),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 6.0),
                                     labelText: "Confirm Password",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
-                                      color: _confirmPasswordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                      color: _confirmPasswordFocusNode.hasFocus
+                                          ? CommonColorConstants.blueLightColor
+                                          : Colors.grey,
                                     ),
                                     suffixIcon: GestureDetector(
-                                      onTap: (){
+                                      onTap: () {
                                         confirmPassword = !confirmPassword;
                                         setState(() {});
                                       },
                                       child: Icon(
-                                        confirmPassword ? Icons.visibility : Icons.visibility_off,
-                                        color: _confirmPasswordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                        confirmPassword
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color:
+                                            _confirmPasswordFocusNode.hasFocus
+                                                ? CommonColorConstants
+                                                    .blueLightColor
+                                                : Colors.grey,
                                       ),
                                     ),
                                     counterText: "",
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: CommonColorConstants
-                                            .blueLightColor,
+                                        color:
+                                            CommonColorConstants.blueLightColor,
                                       ),
                                     ),
                                   ),
-                                  validator: (confirmPassValue){
-                                    if(confirmPassValue!.isEmpty){
+                                  validator: (confirmPassValue) {
+                                    if (confirmPassValue!.isEmpty) {
                                       return "confirm password is empty";
-                                    }else if(confirmPassValue!.length < 8 || confirmPassValue!.length > 15){
+                                    } else if (confirmPassValue!.length < 8 ||
+                                        confirmPassValue!.length > 15) {
                                       return "password must be minimum 8 and maximum 15 character required";
-                                    }else if(confirmPassValue != _passwordTextEditingController.text){
+                                    } else if (confirmPassValue !=
+                                        _passwordTextEditingController.text) {
                                       return "password must be same as above";
                                     }
                                     return null;
@@ -1122,27 +1076,29 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 ),
                                 TextFormField(
                                   controller:
-                                  _designationTExtEdtitingcontroller,
+                                      _designationTExtEdtitingcontroller,
                                   cursorColor:
-                                  CommonColorConstants.blueLightColor,
+                                      CommonColorConstants.blueLightColor,
                                   focusNode: _designationFocusNode,
                                   decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 6.0),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 6.0),
                                     labelText: "Designation",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
-                                      color: _designationFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                      color: _designationFocusNode.hasFocus
+                                          ? CommonColorConstants.blueLightColor
+                                          : Colors.grey,
                                     ),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: CommonColorConstants
-                                            .blueLightColor,
+                                        color:
+                                            CommonColorConstants.blueLightColor,
                                       ),
                                     ),
                                   ),
-                                  validator: (designationValue){
-                                    if(designationValue!.isEmpty){
+                                  validator: (designationValue) {
+                                    if (designationValue!.isEmpty) {
                                       return "Please enter the designation";
                                     }
                                     return null;
@@ -1153,17 +1109,20 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 ),
                                 DropdownButtonHideUnderline(
                                   child: DropdownButtonFormField2(
-                                    icon: Icon(Icons
-                                        .keyboard_arrow_down_outlined),
+                                    icon: Icon(
+                                        Icons.keyboard_arrow_down_outlined),
                                     isExpanded: true,
                                     focusNode: _departmentFocusNode,
                                     decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: 0.0),
+                                      contentPadding:
+                                          EdgeInsets.symmetric(vertical: 0.0),
                                       labelText: "Department",
                                       labelStyle: TextStyle(
                                         fontSize: 16.0,
-                                        color: _departmentFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                        color: _departmentFocusNode.hasFocus
+                                            ? CommonColorConstants
+                                                .blueLightColor
+                                            : Colors.grey,
                                       ),
                                       focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
@@ -1172,42 +1131,38 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                         ),
                                       ),
                                     ),
-                                    validator: (departmentValue){
-                                      if(departmentValue == null){
+                                    validator: (departmentValue) {
+                                      if (departmentValue == null) {
                                         return "Please select the department";
                                       }
                                       return null;
                                     },
                                     items: departmentList
-                                        .map((item) =>
-                                        DropdownMenuItem<String>(
-                                          value: item,
-                                          child: Text(
-                                            item,
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.black,
-                                            ),
-                                            overflow: TextOverflow
-                                                .ellipsis,
-                                          ),
-                                        ))
+                                        .map((item) => DropdownMenuItem<String>(
+                                              value: item,
+                                              child: Text(
+                                                item,
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.black,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ))
                                         .toList(),
                                     customItemsHeight: 4,
                                     value: selectedDepartment,
                                     onChanged: (value) {
                                       setState(
-                                            () {
-                                          selectedDepartment =
-                                          value as String;
+                                        () {
+                                          selectedDepartment = value as String;
                                         },
                                       );
                                     },
                                     buttonHeight: 40,
                                     buttonWidth: 140,
                                     itemHeight: 40,
-                                    itemPadding:
-                                    const EdgeInsets.symmetric(
+                                    itemPadding: const EdgeInsets.symmetric(
                                         horizontal: 8.0),
                                   ),
                                 ),
@@ -1217,16 +1172,19 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 DropdownButtonHideUnderline(
                                   child: DropdownButtonFormField2(
                                     focusNode: _genderFocusNode,
-                                    icon: Icon(Icons
-                                        .keyboard_arrow_down_outlined),
+                                    icon: Icon(
+                                        Icons.keyboard_arrow_down_outlined),
                                     isExpanded: true,
                                     decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: 0.0),
+                                      contentPadding:
+                                          EdgeInsets.symmetric(vertical: 0.0),
                                       labelText: "Gender",
                                       labelStyle: TextStyle(
                                         fontSize: 16.0,
-                                        color: _genderFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                        color: _genderFocusNode.hasFocus
+                                            ? CommonColorConstants
+                                                .blueLightColor
+                                            : Colors.grey,
                                       ),
                                       focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
@@ -1235,8 +1193,8 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                         ),
                                       ),
                                     ),
-                                    validator: (genderValue){
-                                      if(genderValue == null){
+                                    validator: (genderValue) {
+                                      if (genderValue == null) {
                                         return "Please select the gender";
                                       }
                                       return null;
@@ -1249,35 +1207,31 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       ),
                                     ),
                                     items: genderList
-                                        .map((item) =>
-                                        DropdownMenuItem<String>(
-                                          value: item,
-                                          child: Text(
-                                            item,
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.black,
-                                            ),
-                                            overflow: TextOverflow
-                                                .ellipsis,
-                                          ),
-                                        ))
+                                        .map((item) => DropdownMenuItem<String>(
+                                              value: item,
+                                              child: Text(
+                                                item,
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.black,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ))
                                         .toList(),
                                     customItemsHeight: 4,
                                     value: selectedGender,
                                     onChanged: (value) {
                                       setState(
-                                            () {
-                                          selectedGender =
-                                          value as String;
+                                        () {
+                                          selectedGender = value as String;
                                         },
                                       );
                                     },
                                     buttonHeight: 40,
                                     buttonWidth: 140,
                                     itemHeight: 40,
-                                    itemPadding:
-                                    const EdgeInsets.symmetric(
+                                    itemPadding: const EdgeInsets.symmetric(
                                         horizontal: 8.0),
                                   ),
                                 ),
@@ -1285,37 +1239,37 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                   height: 24.0,
                                 ),
                                 TextFormField(
-                                  controller:
-                                  _mobileNoTextEditingController,
+                                  controller: _mobileNoTextEditingController,
                                   cursorColor:
-                                  CommonColorConstants.blueLightColor,
+                                      CommonColorConstants.blueLightColor,
                                   focusNode: _mobileNoFocusNode,
                                   maxLength: 15,
                                   keyboardType: TextInputType.phone,
                                   decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 6.0),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 6.0),
                                     labelText: "Mobile No.",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
-                                      color: _mobileNoFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                      color: _mobileNoFocusNode.hasFocus
+                                          ? CommonColorConstants.blueLightColor
+                                          : Colors.grey,
                                     ),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: CommonColorConstants
-                                            .blueLightColor,
+                                        color:
+                                            CommonColorConstants.blueLightColor,
                                       ),
                                     ),
-                                    counterText:
-                                      "",
+                                    counterText: "",
                                   ),
-                                  validator: (value){
-                                    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+                                  validator: (value) {
+                                    String patttern =
+                                        r'(^(?:[+0]9)?[0-9]{10,12}$)';
                                     RegExp regExp = new RegExp(patttern);
                                     if (value!.length == 0) {
                                       return 'Please enter mobile number';
-                                    }
-                                    else if (!regExp.hasMatch(value)) {
+                                    } else if (!regExp.hasMatch(value)) {
                                       return 'Please enter valid mobile number';
                                     }
                                     return null;
@@ -1327,21 +1281,23 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 TextFormField(
                                   controller: _addressTextEditingController,
                                   cursorColor:
-                                  CommonColorConstants.blueLightColor,
+                                      CommonColorConstants.blueLightColor,
                                   maxLines: 4,
                                   focusNode: _addressFocusNode,
                                   decoration: InputDecoration(
                                     contentPadding:
-                                    EdgeInsets.symmetric(vertical: 6.0),
+                                        EdgeInsets.symmetric(vertical: 6.0),
                                     hintText: "Address",
                                     hintStyle: TextStyle(
                                       fontSize: 16.0,
-                                      color: _addressFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                      color: _addressFocusNode.hasFocus
+                                          ? CommonColorConstants.blueLightColor
+                                          : Colors.grey,
                                     ),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
                                         color:
-                                        CommonColorConstants.blueLightColor,
+                                            CommonColorConstants.blueLightColor,
                                       ),
                                     ),
                                   ),
@@ -1407,26 +1363,28 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 TextFormField(
                                   controller: _educationTextEditingController,
                                   cursorColor:
-                                  CommonColorConstants.blueLightColor,
+                                      CommonColorConstants.blueLightColor,
                                   focusNode: _educationFocusNode,
                                   maxLines: 4,
                                   decoration: InputDecoration(
                                     contentPadding:
-                                    EdgeInsets.symmetric(vertical: 6.0),
+                                        EdgeInsets.symmetric(vertical: 6.0),
                                     hintText: "Education",
                                     hintStyle: TextStyle(
                                       fontSize: 16.0,
-                                      color: _educationFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                      color: _educationFocusNode.hasFocus
+                                          ? CommonColorConstants.blueLightColor
+                                          : Colors.grey,
                                     ),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
                                         color:
-                                        CommonColorConstants.blueLightColor,
+                                            CommonColorConstants.blueLightColor,
                                       ),
                                     ),
                                   ),
-                                  validator: (educationValue){
-                                    if(educationValue!.isEmpty){
+                                  validator: (educationValue) {
+                                    if (educationValue!.isEmpty) {
                                       return "Please enter the Education Details";
                                     }
                                     return null;
@@ -1440,6 +1398,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                   children: [
                                     ElevatedButton(
                                       onPressed: () {
+                                        insertData();
                                         Navigator.of(context).pop();
                                       },
                                       child: Padding(
@@ -1527,7 +1486,6 @@ class _AdmissionFormState extends State<AdmissionForm> {
   }
 
   void _selectImageFromGallary() async {
-
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     File image = File(pickedFile!.path);
     filePath = image.path;
@@ -1551,7 +1509,5 @@ class _AdmissionFormState extends State<AdmissionForm> {
     //     });
     //   }
     // }
-
-
   }
 }

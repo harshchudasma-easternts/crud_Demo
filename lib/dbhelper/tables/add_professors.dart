@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-class DBHelper{
+class DBHelper {
   static const tableName = 'AddProfessor'; // table name
   static const databaseName = 'Education.db'; // database name
   late Database _database;
@@ -22,6 +26,49 @@ class DBHelper{
   DBHelper.privateConstructor();
   static final DBHelper instance = DBHelper.privateConstructor();
 
-  
+  Future<Database> get database async {
+    _database = await _initDatabase();
+    return _database;
+  }
 
+  _initDatabase() async {
+    Directory documentDiractory = await getApplicationDocumentsDirectory();
+    String path = join(documentDiractory.path, databaseName);
+    return await openDatabase(path, version: 1, onCreate: _onCreateDatabase);
+  }
+
+  Future _onCreateDatabase(Database db, int version) async {
+    try {
+      await db
+          .execute('''CREATE TABLE IF NOT EXISTS $tableName(
+          $id INTEGER PRIMARY KEY AUTOINCREMENT,
+          $firstName TEXT NOT NULL,
+          $lastName TEXT NOT NULL,
+          $emailAddress TEXT NOT NULL,
+          $joiningDate TEXT NOT NULL,
+          $password TEXT NOT NULL,
+          $confirmPassword TEXT NOT NULL,
+          $designation TEXT NOT NULL,
+          $department TEXT NOT NULL,
+          $gender TEXT NOT NULL,
+          $mobileNo TEXT NOT NULL,
+          $address TEXT NOT NULL,
+          $imageFile TEXT NOT NULL,
+          $education TEXT NOT NULL,)
+          ''');
+    } catch (e) {
+      print("erro of the database ${e.toString()}");
+    }
+    throw Exception();
+  }
+
+  Future<int> insert(Map<String, dynamic> row) async {
+    Database db = await instance.database;
+    return await db.insert(tableName, row);
+  }
+
+  Future close() async {
+    Database db = await instance.database;
+    return await db.close();
+  }
 }
