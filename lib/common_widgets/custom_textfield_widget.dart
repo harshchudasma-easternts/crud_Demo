@@ -13,6 +13,7 @@ class CustomTextFieldWidget extends StatelessWidget {
   final Widget? suffixIconWidget;
   final List<TextInputFormatter>? textFieldInputFormater;
   final int? textFieldMaximumLines;
+  final bool obsecureText;
   const CustomTextFieldWidget({
     Key? key,
     required this.controller,
@@ -24,11 +25,13 @@ class CustomTextFieldWidget extends StatelessWidget {
     this.suffixIconWidget,
     this.textFieldInputFormater,
     this.textFieldMaximumLines,
+    this.obsecureText =false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      obscureText: obsecureText,
       controller: controller,
       cursorColor: CommonColorConstants.blueLightColor,
       maxLength: maximumLengthOfField,
