@@ -38157,7 +38157,7 @@ s.gmg().V(0,new A.a6E(s))
 s.gtc().V(0,new A.a6F(s))
 s.grq().V(0,new A.a6G(s))
 s.grH().V(0,new A.a6y(s))},
-L(b7,b8){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d=this,c=null,b="Add Professors",a="Basic Information",a0="FirstName",a1="LastName",a2="Joining Date",a3="Password",a4="Confirm Password",a5="Designation",a6="Department",a7="Gender",a8="Mobile No.",a9="UploadPhoto",b0="Drop File Here to Upload",b1="Education",b2=A.ar(b8).w,b3=t.w,b4=b8.T(b3).f.a.a<550?new A.J(1/0,50):new A.J(1/0,60),b5=b8.T(b3).f.a.a>1200||A.agG(b8),b6=d.w
+L(b7,b8){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d=this,c=null,b="Add Professors",a="Basic Information",a0="FirstName",a1="LastName",a2="Joining Date",a3="Password",a4="Confirm Password",a5="Designation",a6="Department",a7="Gender",a8="Mobile No.",a9="UploadPhoto",b0="Upload your File or Image",b1="Education",b2=A.ar(b8).w,b3=t.w,b4=b8.T(b3).f.a.a<550?new A.J(1/0,50):new A.J(1/0,60),b5=b8.T(b3).f.a.a>1200||A.agG(b8),b6=d.w
 if(b5){b3=A.aP(b,c,c,c,A.aB(c,c,B.bV,c,c,c,c,c,c,c,c,24,c,B.V,c,c,!0,c,c,c,c,c,c,c,c),c,c)
 b5=A.kG(6)
 s=A.aP(a,c,c,c,A.aB(c,c,B.u,c,c,c,c,c,c,c,c,16,c,B.aa,c,c,!0,c,c,c,c,c,c,c,c),c,c)
