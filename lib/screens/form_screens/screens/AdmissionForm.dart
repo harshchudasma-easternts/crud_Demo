@@ -680,7 +680,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                                 height: 100.0,
                                                 color: Colors.white,
                                                 child: Text(
-                                                  "Drop File Here to Upload",
+                                                  "Upload your File or Image",
                                                   style: TextStyle(
                                                     fontSize: 16.0,
                                                     fontWeight: FontWeight.bold,
@@ -1218,7 +1218,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                           height: 100.0,
                                           color: Colors.white,
                                           child: Text(
-                                            "Drop File Here to Upload",
+                                            "Upload your File or Image",
                                             style: TextStyle(
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.bold,
