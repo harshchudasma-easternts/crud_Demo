@@ -28,11 +28,11 @@ class HeaderNavigationBar extends StatelessWidget {
                   ),
                 ),
               ),
-              Icon(
-                Icons.menu,
-                size: 24.0,
-                color: Colors.black,
-              ),
+              // Icon(
+              //   Icons.menu,
+              //   size: 24.0,
+              //   color: Colors.black,
+              // ),
               Spacer(),
               Padding(
                 padding: const EdgeInsets.only(right: 16.0),
@@ -156,14 +156,14 @@ class HeaderNavigationBar extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(
-                Icons.menu,
-                size: 24.0,
-                color: Colors.black,
-              ),
-              const SizedBox(
-                width: 12.0,
-              ),
+              // Icon(
+              //   Icons.menu,
+              //   size: 24.0,
+              //   color: Colors.black,
+              // ),
+              // const SizedBox(
+              //   width: 12.0,
+              // ),
               Text(
                 "Education",
                 style: TextStyle(

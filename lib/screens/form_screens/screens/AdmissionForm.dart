@@ -97,23 +97,39 @@ class _AdmissionFormState extends State<AdmissionForm> {
     _textFieldFocusNode();
   }
 
-  void insertData() async {
+  Future<void> insertData({
+    required String firstName,
+    required String lastName,
+    required String email,
+    String? joiningDate,
+    required String password,
+    required String confirmPassword,
+    required String designation,
+    required String department,
+    required String gender,
+    required String mobileNo,
+    String? address,
+    // required String imagebase64String,
+    required String education,
+  }) async {
     Map<String, dynamic> insertRow = {
-      DBHelper.firstName: "Harsh",
-      DBHelper.lastName: "Chudasma",
-      DBHelper.emailAddress: "harshchudasma010@gmail.com",
-      DBHelper.joiningDate: "4456",
-      DBHelper.password: "fadfasdfadf",
-      DBHelper.confirmPassword: "fadfasdfadf",
-      DBHelper.designation: "Computer",
-      DBHelper.department: "Cfadsf",
-      DBHelper.gender: "male",
-      DBHelper.mobileNo: "1156456165646",
-      DBHelper.address: "fasdfasdfasfasdf",
-      DBHelper.imageFile: "fadsfasdfasdfasdf",
-      DBHelper.education: "fadsfadsfasdfasd",
+      DBHelper.firstName: firstName,
+      DBHelper.lastName: lastName,
+      DBHelper.emailAddress: email,
+      DBHelper.joiningDate: joiningDate ?? DateTime.now(),
+      DBHelper.password: password,
+      DBHelper.confirmPassword: confirmPassword,
+      DBHelper.designation: designation,
+      DBHelper.department: department,
+      DBHelper.gender: gender,
+      DBHelper.mobileNo: mobileNo,
+      DBHelper.address: address ?? "-",
+      // DBHelper.imageFile: imagebase64String,
+      DBHelper.education: education,
     };
     final id = await dbHelper.insert(insertRow);
+
+
     print("insert database value ${id}");
   }
 
@@ -720,7 +736,6 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       onPressed: () {
                                         if (_formKey.currentState!.validate()) {
                                           _formKey.currentState!.save();
-                                          // _formValidation();
                                         }
                                       },
                                       child: Padding(
@@ -1398,7 +1413,6 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                   children: [
                                     ElevatedButton(
                                       onPressed: () {
-                                        insertData();
                                         Navigator.of(context).pop();
                                       },
                                       child: Padding(
@@ -1422,9 +1436,57 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
+                                        print("a;; the details for here ${_firstNameTextEditingController.text}");
+                                        print("a;; the details for here ${_lastNameTextEditingController.text}");
+                                        print("a;; the details for here ${_emailTextEditingController.text}");
+                                        print("a;; the details for here ${_joiningDateTextEditingController.text}");
+                                        print("a;; the details for here ${_passwordTextEditingController.text}");
+                                        print("a;; the details for here ${_confirmTextEditingController.text}");
+                                        print("a;; the details for here ${_designationTExtEdtitingcontroller.text}");
+                                        print("a;; the details for here ${_mobileNoTextEditingController.text}");
+                                        print("a;; the details for here ${_addressTextEditingController.text}");
+                                        print("a;; the details for here ${_educationTextEditingController.text}");
+                                        print("a;; the details for here ${selectedDepartment}");
+                                        print("a;; the details for here ${selectedGender}");
                                         if (_formKey.currentState!.validate()) {
                                           _formKey.currentState!.save();
                                           // _formValidation();
+                                          insertData(
+                                            firstName:
+                                                _firstNameTextEditingController
+                                                    .text,
+                                            lastName:
+                                                _lastNameTextEditingController
+                                                    .text,
+                                            email: _emailTextEditingController
+                                                .text,
+                                            joiningDate:
+                                                _joiningDateTextEditingController
+                                                    .text,
+                                            password:
+                                                _passwordTextEditingController
+                                                    .text,
+                                            confirmPassword:
+                                                _confirmTextEditingController
+                                                    .text,
+                                            designation:
+                                                _designationTExtEdtitingcontroller
+                                                    .text,
+                                            department: selectedDepartment!,
+                                            gender: selectedGender!,
+                                            mobileNo:
+                                                _mobileNoTextEditingController
+                                                    .text,
+                                            address:
+                                                _addressTextEditingController
+                                                    .text,
+                                            education:
+                                                _educationTextEditingController
+                                                    .text,
+                                          ).then((value) {
+
+                                            Navigator.of(context).pop();
+                                          });
                                         }
                                       },
                                       child: Padding(
