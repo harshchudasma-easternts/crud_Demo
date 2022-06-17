@@ -1275,33 +1275,8 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
-                                        print(
-                                            "a;; the details for here ${_firstNameTextEditingController.text}");
-                                        print(
-                                            "a;; the details for here ${_lastNameTextEditingController.text}");
-                                        print(
-                                            "a;; the details for here ${_emailTextEditingController.text}");
-                                        print(
-                                            "a;; the details for here ${_joiningDateTextEditingController.text}");
-                                        print(
-                                            "a;; the details for here ${_passwordTextEditingController.text}");
-                                        print(
-                                            "a;; the details for here ${_confirmTextEditingController.text}");
-                                        print(
-                                            "a;; the details for here ${_designationTExtEdtitingcontroller.text}");
-                                        print(
-                                            "a;; the details for here ${_mobileNoTextEditingController.text}");
-                                        print(
-                                            "a;; the details for here ${_addressTextEditingController.text}");
-                                        print(
-                                            "a;; the details for here ${_educationTextEditingController.text}");
-                                        print(
-                                            "a;; the details for here ${selectedDepartment}");
-                                        print(
-                                            "a;; the details for here ${selectedGender}");
                                         if (_formKey.currentState!.validate()) {
                                           _formKey.currentState!.save();
-                                          // _formValidation();
                                           insertData(
                                             firstName:
                                                 _firstNameTextEditingController
@@ -1334,9 +1309,11 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             education:
                                                 _educationTextEditingController
                                                     .text,
-                                          ).then((value) {
-                                            Navigator.of(context).pop();
-                                          });
+                                          ).then(
+                                            (value) {
+                                              Navigator.of(context).pop();
+                                            },
+                                          );
                                         }
                                       },
                                       child: Padding(
