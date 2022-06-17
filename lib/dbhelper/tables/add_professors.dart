@@ -38,7 +38,7 @@ class DBHelper {
   }
 
   Future _onCreateDatabase(Database db, int version) async {
-
+    try {
       await db.execute('''CREATE TABLE $tableName 
       ($id INTEGER PRIMARY KEY AUTOINCREMENT,
       $firstName TEXT NOT NULL,
@@ -53,17 +53,18 @@ class DBHelper {
       $mobileNo TEXT NOT NULL,
       $address TEXT NOT NULL,
       $education TEXT NOT NULL)''');
+
       // $imageFile TEXT NOT NULL,
+
+    } catch (e) {
+      print("error of the database ${e.toString()}");
+    }
+    throw Exception();
   }
 
   Future<int> insert(Map<String, dynamic> row) async {
     Database db = await instance.database;
     return await db.insert(tableName, row);
-  }
-
-  Future<List<Map>> getData() async {
-    Database db = await instance.database;
-    return await db.rawQuery('select * FROM $tableName');
   }
 
   Future close() async {
