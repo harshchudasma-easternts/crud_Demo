@@ -1,5 +1,6 @@
 import 'package:animation_demo/common_widgets/header_navbar_widget.dart';
 import 'package:animation_demo/constants/image_constants.dart';
+import 'package:animation_demo/dbhelper/tables/add_professors.dart';
 import 'package:animation_demo/screens/list_screen/widgets/all_prefessors_list.dart';
 import 'package:animation_demo/utils/responsive_widget.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +14,11 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child:
-
-      Scaffold(
+      child: Scaffold(
         appBar: PreferredSize(
           preferredSize: ResponsiveWidget.isMobileScreen(context)
               ? Size.fromHeight(50.0)

@@ -6,6 +6,7 @@ import 'package:animation_demo/common_widgets/header_navbar_widget.dart';
 import 'package:animation_demo/constants/color_constants.dart';
 import 'package:animation_demo/constants/image_constants.dart';
 import 'package:animation_demo/dbhelper/tables/add_professors.dart';
+import 'package:animation_demo/screens/list_screen/screens/list_screen.dart';
 import 'package:animation_demo/utils/permission_utils.dart';
 import 'package:animation_demo/utils/responsive_widget.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -88,12 +89,11 @@ class _AdmissionFormState extends State<AdmissionForm> {
   late final _mobileNoFocusNode = FocusNode();
   late final _addressFocusNode = FocusNode();
   late final _educationFocusNode = FocusNode();
-  var dbHelper;
+  final dbHelper = DBHelper.instance;
 
   @override
   void initState() {
     super.initState();
-    dbHelper = DBHelper.instance;
     _textFieldFocusNode();
   }
 
@@ -1311,7 +1311,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                                     .text,
                                           ).then(
                                             (value) {
-                                              Navigator.of(context).pop();
+                                              Navigator.popAndPushNamed(context, ListScreen.routeName);
                                             },
                                           );
                                         }

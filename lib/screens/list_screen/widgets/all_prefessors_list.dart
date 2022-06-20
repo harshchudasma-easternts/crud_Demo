@@ -4,6 +4,8 @@ import 'package:animation_demo/screens/form_screens/screens/AdmissionForm.dart';
 import 'package:animation_demo/utils/responsive_widget.dart';
 import 'package:flutter/material.dart';
 
+import '../../../dbhelper/tables/add_professors.dart';
+
 class AllProfessorsList extends StatefulWidget {
   const AllProfessorsList({Key? key}) : super(key: key);
 
@@ -13,6 +15,24 @@ class AllProfessorsList extends StatefulWidget {
 
 class _AllProfessorsListState extends State<AllProfessorsList> {
   bool isExpandedProfessorsList = true;
+
+  final dbHelper =  DBHelper.instance;
+  bool isLoadingValue = true;
+  bool isDataValue = false;
+  List<Map<String,dynamic>> listofData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    dbHelper.getAllData().then((value) {
+      listofData = value;
+      isLoadingValue = false;
+      setState(() {});
+      for(int i =0;i<= listofData.length;i++){
+        print(listofData[i].length);
+      }
+    });
+  }
 
   Widget build(BuildContext context) {
     if (ResponsiveWidget.isLargeScreen(context) ||
@@ -274,8 +294,12 @@ class _AllProfessorsListState extends State<AllProfessorsList> {
                   height: 24.0,
                 ),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: 10,
+                  child: isLoadingValue == true ? Center(
+                    child: CircularProgressIndicator(),
+                  ) : listofData.length <= 0 ? Center(
+                    child: Text("No Data Found!"),
+                  ) : ListView.builder(
+                    itemCount: listofData.length,
                     itemBuilder: (context, index) {
                       return IntrinsicHeight(
                         child: Card(
@@ -313,14 +337,14 @@ class _AllProfessorsListState extends State<AllProfessorsList> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Amit",
+                                          "${listofData[index]['FirstName']}",
                                           style: TextStyle(
                                             fontSize: 14.0,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                         Text(
-                                          "Department",
+                                          "${listofData[index]['Department']}",
                                           style: TextStyle(
                                             fontSize: 14.0,
                                           ),
@@ -349,7 +373,12 @@ class _AllProfessorsListState extends State<AllProfessorsList> {
                                   highlightColor: Colors.transparent,
                                   splashColor: Colors.transparent,
                                   hoverColor: Colors.transparent,
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    print(listofData[index]['id']);
+                                    listofData.remove(index);
+                                    dbHelper.delete(listofData[index]['id']);
+                                    setState(() {});
+                                  },
                                   icon: Icon(
                                     Icons.delete,
                                     size: 20.0,
