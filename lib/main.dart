@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         ListScreen.routeName: (context) => ListScreen(),
-        AdmissionForm.routeName: (context) => AdmissionForm(),
+        AdmissionForm.routeName: (context) => AdmissionForm(isEdit: false),
       },
     );
   }

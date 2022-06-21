@@ -16,22 +16,26 @@ class AllProfessorsList extends StatefulWidget {
 class _AllProfessorsListState extends State<AllProfessorsList> {
   bool isExpandedProfessorsList = true;
 
-  final dbHelper =  DBHelper.instance;
+  final dbHelper = DBHelper.instance;
   bool isLoadingValue = true;
   bool isDataValue = false;
-  List<Map<String,dynamic>> listofData = [];
+  List<Map<String, dynamic>> listofData = [];
 
   @override
   void initState() {
     super.initState();
-    dbHelper.getAllData().then((value) {
-      listofData = value;
-      isLoadingValue = false;
-      setState(() {});
-      for(int i =0;i<= listofData.length;i++){
-        print(listofData[i].length);
-      }
-    });
+    getDatabaseData();
+  }
+
+  getDatabaseData() {
+    dbHelper.getAllData().then(
+      (value) {
+        listofData = value;
+        isLoadingValue = false;
+        setState(() {});
+        print("${listofData[0]}");
+      },
+    );
   }
 
   Widget build(BuildContext context) {
@@ -294,105 +298,146 @@ class _AllProfessorsListState extends State<AllProfessorsList> {
                   height: 24.0,
                 ),
                 Expanded(
-                  child: isLoadingValue == true ? Center(
-                    child: CircularProgressIndicator(),
-                  ) : listofData.length <= 0 ? Center(
-                    child: Text("No Data Found!"),
-                  ) : ListView.builder(
-                    itemCount: listofData.length,
-                    itemBuilder: (context, index) {
-                      return IntrinsicHeight(
-                        child: Card(
-                          elevation: 2.0,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16.0,
-                              vertical: 8.0,
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 42.0,
-                                  width: 42.0,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: AssetImage(
-                                        CommonImageConstats.profileImage,
+                  child: isLoadingValue == true
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : listofData.length <= 0
+                          ? Center(
+                              child: Text("No Data Found!"),
+                            )
+                          : ListView.builder(
+                              itemCount: listofData.length,
+                              itemBuilder: (context, index) {
+                                return IntrinsicHeight(
+                                  child: Card(
+                                    elevation: 2.0,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 16.0,
+                                        vertical: 8.0,
+                                      ),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            height: 42.0,
+                                            width: 42.0,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                fit: BoxFit.fill,
+                                                image: AssetImage(
+                                                  CommonImageConstats
+                                                      .profileImage,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 16.0,
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "${listofData[index]['FirstName']}",
+                                                    style: TextStyle(
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    "${listofData[index]['Department']}",
+                                                    style: TextStyle(
+                                                      fontSize: 14.0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          SizedBox(
+                                            height: 24.0,
+                                            width: 24.0,
+                                            child: IconButton(
+                                              color: Colors.transparent,
+                                              focusColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
+                                              splashColor: Colors.transparent,
+                                              hoverColor: Colors.transparent,
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AdmissionForm(
+                                                      isEdit: true,
+                                                      listOfDynamic: listofData,
+                                                      indexofList: index,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              icon: Icon(
+                                                Icons.edit,
+                                                size: 20.0,
+                                                color: CommonColorConstants
+                                                    .blueLightColor,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 6.0,
+                                          ),
+                                          SizedBox(
+                                            height: 24.0,
+                                            width: 24.0,
+                                            child: IconButton(
+                                              color: Colors.transparent,
+                                              focusColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
+                                              splashColor: Colors.transparent,
+                                              hoverColor: Colors.transparent,
+                                              onPressed: () {
+                                                dbHelper
+                                                    .delete(
+                                                  listofData[index]['id'],
+                                                )
+                                                    .then(
+                                                  (value) {
+                                                    listofData = value;
+                                                    isLoadingValue = false;
+                                                    setState(() {});
+                                                  },
+                                                );
+                                              },
+                                              icon: Icon(
+                                                Icons.delete,
+                                                size: 20.0,
+                                                color: CommonColorConstants
+                                                    .orangeLightColor,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 16.0,
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${listofData[index]['FirstName']}",
-                                          style: TextStyle(
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          "${listofData[index]['Department']}",
-                                          style: TextStyle(
-                                            fontSize: 14.0,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Spacer(),
-                                IconButton(
-                                  color: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  splashColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.edit,
-                                    size: 20.0,
-                                    color: CommonColorConstants.blueLightColor,
-                                  ),
-                                ),
-                                IconButton(
-                                  color: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  splashColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  onPressed: () {
-                                    print(listofData[index]['id']);
-                                    listofData.remove(index);
-                                    dbHelper.delete(listofData[index]['id']);
-                                    setState(() {});
-                                  },
-                                  icon: Icon(
-                                    Icons.delete,
-                                    size: 20.0,
-                                    color:
-                                        CommonColorConstants.orangeLightColor,
-                                  ),
-                                ),
-                              ],
+                                );
+                              },
                             ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
                 ),
               ],
             ),

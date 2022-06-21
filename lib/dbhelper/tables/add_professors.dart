@@ -8,14 +8,14 @@ class DBHelper {
   static const tableName = 'AddProfessor'; // table name
   static const databaseName = 'Education.db'; // database name
   late Database _database;
-  static const id = "id"; // column name
+  static const columnid = "id"; // column name
   static const firstName = "FirstName"; // Column Name
   static const lastName = "LastName"; // Column Name
   static const emailAddress = "EmailAddress"; // Column Name
   static const joiningDate = "JoiningDate"; // Column Name
   static const password = "Password"; // Column Name
   static const confirmPassword = "ConfirmPassword"; // Column Name
-  static const designation = "Designatin"; // Column Name
+  static const designation = "Designation"; // Column Name
   static const department = "Department"; // Column Name
   static const gender = "Gender"; // Column Name
   static const mobileNo = "MobileNo"; // Column Name
@@ -38,9 +38,8 @@ class DBHelper {
   }
 
   Future _onCreateDatabase(Database db, int version) async {
-
-      await db.execute('''CREATE TABLE $tableName 
-      ($id INTEGER PRIMARY KEY AUTOINCREMENT,
+    await db.execute('''CREATE TABLE $tableName 
+      ($columnid INTEGER PRIMARY KEY AUTOINCREMENT,
       $firstName TEXT NOT NULL,
       $lastName TEXT NOT NULL,
       $emailAddress TEXT NOT NULL,
@@ -62,13 +61,23 @@ class DBHelper {
 
   Future<List<Map<String, dynamic>>> getAllData() async {
     Database db = await instance.database;
-    List<Map<String, dynamic>> listOfDataTable = await db.query(tableName);
+    List<Map<String, dynamic>>? listOfDataTable = await db.query(tableName);
+    print("get all the data from the database ${listOfDataTable}");
     return listOfDataTable;
   }
 
-  Future<int> delete(int id) async {
+  Future<List<Map<String, dynamic>>> delete(int id) async {
     Database db = await instance.database;
-    return await db.delete(tableName,where: '$id = ?',whereArgs: [id]);
+    await db.delete(tableName, where: '$columnid = ?', whereArgs: [id]);
+    return await getAllData();
+  }
+
+  Future<int> update(Map<String, dynamic> row) async {
+    Database db = await instance.database;
+    int id = row[columnid];
+    print("update data id : $id");
+    return await db
+        .update(tableName, row, where: '$columnid = ?', whereArgs: [id]);
   }
 
   Future close() async {

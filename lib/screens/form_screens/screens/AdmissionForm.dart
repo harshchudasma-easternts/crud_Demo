@@ -20,8 +20,13 @@ import 'package:path/path.dart' as path;
 
 class AdmissionForm extends StatefulWidget {
   static const routeName = "/admissionForm";
+  bool isEdit = false;
+  List<Map<String, dynamic>>? listOfDynamic;
+  int? indexofList;
 
-  const AdmissionForm({Key? key}) : super(key: key);
+  AdmissionForm(
+      {Key? key, required this.isEdit, this.listOfDynamic, this.indexofList})
+      : super(key: key);
 
   @override
   State<AdmissionForm> createState() => _AdmissionFormState();
@@ -95,6 +100,27 @@ class _AdmissionFormState extends State<AdmissionForm> {
   void initState() {
     super.initState();
     _textFieldFocusNode();
+    if (widget.isEdit) {
+      _setDataForUpdate();
+    }
+  }
+
+  _setDataForUpdate() {
+    _firstNameTextEditingController.text =
+        widget.listOfDynamic![widget.indexofList!]['FirstName'];
+    _lastNameTextEditingController.text =
+        widget.listOfDynamic![widget.indexofList!]['LastName'];
+    _emailTextEditingController.text =
+        widget.listOfDynamic![widget.indexofList!]['EmailAddress'];
+    _designationTExtEdtitingcontroller.text =
+        widget.listOfDynamic![widget.indexofList!]['Designation'];
+    selectedDepartment =
+        widget.listOfDynamic![widget.indexofList!]['Department'];
+    selectedGender = widget.listOfDynamic![widget.indexofList!]['Gender'];
+    _mobileNoTextEditingController.text =
+        widget.listOfDynamic![widget.indexofList!]['MobileNo'];
+    _educationTextEditingController.text =
+        widget.listOfDynamic![widget.indexofList!]['Education'];
   }
 
   Future<void> insertData({
@@ -130,6 +156,43 @@ class _AdmissionFormState extends State<AdmissionForm> {
     final id = await dbHelper.insert(insertRow);
 
     print("insert database value ${id}");
+  }
+
+  Future<void> updateData({
+    required String firstName,
+    required String lastName,
+    required String email,
+    String? joiningDate,
+    required String password,
+    required String confirmPassword,
+    required String designation,
+    required String department,
+    required String gender,
+    required String mobileNo,
+    String? address,
+    // required String imagebase64String,
+    required String education,
+  }) async {
+    Map<String, dynamic> updateRow = {
+      DBHelper.columnid: widget.listOfDynamic![widget.indexofList!]['id'],
+      DBHelper.firstName: firstName,
+      DBHelper.lastName: lastName,
+      DBHelper.emailAddress: email,
+      DBHelper.joiningDate: joiningDate ?? DateTime.now(),
+      DBHelper.password: password,
+      DBHelper.confirmPassword: confirmPassword,
+      DBHelper.designation: designation,
+      DBHelper.department: department,
+      DBHelper.gender: gender,
+      DBHelper.mobileNo: mobileNo,
+      DBHelper.address: address ?? "-",
+      // DBHelper.imageFile: imagebase64String,
+      DBHelper.education: education,
+    };
+    // final id = await dbHelper.insert(insertRow);
+    final id = await dbHelper.update(updateRow);
+
+    print("update database value ${id}");
   }
 
   void _textFieldFocusNode() {
@@ -1273,65 +1336,140 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                     const SizedBox(
                                       width: 12.0,
                                     ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        if (_formKey.currentState!.validate()) {
-                                          _formKey.currentState!.save();
-                                          insertData(
-                                            firstName:
-                                                _firstNameTextEditingController
-                                                    .text,
-                                            lastName:
-                                                _lastNameTextEditingController
-                                                    .text,
-                                            email: _emailTextEditingController
-                                                .text,
-                                            joiningDate:
-                                                _joiningDateTextEditingController
-                                                    .text,
-                                            password:
-                                                _passwordTextEditingController
-                                                    .text,
-                                            confirmPassword:
-                                                _confirmTextEditingController
-                                                    .text,
-                                            designation:
-                                                _designationTExtEdtitingcontroller
-                                                    .text,
-                                            department: selectedDepartment!,
-                                            gender: selectedGender!,
-                                            mobileNo:
-                                                _mobileNoTextEditingController
-                                                    .text,
-                                            address:
-                                                _addressTextEditingController
-                                                    .text,
-                                            education:
-                                                _educationTextEditingController
-                                                    .text,
-                                          ).then(
-                                            (value) {
-                                              Navigator.popAndPushNamed(context, ListScreen.routeName);
+                                    widget.isEdit == true
+                                        ? ElevatedButton(
+                                            onPressed: () {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                _formKey.currentState!.save();
+                                                updateData(
+                                                  firstName:
+                                                      _firstNameTextEditingController
+                                                          .text,
+                                                  lastName:
+                                                      _lastNameTextEditingController
+                                                          .text,
+                                                  email:
+                                                      _emailTextEditingController
+                                                          .text,
+                                                  joiningDate:
+                                                      _joiningDateTextEditingController
+                                                          .text,
+                                                  password:
+                                                      _passwordTextEditingController
+                                                          .text,
+                                                  confirmPassword:
+                                                      _confirmTextEditingController
+                                                          .text,
+                                                  designation:
+                                                      _designationTExtEdtitingcontroller
+                                                          .text,
+                                                  department:
+                                                      selectedDepartment!,
+                                                  gender: selectedGender!,
+                                                  mobileNo:
+                                                      _mobileNoTextEditingController
+                                                          .text,
+                                                  address:
+                                                      _addressTextEditingController
+                                                          .text,
+                                                  education:
+                                                      _educationTextEditingController
+                                                          .text,
+                                                ).then(
+                                                  (value) {
+                                                    Navigator.popAndPushNamed(
+                                                        context,
+                                                        ListScreen.routeName);
+                                                  },
+                                                );
+                                              }
                                             },
-                                          );
-                                        }
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0, vertical: 6.0),
-                                        child: Text(
-                                          "Submit",
-                                          style: TextStyle(
-                                            fontSize: 20.0,
-                                            color: Colors.white,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 8.0,
+                                                vertical: 6.0,
+                                              ),
+                                              child: Text(
+                                                "Update",
+                                                style: TextStyle(
+                                                  fontSize: 20.0,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                            style: ElevatedButton.styleFrom(
+                                              primary: CommonColorConstants
+                                                  .blueLightColor,
+                                            ),
+                                          )
+                                        : ElevatedButton(
+                                            onPressed: () {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                _formKey.currentState!.save();
+                                                insertData(
+                                                  firstName:
+                                                      _firstNameTextEditingController
+                                                          .text,
+                                                  lastName:
+                                                      _lastNameTextEditingController
+                                                          .text,
+                                                  email:
+                                                      _emailTextEditingController
+                                                          .text,
+                                                  joiningDate:
+                                                      _joiningDateTextEditingController
+                                                          .text,
+                                                  password:
+                                                      _passwordTextEditingController
+                                                          .text,
+                                                  confirmPassword:
+                                                      _confirmTextEditingController
+                                                          .text,
+                                                  designation:
+                                                      _designationTExtEdtitingcontroller
+                                                          .text,
+                                                  department:
+                                                      selectedDepartment!,
+                                                  gender: selectedGender!,
+                                                  mobileNo:
+                                                      _mobileNoTextEditingController
+                                                          .text,
+                                                  address:
+                                                      _addressTextEditingController
+                                                          .text,
+                                                  education:
+                                                      _educationTextEditingController
+                                                          .text,
+                                                ).then(
+                                                  (value) {
+                                                    Navigator.popAndPushNamed(
+                                                        context,
+                                                        ListScreen.routeName);
+                                                  },
+                                                );
+                                              }
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8.0,
+                                                      vertical: 6.0),
+                                              child: Text(
+                                                "Submit",
+                                                style: TextStyle(
+                                                  fontSize: 20.0,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                            style: ElevatedButton.styleFrom(
+                                              primary: CommonColorConstants
+                                                  .blueLightColor,
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        primary:
-                                            CommonColorConstants.blueLightColor,
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ],
