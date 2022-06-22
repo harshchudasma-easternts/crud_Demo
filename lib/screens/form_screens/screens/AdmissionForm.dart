@@ -6,6 +6,7 @@ import 'package:animation_demo/common_widgets/header_navbar_widget.dart';
 import 'package:animation_demo/constants/color_constants.dart';
 import 'package:animation_demo/constants/image_constants.dart';
 import 'package:animation_demo/dbhelper/tables/add_professors.dart';
+import 'package:animation_demo/provider_demo.dart/database_provider.dart';
 import 'package:animation_demo/screens/list_screen/screens/list_screen.dart';
 import 'package:animation_demo/utils/permission_utils.dart';
 import 'package:animation_demo/utils/responsive_widget.dart';
@@ -17,15 +18,14 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
+import 'package:provider/provider.dart';
 
 class AdmissionForm extends StatefulWidget {
   static const routeName = "/admissionForm";
   bool isEdit = false;
-  List<Map<String, dynamic>>? listOfDynamic;
-  int? indexofList;
+  Map<String, dynamic>? listOfDynamic;
 
-  AdmissionForm(
-      {Key? key, required this.isEdit, this.listOfDynamic, this.indexofList})
+  AdmissionForm({Key? key, required this.isEdit, this.listOfDynamic})
       : super(key: key);
 
   @override
@@ -94,7 +94,6 @@ class _AdmissionFormState extends State<AdmissionForm> {
   late final _mobileNoFocusNode = FocusNode();
   late final _addressFocusNode = FocusNode();
   late final _educationFocusNode = FocusNode();
-  final dbHelper = DBHelper.instance;
 
   @override
   void initState() {
@@ -106,93 +105,15 @@ class _AdmissionFormState extends State<AdmissionForm> {
   }
 
   _setDataForUpdate() {
-    _firstNameTextEditingController.text =
-        widget.listOfDynamic![widget.indexofList!]['FirstName'];
-    _lastNameTextEditingController.text =
-        widget.listOfDynamic![widget.indexofList!]['LastName'];
-    _emailTextEditingController.text =
-        widget.listOfDynamic![widget.indexofList!]['EmailAddress'];
+    _firstNameTextEditingController.text = widget.listOfDynamic!['FirstName'];
+    _lastNameTextEditingController.text = widget.listOfDynamic!['LastName'];
+    _emailTextEditingController.text = widget.listOfDynamic!['EmailAddress'];
     _designationTExtEdtitingcontroller.text =
-        widget.listOfDynamic![widget.indexofList!]['Designation'];
-    selectedDepartment =
-        widget.listOfDynamic![widget.indexofList!]['Department'];
-    selectedGender = widget.listOfDynamic![widget.indexofList!]['Gender'];
-    _mobileNoTextEditingController.text =
-        widget.listOfDynamic![widget.indexofList!]['MobileNo'];
-    _educationTextEditingController.text =
-        widget.listOfDynamic![widget.indexofList!]['Education'];
-  }
-
-  Future<void> insertData({
-    required String firstName,
-    required String lastName,
-    required String email,
-    String? joiningDate,
-    required String password,
-    required String confirmPassword,
-    required String designation,
-    required String department,
-    required String gender,
-    required String mobileNo,
-    String? address,
-    // required String imagebase64String,
-    required String education,
-  }) async {
-    Map<String, dynamic> insertRow = {
-      DBHelper.firstName: firstName,
-      DBHelper.lastName: lastName,
-      DBHelper.emailAddress: email,
-      DBHelper.joiningDate: joiningDate ?? DateTime.now(),
-      DBHelper.password: password,
-      DBHelper.confirmPassword: confirmPassword,
-      DBHelper.designation: designation,
-      DBHelper.department: department,
-      DBHelper.gender: gender,
-      DBHelper.mobileNo: mobileNo,
-      DBHelper.address: address ?? "-",
-      // DBHelper.imageFile: imagebase64String,
-      DBHelper.education: education,
-    };
-    final id = await dbHelper.insert(insertRow);
-
-    print("insert database value ${id}");
-  }
-
-  Future<void> updateData({
-    required String firstName,
-    required String lastName,
-    required String email,
-    String? joiningDate,
-    required String password,
-    required String confirmPassword,
-    required String designation,
-    required String department,
-    required String gender,
-    required String mobileNo,
-    String? address,
-    // required String imagebase64String,
-    required String education,
-  }) async {
-    Map<String, dynamic> updateRow = {
-      DBHelper.columnid: widget.listOfDynamic![widget.indexofList!]['id'],
-      DBHelper.firstName: firstName,
-      DBHelper.lastName: lastName,
-      DBHelper.emailAddress: email,
-      DBHelper.joiningDate: joiningDate ?? DateTime.now(),
-      DBHelper.password: password,
-      DBHelper.confirmPassword: confirmPassword,
-      DBHelper.designation: designation,
-      DBHelper.department: department,
-      DBHelper.gender: gender,
-      DBHelper.mobileNo: mobileNo,
-      DBHelper.address: address ?? "-",
-      // DBHelper.imageFile: imagebase64String,
-      DBHelper.education: education,
-    };
-    // final id = await dbHelper.insert(insertRow);
-    final id = await dbHelper.update(updateRow);
-
-    print("update database value ${id}");
+        widget.listOfDynamic!['Designation'];
+    selectedDepartment = widget.listOfDynamic!['Department'];
+    selectedGender = widget.listOfDynamic!['Gender'];
+    _mobileNoTextEditingController.text = widget.listOfDynamic!['MobileNo'];
+    _educationTextEditingController.text = widget.listOfDynamic!['Education'];
   }
 
   void _textFieldFocusNode() {
@@ -362,32 +283,33 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       width: 12.0,
                                     ),
                                     Expanded(
-                                      child: TextFormField(
-                                        controller:
-                                            _joiningDateTextEditingController,
-                                        cursorColor:
-                                            CommonColorConstants.blueLightColor,
-                                        focusNode: _joiningDateFocusNode,
-                                        decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              vertical: 6.0),
-                                          labelText: "Joining Date",
-                                          labelStyle: TextStyle(
-                                            fontSize: 16.0,
-                                            color:
-                                                _joiningDateFocusNode.hasFocus
-                                                    ? CommonColorConstants
-                                                        .blueLightColor
-                                                    : Colors.grey,
-                                          ),
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: CommonColorConstants
-                                                  .blueLightColor,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                      child: SizedBox(),
+                                      // child: TextFormField(
+                                      //   controller:
+                                      //       _joiningDateTextEditingController,
+                                      //   cursorColor:
+                                      //       CommonColorConstants.blueLightColor,
+                                      //   focusNode: _joiningDateFocusNode,
+                                      //   decoration: InputDecoration(
+                                      //     contentPadding: EdgeInsets.symmetric(
+                                      //         vertical: 6.0),
+                                      //     labelText: "Joining Date",
+                                      //     labelStyle: TextStyle(
+                                      //       fontSize: 16.0,
+                                      //       color:
+                                      //           _joiningDateFocusNode.hasFocus
+                                      //               ? CommonColorConstants
+                                      //                   .blueLightColor
+                                      //               : Colors.grey,
+                                      //     ),
+                                      //     focusedBorder: UnderlineInputBorder(
+                                      //       borderSide: BorderSide(
+                                      //         color: CommonColorConstants
+                                      //             .blueLightColor,
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      // ),
                                     )
                                   ],
                                 ),
@@ -699,64 +621,64 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 const SizedBox(
                                   height: 24.0,
                                 ),
-                                webImage.isNotEmpty
-                                    ? Container(
-                                        height: 50.0,
-                                        child: Image.memory(webImage),
-                                      )
-                                    : Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            "UploadPhoto",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 16.0,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 4.0,
-                                          ),
-                                          DottedBorder(
-                                            color: Colors.black,
-                                            strokeWidth: 1,
-                                            dashPattern: [10, 6],
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                PermissionUtil.checkPermission(
-                                                        platform)
-                                                    .then((isGranted) async {
-                                                  if (isGranted) {
-                                                    print(
-                                                        "Image related filename and filepath is tapped");
-                                                    _selectImageFromGallary();
-                                                  } else {
-                                                    print(
-                                                        'perimssion nont granted...........');
-                                                  }
-                                                });
-                                              },
-                                              child: Container(
-                                                alignment: Alignment.center,
-                                                height: 100.0,
-                                                color: Colors.white,
-                                                child: Text(
-                                                  "Upload your File or Image",
-                                                  style: TextStyle(
-                                                    fontSize: 16.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                const SizedBox(
-                                  height: 24.0,
-                                ),
+                                // webImage.isNotEmpty
+                                //     ? Container(
+                                //         height: 50.0,
+                                //         child: Image.memory(webImage),
+                                //       )
+                                //     : Column(
+                                //         crossAxisAlignment:
+                                //             CrossAxisAlignment.stretch,
+                                //         mainAxisSize: MainAxisSize.min,
+                                //         children: [
+                                //           Text(
+                                //             "UploadPhoto",
+                                //             style: TextStyle(
+                                //               color: Colors.black,
+                                //               fontSize: 16.0,
+                                //             ),
+                                //           ),
+                                //           const SizedBox(
+                                //             height: 4.0,
+                                //           ),
+                                //           DottedBorder(
+                                //             color: Colors.black,
+                                //             strokeWidth: 1,
+                                //             dashPattern: [10, 6],
+                                //             child: GestureDetector(
+                                //               onTap: () {
+                                //                 PermissionUtil.checkPermission(
+                                //                         platform)
+                                //                     .then((isGranted) async {
+                                //                   if (isGranted) {
+                                //                     print(
+                                //                         "Image related filename and filepath is tapped");
+                                //                     _selectImageFromGallary();
+                                //                   } else {
+                                //                     print(
+                                //                         'perimssion nont granted...........');
+                                //                   }
+                                //                 });
+                                //               },
+                                //               child: Container(
+                                //                 alignment: Alignment.center,
+                                //                 height: 100.0,
+                                //                 color: Colors.white,
+                                //                 child: Text(
+                                //                   "Upload your File or Image",
+                                //                   style: TextStyle(
+                                //                     fontSize: 16.0,
+                                //                     fontWeight: FontWeight.bold,
+                                //                   ),
+                                //                 ),
+                                //               ),
+                                //             ),
+                                //           ),
+                                //         ],
+                                //       ),
+                                // const SizedBox(
+                                //   height: 24.0,
+                                // ),
                                 CustomTextFieldWidget(
                                   controller: _educationTextEditingController,
                                   textfiledFocusNode: _educationFocusNode,
@@ -964,29 +886,29 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 const SizedBox(
                                   height: 24.0,
                                 ),
-                                TextFormField(
-                                  controller: _joiningDateTextEditingController,
-                                  cursorColor:
-                                      CommonColorConstants.blueLightColor,
-                                  focusNode: _joiningDateFocusNode,
-                                  decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 6.0),
-                                    labelText: "Joining Date",
-                                    labelStyle: TextStyle(
-                                      fontSize: 16.0,
-                                      color: _joiningDateFocusNode.hasFocus
-                                          ? CommonColorConstants.blueLightColor
-                                          : Colors.grey,
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color:
-                                            CommonColorConstants.blueLightColor,
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                // TextFormField(
+                                //   controller: _joiningDateTextEditingController,
+                                //   cursorColor:
+                                //       CommonColorConstants.blueLightColor,
+                                //   focusNode: _joiningDateFocusNode,
+                                //   decoration: InputDecoration(
+                                //     contentPadding:
+                                //         EdgeInsets.symmetric(vertical: 6.0),
+                                //     labelText: "Joining Date",
+                                //     labelStyle: TextStyle(
+                                //       fontSize: 16.0,
+                                //       color: _joiningDateFocusNode.hasFocus
+                                //           ? CommonColorConstants.blueLightColor
+                                //           : Colors.grey,
+                                //     ),
+                                //     focusedBorder: UnderlineInputBorder(
+                                //       borderSide: BorderSide(
+                                //         color:
+                                //             CommonColorConstants.blueLightColor,
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
                                 const SizedBox(
                                   height: 24.0,
                                 ),
@@ -1240,61 +1162,61 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 const SizedBox(
                                   height: 24.0,
                                 ),
-                                Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      "UploadPhoto",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16.0,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 4.0,
-                                    ),
-                                    DottedBorder(
-                                      color: Colors.black,
-                                      strokeWidth: 1,
-                                      dashPattern: [10, 6],
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          PermissionUtil.checkPermission(
-                                                  platform)
-                                              .then(
-                                            (isGranted) async {
-                                              if (isGranted) {
-                                                print(
-                                                    "Image related filename and filepath is tapped");
-                                                _selectImageFromGallary();
-                                              } else {
-                                                print(
-                                                    'perimssion nont granted...........');
-                                              }
-                                            },
-                                          );
-                                        },
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          height: 100.0,
-                                          color: Colors.white,
-                                          child: Text(
-                                            "Upload your File or Image",
-                                            style: TextStyle(
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 24.0,
-                                ),
+                                // Column(
+                                //   crossAxisAlignment:
+                                //       CrossAxisAlignment.stretch,
+                                //   mainAxisSize: MainAxisSize.min,
+                                //   children: [
+                                //     Text(
+                                //       "UploadPhoto",
+                                //       style: TextStyle(
+                                //         color: Colors.black,
+                                //         fontSize: 16.0,
+                                //       ),
+                                //     ),
+                                //     const SizedBox(
+                                //       height: 4.0,
+                                //     ),
+                                //     DottedBorder(
+                                //       color: Colors.black,
+                                //       strokeWidth: 1,
+                                //       dashPattern: [10, 6],
+                                //       child: GestureDetector(
+                                //         onTap: () {
+                                //           PermissionUtil.checkPermission(
+                                //                   platform)
+                                //               .then(
+                                //             (isGranted) async {
+                                //               if (isGranted) {
+                                //                 print(
+                                //                     "Image related filename and filepath is tapped");
+                                //                 _selectImageFromGallary();
+                                //               } else {
+                                //                 print(
+                                //                     'perimssion nont granted...........');
+                                //               }
+                                //             },
+                                //           );
+                                //         },
+                                //         child: Container(
+                                //           alignment: Alignment.center,
+                                //           height: 100.0,
+                                //           color: Colors.white,
+                                //           child: Text(
+                                //             "Upload your File or Image",
+                                //             style: TextStyle(
+                                //               fontSize: 16.0,
+                                //               fontWeight: FontWeight.bold,
+                                //             ),
+                                //           ),
+                                //         ),
+                                //       ),
+                                //     ),
+                                //   ],
+                                // ),
+                                // const SizedBox(
+                                //   height: 24.0,
+                                // ),
                                 CustomTextFieldWidget(
                                   controller: _educationTextEditingController,
                                   textfiledFocusNode: _educationFocusNode,
@@ -1337,138 +1259,231 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       width: 12.0,
                                     ),
                                     widget.isEdit == true
-                                        ? ElevatedButton(
-                                            onPressed: () {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                _formKey.currentState!.save();
-                                                updateData(
-                                                  firstName:
-                                                      _firstNameTextEditingController
-                                                          .text,
-                                                  lastName:
-                                                      _lastNameTextEditingController
-                                                          .text,
-                                                  email:
-                                                      _emailTextEditingController
-                                                          .text,
-                                                  joiningDate:
-                                                      _joiningDateTextEditingController
-                                                          .text,
-                                                  password:
-                                                      _passwordTextEditingController
-                                                          .text,
-                                                  confirmPassword:
-                                                      _confirmTextEditingController
-                                                          .text,
-                                                  designation:
-                                                      _designationTExtEdtitingcontroller
-                                                          .text,
-                                                  department:
-                                                      selectedDepartment!,
-                                                  gender: selectedGender!,
-                                                  mobileNo:
-                                                      _mobileNoTextEditingController
-                                                          .text,
-                                                  address:
-                                                      _addressTextEditingController
-                                                          .text,
-                                                  education:
-                                                      _educationTextEditingController
-                                                          .text,
-                                                ).then(
-                                                  (value) {
-                                                    Navigator.popAndPushNamed(
-                                                        context,
-                                                        ListScreen.routeName);
-                                                  },
-                                                );
-                                              }
-                                            },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 8.0,
-                                                vertical: 6.0,
-                                              ),
-                                              child: Text(
-                                                "Update",
-                                                style: TextStyle(
-                                                  fontSize: 20.0,
-                                                  color: Colors.white,
+                                        ? Consumer<DatabaseProvider>(
+                                            builder: (context, providerValue,
+                                                child) {
+                                              return ElevatedButton(
+                                                onPressed: () {
+                                                  if (_formKey.currentState!
+                                                      .validate()) {
+                                                    _formKey.currentState!
+                                                        .save();
+
+                                                    providerValue
+                                                        .updateData(
+                                                      ColumnId: widget
+                                                          .listOfDynamic!['id'],
+                                                      firstName:
+                                                          _firstNameTextEditingController
+                                                              .text,
+                                                      lastName:
+                                                          _lastNameTextEditingController
+                                                              .text,
+                                                      email:
+                                                          _emailTextEditingController
+                                                              .text,
+                                                      password:
+                                                          _passwordTextEditingController
+                                                              .text,
+                                                      confirmPassword:
+                                                          _confirmTextEditingController
+                                                              .text,
+                                                      designation:
+                                                          _designationTExtEdtitingcontroller
+                                                              .text,
+                                                      department:
+                                                          selectedDepartment!,
+                                                      gender: selectedGender!,
+                                                      mobileNo:
+                                                          _mobileNoTextEditingController
+                                                              .text,
+                                                      address:
+                                                          _addressTextEditingController
+                                                              .text,
+                                                      education:
+                                                          _educationTextEditingController
+                                                              .text,
+                                                    )
+                                                        .then(
+                                                      (value) {
+                                                        Navigator
+                                                            .popAndPushNamed(
+                                                                context,
+                                                                ListScreen
+                                                                    .routeName);
+                                                      },
+                                                    );
+                                                    // updateData(
+                                                    //   firstName:
+                                                    //       _firstNameTextEditingController
+                                                    //           .text,
+                                                    //   lastName:
+                                                    //       _lastNameTextEditingController
+                                                    //           .text,
+                                                    //   email:
+                                                    //       _emailTextEditingController
+                                                    //           .text,
+                                                    //   password:
+                                                    //       _passwordTextEditingController
+                                                    //           .text,
+                                                    //   confirmPassword:
+                                                    //       _confirmTextEditingController
+                                                    //           .text,
+                                                    //   designation:
+                                                    //       _designationTExtEdtitingcontroller
+                                                    //           .text,
+                                                    //   department:
+                                                    //       selectedDepartment!,
+                                                    //   gender: selectedGender!,
+                                                    //   mobileNo:
+                                                    //       _mobileNoTextEditingController
+                                                    //           .text,
+                                                    //   address:
+                                                    //       _addressTextEditingController
+                                                    //           .text,
+                                                    //   education:
+                                                    //       _educationTextEditingController
+                                                    //           .text,
+                                                    // ).then(
+                                                    //   (value) {
+                                                    //     Navigator.popAndPushNamed(
+                                                    //         context,
+                                                    //         ListScreen.routeName);
+                                                    //   },
+                                                    // );
+                                                  }
+                                                },
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                    horizontal: 8.0,
+                                                    vertical: 6.0,
+                                                  ),
+                                                  child: Text(
+                                                    "Update",
+                                                    style: TextStyle(
+                                                      fontSize: 20.0,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                            style: ElevatedButton.styleFrom(
-                                              primary: CommonColorConstants
-                                                  .blueLightColor,
-                                            ),
-                                          )
-                                        : ElevatedButton(
-                                            onPressed: () {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                _formKey.currentState!.save();
-                                                insertData(
-                                                  firstName:
-                                                      _firstNameTextEditingController
-                                                          .text,
-                                                  lastName:
-                                                      _lastNameTextEditingController
-                                                          .text,
-                                                  email:
-                                                      _emailTextEditingController
-                                                          .text,
-                                                  joiningDate:
-                                                      _joiningDateTextEditingController
-                                                          .text,
-                                                  password:
-                                                      _passwordTextEditingController
-                                                          .text,
-                                                  confirmPassword:
-                                                      _confirmTextEditingController
-                                                          .text,
-                                                  designation:
-                                                      _designationTExtEdtitingcontroller
-                                                          .text,
-                                                  department:
-                                                      selectedDepartment!,
-                                                  gender: selectedGender!,
-                                                  mobileNo:
-                                                      _mobileNoTextEditingController
-                                                          .text,
-                                                  address:
-                                                      _addressTextEditingController
-                                                          .text,
-                                                  education:
-                                                      _educationTextEditingController
-                                                          .text,
-                                                ).then(
-                                                  (value) {
-                                                    Navigator.popAndPushNamed(
-                                                        context,
-                                                        ListScreen.routeName);
-                                                  },
-                                                );
-                                              }
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: CommonColorConstants
+                                                      .blueLightColor,
+                                                ),
+                                              );
                                             },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
+                                          )
+                                        : Consumer<DatabaseProvider>(
+                                            builder: ((context, providerValue,
+                                                child) {
+                                              return ElevatedButton(
+                                                onPressed: () {
+                                                  if (_formKey.currentState!
+                                                      .validate()) {
+                                                    _formKey.currentState!
+                                                        .save();
+                                                    providerValue
+                                                        .insertData(
+                                                      firstName:
+                                                          _firstNameTextEditingController
+                                                              .text,
+                                                      lastName:
+                                                          _lastNameTextEditingController
+                                                              .text,
+                                                      email:
+                                                          _emailTextEditingController
+                                                              .text,
+                                                      password:
+                                                          _passwordTextEditingController
+                                                              .text,
+                                                      confirmPassword:
+                                                          _confirmTextEditingController
+                                                              .text,
+                                                      designation:
+                                                          _designationTExtEdtitingcontroller
+                                                              .text,
+                                                      department:
+                                                          selectedDepartment!,
+                                                      gender: selectedGender!,
+                                                      mobileNo:
+                                                          _mobileNoTextEditingController
+                                                              .text,
+                                                      address:
+                                                          _addressTextEditingController
+                                                              .text,
+                                                      education:
+                                                          _educationTextEditingController
+                                                              .text,
+                                                    )
+                                                        .then(
+                                                      (value) {
+                                                        Navigator
+                                                            .popAndPushNamed(
+                                                                context,
+                                                                ListScreen
+                                                                    .routeName);
+                                                      },
+                                                    );
+                                                    // insertData(
+                                                    //   firstName:
+                                                    //       _firstNameTextEditingController
+                                                    //           .text,
+                                                    //   lastName:
+                                                    //       _lastNameTextEditingController
+                                                    //           .text,
+                                                    //   email:
+                                                    //       _emailTextEditingController
+                                                    //           .text,
+                                                    //   password:
+                                                    //       _passwordTextEditingController
+                                                    //           .text,
+                                                    //   confirmPassword:
+                                                    //       _confirmTextEditingController
+                                                    //           .text,
+                                                    //   designation:
+                                                    //       _designationTExtEdtitingcontroller
+                                                    //           .text,
+                                                    //   department:
+                                                    //       selectedDepartment!,
+                                                    //   gender: selectedGender!,
+                                                    //   mobileNo:
+                                                    //       _mobileNoTextEditingController
+                                                    //           .text,
+                                                    //   address:
+                                                    //       _addressTextEditingController
+                                                    //           .text,
+                                                    //   education:
+                                                    //       _educationTextEditingController
+                                                    //           .text,
+                                                    // ).then(
+                                                    //   (value) {
+                                                    //     Navigator.popAndPushNamed(
+                                                    //         context,
+                                                    //         ListScreen.routeName);
+                                                    //   },
+                                                    // );
+                                                  }
+                                                },
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
                                                       horizontal: 8.0,
                                                       vertical: 6.0),
-                                              child: Text(
-                                                "Submit",
-                                                style: TextStyle(
-                                                  fontSize: 20.0,
-                                                  color: Colors.white,
+                                                  child: Text(
+                                                    "Submit",
+                                                    style: TextStyle(
+                                                      fontSize: 20.0,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                            style: ElevatedButton.styleFrom(
-                                              primary: CommonColorConstants
-                                                  .blueLightColor,
-                                            ),
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: CommonColorConstants
+                                                      .blueLightColor,
+                                                ),
+                                              );
+                                            }),
                                           ),
                                   ],
                                 ),

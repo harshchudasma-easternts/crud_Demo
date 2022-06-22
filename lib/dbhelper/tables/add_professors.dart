@@ -43,7 +43,6 @@ class DBHelper {
       $firstName TEXT NOT NULL,
       $lastName TEXT NOT NULL,
       $emailAddress TEXT NOT NULL,
-      $joiningDate TEXT NOT NULL,
       $password TEXT NOT NULL,
       $confirmPassword TEXT NOT NULL,
       $designation TEXT NOT NULL,

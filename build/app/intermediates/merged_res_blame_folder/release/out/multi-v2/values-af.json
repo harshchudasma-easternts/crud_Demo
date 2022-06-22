@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "/Users/imac/Documents/GitHub/animation_demo/build/app/intermediates/incremental/mergeReleaseResources/merged.dir/values-af/values-af.xml",
+            "map": [
+                {
+                    "source": "/Users/imac/.gradle/caches/transforms-2/files-2.1/3ca45151a5fd76cc281dd2d1c5ca0d59/core-1.8.0/res/values-af/values-af.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    }
+                }
+            ]
+        }
+    ]
+}
