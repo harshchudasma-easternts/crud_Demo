@@ -1,3 +1,4 @@
+import 'package:animation_demo/dbhelper/moor_tables/moor_database.dart';
 import 'package:animation_demo/provider_demo.dart/database_provider.dart';
 import 'package:animation_demo/screens/form_screens/screens/AdmissionForm.dart';
 import 'package:animation_demo/screens/list_screen/screens/list_screen.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
+        ChangeNotifierProvider<DatabaseProvider>(
           create: (context) => DatabaseProvider(),
         ),
       ],

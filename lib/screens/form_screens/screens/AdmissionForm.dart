@@ -5,6 +5,7 @@ import 'package:animation_demo/common_widgets/custom_textfield_widget.dart';
 import 'package:animation_demo/common_widgets/header_navbar_widget.dart';
 import 'package:animation_demo/constants/color_constants.dart';
 import 'package:animation_demo/constants/image_constants.dart';
+import 'package:animation_demo/dbhelper/moor_tables/moor_database.dart';
 import 'package:animation_demo/dbhelper/tables/add_professors.dart';
 import 'package:animation_demo/provider_demo.dart/database_provider.dart';
 import 'package:animation_demo/screens/list_screen/screens/list_screen.dart';
@@ -464,19 +465,21 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             return null;
                                           },
                                           items: departmentList
-                                              .map((item) =>
-                                                  DropdownMenuItem<String>(
-                                                    value: item,
-                                                    child: Text(
-                                                      item,
-                                                      style: const TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.black,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                              .map(
+                                                (item) =>
+                                                    DropdownMenuItem<String>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item,
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.black,
                                                     ),
-                                                  ))
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              )
                                               .toList(),
                                           customItemsHeight: 4,
                                           value: selectedDepartment,

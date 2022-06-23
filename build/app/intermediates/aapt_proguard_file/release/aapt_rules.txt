@@ -1,3 +1,0 @@
--keep class androidx.core.app.CoreComponentFactory { <init>(); }
--keep class com.example.animation_demo.MainActivity { <init>(); }
--keep class io.flutter.plugins.imagepicker.ImagePickerFileProvider { <init>(); }
