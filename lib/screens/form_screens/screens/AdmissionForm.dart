@@ -20,6 +20,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
+import 'package:sqflite/sqlite_api.dart';
 
 class AdmissionForm extends StatefulWidget {
   static const routeName = "/admissionForm";
@@ -36,9 +37,7 @@ class AdmissionForm extends StatefulWidget {
 class _AdmissionFormState extends State<AdmissionForm> {
   DateTime currentDate = DateTime.now();
   String formattedDate = DateFormat('dd-mm-yyyy').format(DateTime.now());
-
-  bool password = true;
-  bool confirmPassword = true;
+  DatabaseProvider? _databaseProvider;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -57,10 +56,6 @@ class _AdmissionFormState extends State<AdmissionForm> {
   late String filePath;
   late String fileName;
   Uint8List webImage = Uint8List(0);
-
-  String? selectedCourse;
-  String? selectedDepartment;
-  String? selectedGender;
 
   late final TextEditingController _firstNameTextEditingController =
       TextEditingController();
@@ -100,8 +95,11 @@ class _AdmissionFormState extends State<AdmissionForm> {
   void initState() {
     super.initState();
     _textFieldFocusNode();
-    if (widget.isEdit) {
-      _setDataForUpdate();
+    if (_databaseProvider == null) {
+      _databaseProvider = Provider.of<DatabaseProvider>(context, listen: false);
+      if (widget.isEdit) {
+        _setDataForUpdate();
+      }
     }
   }
 
@@ -111,49 +109,25 @@ class _AdmissionFormState extends State<AdmissionForm> {
     _emailTextEditingController.text = widget.listOfDynamic!['EmailAddress'];
     _designationTExtEdtitingcontroller.text =
         widget.listOfDynamic!['Designation'];
-    selectedDepartment = widget.listOfDynamic!['Department'];
-    selectedGender = widget.listOfDynamic!['Gender'];
+    _databaseProvider!.selectedDepartment = widget.listOfDynamic!['Department'];
+    _databaseProvider!.selectedGender = widget.listOfDynamic!['Gender'];
     _mobileNoTextEditingController.text = widget.listOfDynamic!['MobileNo'];
     _educationTextEditingController.text = widget.listOfDynamic!['Education'];
   }
 
   void _textFieldFocusNode() {
-    _firstNameFocusNode.addListener(() {
-      setState(() {});
-    });
-    _lastNameFocusNode.addListener(() {
-      setState(() {});
-    });
-    _emailFocusNode.addListener(() {
-      setState(() {});
-    });
-    _joiningDateFocusNode.addListener(() {
-      setState(() {});
-    });
-    _passwordFocusNode.addListener(() {
-      setState(() {});
-    });
-    _confirmPasswordFocusNode.addListener(() {
-      setState(() {});
-    });
-    _designationFocusNode.addListener(() {
-      setState(() {});
-    });
-    _departmentFocusNode.addListener(() {
-      setState(() {});
-    });
-    _genderFocusNode.addListener(() {
-      setState(() {});
-    });
-    _mobileNoFocusNode.addListener(() {
-      setState(() {});
-    });
-    _addressFocusNode.addListener(() {
-      setState(() {});
-    });
-    _educationFocusNode.addListener(() {
-      setState(() {});
-    });
+    _firstNameFocusNode.addListener(() {});
+    _lastNameFocusNode.addListener(() {});
+    _emailFocusNode.addListener(() {});
+    _joiningDateFocusNode.addListener(() {});
+    _passwordFocusNode.addListener(() {});
+    _confirmPasswordFocusNode.addListener(() {});
+    _designationFocusNode.addListener(() {});
+    _departmentFocusNode.addListener(() {});
+    _genderFocusNode.addListener(() {});
+    _mobileNoFocusNode.addListener(() {});
+    _addressFocusNode.addListener(() {});
+    _educationFocusNode.addListener(() {});
   }
 
   @override
@@ -322,38 +296,47 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Expanded(
-                                      child: CustomTextFieldWidget(
-                                        obsecureText: password,
-                                        controller:
-                                            _passwordTextEditingController,
-                                        textfiledFocusNode: _passwordFocusNode,
-                                        textFieldLableName: "Password",
-                                        maximumLengthOfField: 15,
-                                        textFieldCounterText: "",
-                                        textFieldMaximumLines: 1,
-                                        suffixIconWidget: GestureDetector(
-                                          onTap: () {
-                                            password = !password;
-                                            setState(() {});
-                                          },
-                                          child: Icon(
-                                            password
-                                                ? Icons.visibility
-                                                : Icons.visibility_off,
-                                            color: _passwordFocusNode.hasFocus
-                                                ? CommonColorConstants
-                                                    .blueLightColor
-                                                : Colors.grey,
-                                          ),
-                                        ),
-                                        textformFieldValidator: (passValue) {
-                                          if (passValue!.isEmpty) {
-                                            return "password is empty";
-                                          } else if (passValue!.length < 8 ||
-                                              passValue!.length > 15) {
-                                            return "password must be minimum 8 and maximum 15 character required";
-                                          }
-                                          return null;
+                                      child: Consumer<DatabaseProvider>(
+                                        builder:
+                                            (context, providerValue, child) {
+                                          return CustomTextFieldWidget(
+                                            obsecureText:
+                                                providerValue.password,
+                                            controller:
+                                                _passwordTextEditingController,
+                                            textfiledFocusNode:
+                                                _passwordFocusNode,
+                                            textFieldLableName: "Password",
+                                            maximumLengthOfField: 15,
+                                            textFieldCounterText: "",
+                                            textFieldMaximumLines: 1,
+                                            suffixIconWidget: GestureDetector(
+                                              onTap: () {
+                                                providerValue.passwordvisible();
+                                              },
+                                              child: Icon(
+                                                providerValue.password
+                                                    ? Icons.visibility
+                                                    : Icons.visibility_off,
+                                                color:
+                                                    _passwordFocusNode.hasFocus
+                                                        ? CommonColorConstants
+                                                            .blueLightColor
+                                                        : Colors.grey,
+                                              ),
+                                            ),
+                                            textformFieldValidator:
+                                                (passValue) {
+                                              if (passValue!.isEmpty) {
+                                                return "password is empty";
+                                              } else if (passValue!.length <
+                                                      8 ||
+                                                  passValue!.length > 15) {
+                                                return "password must be minimum 8 and maximum 15 character required";
+                                              }
+                                              return null;
+                                            },
+                                          );
                                         },
                                       ),
                                     ),
@@ -361,46 +344,55 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       width: 12.0,
                                     ),
                                     Expanded(
-                                      child: CustomTextFieldWidget(
-                                        obsecureText: confirmPassword,
-                                        controller:
-                                            _confirmTextEditingController,
-                                        textfiledFocusNode:
-                                            _confirmPasswordFocusNode,
-                                        textFieldMaximumLines: 1,
-                                        textFieldLableName: "Confirm Password",
-                                        textformFieldValidator:
-                                            (confirmPassValue) {
-                                          if (confirmPassValue!.isEmpty) {
-                                            return "confirm password is empty";
-                                          } else if (confirmPassValue!.length <
-                                                  8 ||
-                                              confirmPassValue!.length > 15) {
-                                            return "password must be minimum 8 and maximum 15 character required";
-                                          } else if (confirmPassValue !=
-                                              _passwordTextEditingController
-                                                  .text) {
-                                            return "password must be same as above";
-                                          }
-                                          return null;
+                                      child: Consumer<DatabaseProvider>(
+                                        builder:
+                                            (context, providerValue, child) {
+                                          return CustomTextFieldWidget(
+                                            obsecureText:
+                                                providerValue.confirmPassword,
+                                            controller:
+                                                _confirmTextEditingController,
+                                            textfiledFocusNode:
+                                                _confirmPasswordFocusNode,
+                                            textFieldMaximumLines: 1,
+                                            textFieldLableName:
+                                                "Confirm Password",
+                                            textformFieldValidator:
+                                                (confirmPassValue) {
+                                              if (confirmPassValue!.isEmpty) {
+                                                return "confirm password is empty";
+                                              } else if (confirmPassValue!
+                                                          .length <
+                                                      8 ||
+                                                  confirmPassValue!.length >
+                                                      15) {
+                                                return "password must be minimum 8 and maximum 15 character required";
+                                              } else if (confirmPassValue !=
+                                                  _passwordTextEditingController
+                                                      .text) {
+                                                return "password must be same as above";
+                                              }
+                                              return null;
+                                            },
+                                            suffixIconWidget: GestureDetector(
+                                              onTap: () {
+                                                providerValue
+                                                    .changePasswordVisible();
+                                              },
+                                              child: Icon(
+                                                providerValue.confirmPassword
+                                                    ? Icons.visibility
+                                                    : Icons.visibility_off,
+                                                color:
+                                                    _confirmPasswordFocusNode
+                                                            .hasFocus
+                                                        ? CommonColorConstants
+                                                            .blueLightColor
+                                                        : Colors.grey,
+                                              ),
+                                            ),
+                                          );
                                         },
-                                        suffixIconWidget: GestureDetector(
-                                          onTap: () {
-                                            confirmPassword = !confirmPassword;
-                                            setState(() {});
-                                          },
-                                          child: Icon(
-                                            confirmPassword
-                                                ? Icons.visibility
-                                                : Icons.visibility_off,
-                                            color:
-                                                _confirmPasswordFocusNode
-                                                        .hasFocus
-                                                    ? CommonColorConstants
-                                                        .blueLightColor
-                                                    : Colors.grey,
-                                          ),
-                                        ),
                                       ),
                                     ),
                                   ],
@@ -482,14 +474,19 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                               )
                                               .toList(),
                                           customItemsHeight: 4,
-                                          value: selectedDepartment,
+                                          value: _databaseProvider!
+                                              .selectedDepartment,
                                           onChanged: (value) {
-                                            setState(
-                                              () {
-                                                selectedDepartment =
-                                                    value as String;
-                                              },
-                                            );
+                                            _databaseProvider!
+                                                .selectedDepartmentValue(
+                                                    selectedValue:
+                                                        value as String);
+                                            // setState(
+                                            //   () {
+                                            //     selectedDepartment =
+                                            //         value as String;
+                                            //   },
+                                            // );
                                           },
                                           buttonHeight: 40,
                                           buttonWidth: 140,
@@ -564,14 +561,19 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                                   ))
                                               .toList(),
                                           customItemsHeight: 4,
-                                          value: selectedGender,
+                                          value:
+                                              _databaseProvider!.selectedGender,
                                           onChanged: (value) {
-                                            setState(
-                                              () {
-                                                selectedGender =
-                                                    value as String;
-                                              },
-                                            );
+                                            _databaseProvider!
+                                                .selectedGenderValue(
+                                                    selectedValue:
+                                                        value as String);
+                                            // setState(
+                                            //   () {
+                                            //     selectedGender =
+                                            //         value as String;
+                                            //   },
+                                            // );
                                           },
                                           buttonHeight: 40,
                                           buttonWidth: 140,
@@ -915,73 +917,87 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                 const SizedBox(
                                   height: 24.0,
                                 ),
-                                CustomTextFieldWidget(
-                                  obsecureText: password,
-                                  controller: _passwordTextEditingController,
-                                  textfiledFocusNode: _passwordFocusNode,
-                                  textFieldLableName: "Password",
-                                  maximumLengthOfField: 15,
-                                  textFieldCounterText: "",
-                                  textFieldMaximumLines: 1,
-                                  suffixIconWidget: GestureDetector(
-                                    onTap: () {
-                                      password = !password;
-                                      setState(() {});
-                                    },
-                                    child: Icon(
-                                      password
-                                          ? Icons.visibility
-                                          : Icons.visibility_off,
-                                      color: _passwordFocusNode.hasFocus
-                                          ? CommonColorConstants.blueLightColor
-                                          : Colors.grey,
+                                Consumer<DatabaseProvider>(
+                                    builder: ((context, providerValue, child) {
+                                  return CustomTextFieldWidget(
+                                    obsecureText: providerValue.password,
+                                    controller: _passwordTextEditingController,
+                                    textfiledFocusNode: _passwordFocusNode,
+                                    textFieldLableName: "Password",
+                                    maximumLengthOfField: 15,
+                                    textFieldCounterText: "",
+                                    textFieldMaximumLines: 1,
+                                    suffixIconWidget: GestureDetector(
+                                      onTap: () {
+                                        providerValue.passwordvisible();
+                                      },
+                                      child: Icon(
+                                        providerValue.password
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: _passwordFocusNode.hasFocus
+                                            ? CommonColorConstants
+                                                .blueLightColor
+                                            : Colors.grey,
+                                      ),
                                     ),
-                                  ),
-                                  textformFieldValidator: (passValue) {
-                                    if (passValue!.isEmpty) {
-                                      return "password is empty";
-                                    } else if (passValue!.length < 8 ||
-                                        passValue!.length > 15) {
-                                      return "password must be minimum 8 and maximum 15 character required";
-                                    }
-                                    return null;
-                                  },
-                                ),
+                                    textformFieldValidator: (passValue) {
+                                      if (passValue!.isEmpty) {
+                                        return "password is empty";
+                                      } else if (passValue!.length < 8 ||
+                                          passValue!.length > 15) {
+                                        return "password must be minimum 8 and maximum 15 character required";
+                                      }
+                                      return null;
+                                    },
+                                  );
+                                })),
+
                                 const SizedBox(
                                   height: 24.0,
                                 ),
-                                CustomTextFieldWidget(
-                                  obsecureText: confirmPassword,
-                                  controller: _confirmTextEditingController,
-                                  textfiledFocusNode: _confirmPasswordFocusNode,
-                                  textFieldMaximumLines: 1,
-                                  textFieldLableName: "Confirm Password",
-                                  textformFieldValidator: (confirmPassValue) {
-                                    if (confirmPassValue!.isEmpty) {
-                                      return "confirm password is empty";
-                                    } else if (confirmPassValue!.length < 8 ||
-                                        confirmPassValue!.length > 15) {
-                                      return "password must be minimum 8 and maximum 15 character required";
-                                    } else if (confirmPassValue !=
-                                        _passwordTextEditingController.text) {
-                                      return "password must be same as above";
-                                    }
-                                    return null;
+                                Consumer<DatabaseProvider>(
+                                  builder: (context, providerValue, child) {
+                                    return CustomTextFieldWidget(
+                                      obsecureText:
+                                          providerValue.confirmPassword,
+                                      controller: _confirmTextEditingController,
+                                      textfiledFocusNode:
+                                          _confirmPasswordFocusNode,
+                                      textFieldMaximumLines: 1,
+                                      textFieldLableName: "Confirm Password",
+                                      textformFieldValidator:
+                                          (confirmPassValue) {
+                                        if (confirmPassValue!.isEmpty) {
+                                          return "confirm password is empty";
+                                        } else if (confirmPassValue!.length <
+                                                8 ||
+                                            confirmPassValue!.length > 15) {
+                                          return "password must be minimum 8 and maximum 15 character required";
+                                        } else if (confirmPassValue !=
+                                            _passwordTextEditingController
+                                                .text) {
+                                          return "password must be same as above";
+                                        }
+                                        return null;
+                                      },
+                                      suffixIconWidget: GestureDetector(
+                                        onTap: () {
+                                          providerValue.changePasswordVisible();
+                                        },
+                                        child: Icon(
+                                          providerValue.confirmPassword
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
+                                          color:
+                                              _confirmPasswordFocusNode.hasFocus
+                                                  ? CommonColorConstants
+                                                      .blueLightColor
+                                                  : Colors.grey,
+                                        ),
+                                      ),
+                                    );
                                   },
-                                  suffixIconWidget: GestureDetector(
-                                    onTap: () {
-                                      confirmPassword = !confirmPassword;
-                                      setState(() {});
-                                    },
-                                    child: Icon(
-                                      confirmPassword
-                                          ? Icons.visibility
-                                          : Icons.visibility_off,
-                                      color: _confirmPasswordFocusNode.hasFocus
-                                          ? CommonColorConstants.blueLightColor
-                                          : Colors.grey,
-                                    ),
-                                  ),
                                 ),
                                 const SizedBox(
                                   height: 24.0,
@@ -1045,13 +1061,17 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             ))
                                         .toList(),
                                     customItemsHeight: 4,
-                                    value: selectedDepartment,
+                                    value:
+                                        _databaseProvider!.selectedDepartment,
                                     onChanged: (value) {
-                                      setState(
-                                        () {
-                                          selectedDepartment = value as String;
-                                        },
-                                      );
+                                      _databaseProvider!
+                                          .selectedDepartmentValue(
+                                              selectedValue: value as String);
+                                      // setState(
+                                      //   () {
+                                      //     selectedDepartment = value as String;
+                                      //   },
+                                      // );
                                     },
                                     buttonHeight: 40,
                                     buttonWidth: 140,
@@ -1114,13 +1134,15 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                             ))
                                         .toList(),
                                     customItemsHeight: 4,
-                                    value: selectedGender,
+                                    value: _databaseProvider!.selectedGender,
                                     onChanged: (value) {
-                                      setState(
-                                        () {
-                                          selectedGender = value as String;
-                                        },
-                                      );
+                                      _databaseProvider!.selectedGenderValue(
+                                          selectedValue: value as String);
+                                      // setState(
+                                      //   () {
+                                      //     selectedGender = value as String;
+                                      //   },
+                                      // );
                                     },
                                     buttonHeight: 40,
                                     buttonWidth: 140,
@@ -1295,8 +1317,10 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                                           _designationTExtEdtitingcontroller
                                                               .text,
                                                       department:
-                                                          selectedDepartment!,
-                                                      gender: selectedGender!,
+                                                          _databaseProvider!
+                                                              .selectedDepartment!,
+                                                      gender: _databaseProvider!
+                                                          .selectedGender!,
                                                       mobileNo:
                                                           _mobileNoTextEditingController
                                                               .text,
@@ -1407,8 +1431,10 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                                           _designationTExtEdtitingcontroller
                                                               .text,
                                                       department:
-                                                          selectedDepartment!,
-                                                      gender: selectedGender!,
+                                                          _databaseProvider!
+                                                              .selectedDepartment!,
+                                                      gender: _databaseProvider!
+                                                          .selectedGender!,
                                                       mobileNo:
                                                           _mobileNoTextEditingController
                                                               .text,

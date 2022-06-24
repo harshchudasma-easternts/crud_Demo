@@ -6,6 +6,30 @@ class DatabaseProvider extends ChangeNotifier {
   bool isLoadingValue = true;
   bool isDataValue = false;
   List<Map<String, dynamic>> listofData = [];
+  bool password = true;
+  bool confirmPassword = true;
+  String? selectedDepartment;
+  String? selectedGender;
+
+  passwordvisible() {
+    password = !password;
+    notifyListeners();
+  }
+
+  changePasswordVisible() {
+    confirmPassword = !confirmPassword;
+    notifyListeners();
+  }
+
+  selectedGenderValue({String? selectedValue}) {
+    selectedGender = selectedValue;
+    notifyListeners();
+  }
+
+  selectedDepartmentValue({String? selectedValue}) {
+    selectedDepartment = selectedValue;
+    notifyListeners();
+  }
 
   // data insert to the database
   Future<void> insertData({
