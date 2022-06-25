@@ -1,5 +1,9 @@
+import 'package:animation_demo/dbhelper/hive_database/hive_model.dart';
 import 'package:animation_demo/dbhelper/tables/add_professors.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+
+import '../dbhelper/hive_database/boxs.dart';
 
 class DatabaseProvider extends ChangeNotifier {
   final dbHelper = DBHelper.instance;
@@ -10,6 +14,7 @@ class DatabaseProvider extends ChangeNotifier {
   bool confirmPassword = true;
   String? selectedDepartment;
   String? selectedGender;
+  List<Professors>? listOfProfessors;
 
   passwordvisible() {
     password = !password;
@@ -105,10 +110,46 @@ class DatabaseProvider extends ChangeNotifier {
   getDatabaseData() {
     dbHelper.getAllData().then(
       (value) {
-        listofData = value;
-        isLoadingValue = false;
-        notifyListeners();
+        getDataFromDatabase(listofDataValue: value);
       },
     );
   }
+
+  getDataFromDatabase({List<Map<String, dynamic>>? listofDataValue}) {
+    listofData = listofDataValue!;
+    isLoadingValue = false;
+    notifyListeners();
+  }
+
+  // Future addHiveDatabaseTransaction(
+  //     String firstName,
+  //     String lastName,
+  //     String emailAddress,
+  //     String password,
+  //     String confirmPassword,
+  //     String designation,
+  //     String department,
+  //     String gender,
+  //     num mobileNO,
+  //     String address,
+  //     String education) {
+  //   final addProfessor = Professors()
+  //     ..firstName = firstName
+  //     ..lastName = lastName
+  //     ..emailAddress = emailAddress
+  //     ..password = password
+  //     ..confirmPassword = confirmPassword
+  //     ..designation = designation
+  //     ..department = department
+  //     ..gender = gender
+  //     ..mobileNo = mobileNO
+  //     ..address = address
+  //     ..education = education;
+
+  //   final box = Boxes.getTransaction();
+  //   box.add(addProfessor);
+  //   print("box related print ${box}");
+  //   notifyListeners();
+  //   return box.add(addProfessor);
+  // }
 }

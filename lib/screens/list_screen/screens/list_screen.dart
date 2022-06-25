@@ -1,9 +1,11 @@
 import 'package:animation_demo/common_widgets/header_navbar_widget.dart';
 import 'package:animation_demo/constants/image_constants.dart';
+import 'package:animation_demo/dbhelper/hive_database/hive_model.dart';
 import 'package:animation_demo/dbhelper/tables/add_professors.dart';
 import 'package:animation_demo/screens/list_screen/widgets/all_prefessors_list.dart';
 import 'package:animation_demo/utils/responsive_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class ListScreen extends StatefulWidget {
   static const routeName = "/";
@@ -14,6 +16,23 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
+
+  List<Professors> listEmployees = [];
+
+  void getEmployees() async {
+    final box = await Hive.openBox<Professors>('employee');
+
+    setState(() {
+      listEmployees = box.values.toList();
+      print("get the data from the list ${listEmployees}");
+    });
+  }
+
+  @override
+  void initState() {
+    getEmployees();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

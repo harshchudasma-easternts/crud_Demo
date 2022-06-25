@@ -5,13 +5,9 @@ import 'package:animation_demo/common_widgets/custom_textfield_widget.dart';
 import 'package:animation_demo/common_widgets/header_navbar_widget.dart';
 import 'package:animation_demo/constants/color_constants.dart';
 import 'package:animation_demo/constants/image_constants.dart';
-import 'package:animation_demo/dbhelper/moor_tables/moor_database.dart';
-import 'package:animation_demo/dbhelper/tables/add_professors.dart';
 import 'package:animation_demo/provider_demo.dart/database_provider.dart';
 import 'package:animation_demo/screens/list_screen/screens/list_screen.dart';
-import 'package:animation_demo/utils/permission_utils.dart';
 import 'package:animation_demo/utils/responsive_widget.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +16,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
-import 'package:sqflite/sqlite_api.dart';
 
 class AdmissionForm extends StatefulWidget {
   static const routeName = "/admissionForm";
@@ -729,6 +724,24 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       onPressed: () {
                                         if (_formKey.currentState!.validate()) {
                                           _formKey.currentState!.save();
+                                          // _databaseProvider!
+                                          //     .addHiveDatabaseTransaction(
+                                          //   _firstNameTextEditingController
+                                          //       .text,
+                                          //   _lastNameTextEditingController.text,
+                                          //   _emailTextEditingController.text,
+                                          //   _passwordTextEditingController.text,
+                                          //   _confirmTextEditingController.text,
+                                          //   _designationTExtEdtitingcontroller
+                                          //       .text,
+                                          //   _databaseProvider!
+                                          //       .selectedDepartment!,
+                                          //   _databaseProvider!.selectedGender!,
+                                          //   num.parse(_mobileNoTextEditingController.text),
+                                          //   _addressTextEditingController.text,
+                                          //   _educationTextEditingController
+                                          //       .text,
+                                          // );
                                         }
                                       },
                                       child: Padding(

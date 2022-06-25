@@ -471,11 +471,10 @@ class _AllProfessorsListState extends State<AllProfessorsList> {
                                                 )
                                                     .then(
                                                   (value) {
-                                                    providerValue.listofData =
-                                                        value;
                                                     providerValue
-                                                        .isLoadingValue = false;
-                                                    setState(() {});
+                                                        .getDataFromDatabase(
+                                                            listofDataValue:
+                                                                value);
                                                   },
                                                 );
                                               },
@@ -496,7 +495,6 @@ class _AllProfessorsListState extends State<AllProfessorsList> {
                             );
                 },
               ),
-
               // isLoadingValue == true
               //     ? Center(
               //         child: CircularProgressIndicator(),
