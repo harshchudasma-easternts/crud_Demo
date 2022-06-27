@@ -1,9 +1,6 @@
 import 'package:animation_demo/dbhelper/hive_database/hive_model.dart';
 import 'package:animation_demo/dbhelper/tables/add_professors.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-
-import '../dbhelper/hive_database/boxs.dart';
 
 class DatabaseProvider extends ChangeNotifier {
   final dbHelper = DBHelper.instance;
@@ -120,36 +117,4 @@ class DatabaseProvider extends ChangeNotifier {
     isLoadingValue = false;
     notifyListeners();
   }
-
-  // Future addHiveDatabaseTransaction(
-  //     String firstName,
-  //     String lastName,
-  //     String emailAddress,
-  //     String password,
-  //     String confirmPassword,
-  //     String designation,
-  //     String department,
-  //     String gender,
-  //     num mobileNO,
-  //     String address,
-  //     String education) {
-  //   final addProfessor = Professors()
-  //     ..firstName = firstName
-  //     ..lastName = lastName
-  //     ..emailAddress = emailAddress
-  //     ..password = password
-  //     ..confirmPassword = confirmPassword
-  //     ..designation = designation
-  //     ..department = department
-  //     ..gender = gender
-  //     ..mobileNo = mobileNO
-  //     ..address = address
-  //     ..education = education;
-
-  //   final box = Boxes.getTransaction();
-  //   box.add(addProfessor);
-  //   print("box related print ${box}");
-  //   notifyListeners();
-  //   return box.add(addProfessor);
-  // }
 }

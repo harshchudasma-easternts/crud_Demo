@@ -1566,6 +1566,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
     _educationFocusNode.dispose();
     _genderFocusNode.dispose();
     _mobileNoFocusNode.dispose();
+    _databaseProvider!.dispose();
     super.dispose();
   }
 
