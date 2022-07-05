@@ -1,4 +1,0 @@
-#Wed Jun 29 11:21:45 IST 2022
-base.0=/Users/imac/Documents/GitHub/animation_demo/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
-renamed.0=classes.dex
-path.0=classes.dex
