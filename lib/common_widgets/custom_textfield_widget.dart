@@ -14,8 +14,10 @@ class CustomTextFieldWidget extends StatelessWidget {
   final List<TextInputFormatter>? textFieldInputFormater;
   final int? textFieldMaximumLines;
   final bool obsecureText;
+  final VoidCallback? textFieldOnTap;
   const CustomTextFieldWidget({
     Key? key,
+    this.textFieldOnTap,
     required this.controller,
     this.maximumLengthOfField,
     required this.textfiledFocusNode,
@@ -31,6 +33,7 @@ class CustomTextFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onTap: textFieldOnTap,
       obscureText: obsecureText,
       controller: controller,
       cursorColor: CommonColorConstants.blueLightColor,

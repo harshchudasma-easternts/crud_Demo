@@ -1,4 +1,3 @@
-import 'package:animation_demo/dbhelper/hive_database/hive_model.dart';
 import 'package:animation_demo/dbhelper/tables/add_professors.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +10,6 @@ class DatabaseProvider extends ChangeNotifier {
   bool confirmPassword = true;
   String? selectedDepartment;
   String? selectedGender;
-  List<Professors>? listOfProfessors;
 
   passwordvisible() {
     password = !password;
@@ -108,8 +106,11 @@ class DatabaseProvider extends ChangeNotifier {
     dbHelper.getAllData().then(
       (value) {
         getDataFromDatabase(listofDataValue: value);
+
       },
     );
+    isLoadingValue = false;
+    notifyListeners();
   }
 
   getDataFromDatabase({List<Map<String, dynamic>>? listofDataValue}) {

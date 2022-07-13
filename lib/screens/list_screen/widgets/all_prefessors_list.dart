@@ -1,7 +1,7 @@
 import 'package:animation_demo/constants/color_constants.dart';
 import 'package:animation_demo/constants/image_constants.dart';
 import 'package:animation_demo/provider_demo.dart/database_provider.dart';
-import 'package:animation_demo/screens/form_screens/screens/AdmissionForm.dart';
+import 'package:animation_demo/screens/form_screens/screens/add_professor_screen.dart';
 import 'package:animation_demo/screens/list_screen/widgets/show_details_widget.dart';
 import 'package:animation_demo/utils/responsive_widget.dart';
 import 'package:flutter/material.dart';
@@ -241,6 +241,9 @@ class _AllProfessorsListState extends State<AllProfessorsList> {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const SizedBox(
+              height: 12.0,
+            ),
             Align(
               alignment: Alignment.centerLeft,
               child: ElevatedButton(
@@ -282,7 +285,7 @@ class _AllProfessorsListState extends State<AllProfessorsList> {
             Expanded(
               child: Consumer<DatabaseProvider>(
                 builder: (context, providerValue, child) {
-                  // providerValue.getDatabaseData();
+                  providerValue.getDatabaseData();
                   return providerValue.isLoadingValue == true
                       ? Center(
                           child: CircularProgressIndicator(),

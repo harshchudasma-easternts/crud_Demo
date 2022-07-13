@@ -1,11 +1,13 @@
 import 'package:animation_demo/provider_demo.dart/database_provider.dart';
-import 'package:animation_demo/screens/form_screens/screens/AdmissionForm.dart';
+import 'package:animation_demo/screens/form_screens/screens/add_professor_screen.dart';
 import 'package:animation_demo/screens/list_screen/screens/list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setPathUrlStrategy();
   runApp(
     MyApp(),
   );
