@@ -1,4 +1,4 @@
-import 'package:animation_demo/provider_demo.dart/database_provider.dart';
+import 'package:animation_demo/provider_demo/database_provider.dart';
 import 'package:animation_demo/screens/form_screens/screens/add_professor_screen.dart';
 import 'package:animation_demo/screens/list_screen/screens/list_screen.dart';
 import 'package:flutter/material.dart';

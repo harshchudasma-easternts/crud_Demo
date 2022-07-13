@@ -1,6 +1,6 @@
+import 'dart:math';
+
 import 'package:animation_demo/constants/color_constants.dart';
-import 'package:animation_demo/constants/image_constants.dart';
-import 'package:animation_demo/provider_demo.dart/database_provider.dart';
 import 'package:animation_demo/screens/form_screens/screens/add_professor_screen.dart';
 import 'package:animation_demo/screens/list_screen/widgets/show_details_widget.dart';
 import 'package:animation_demo/utils/responsive_widget.dart';
@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../dbhelper/tables/add_professors.dart';
+import '../../../provider_demo/database_provider.dart';
 
 class AllProfessorsList extends StatefulWidget {
   const AllProfessorsList({Key? key}) : super(key: key);
@@ -18,6 +19,7 @@ class AllProfessorsList extends StatefulWidget {
 
 class _AllProfessorsListState extends State<AllProfessorsList> {
   bool isExpandedProfessorsList = true;
+  final DataTableSource _data = ProfessorDataTable();
 
   final dbHelper = DBHelper.instance;
   DatabaseProvider? _databaseProvider;
@@ -121,7 +123,75 @@ class _AllProfessorsListState extends State<AllProfessorsList> {
                             const SizedBox(
                               height: 24.0,
                             ),
-                            _dynamicTableViewWidgetForWebAndDesktop(),
+                            PaginatedDataTable(
+                              source: _data,
+                              columns: const [
+                                DataColumn(
+                                  label: Text(
+                                    'ID',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Profile',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Name',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'department',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Gender',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Degree',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Mobile No',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Email',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Joining Date',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Action',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              ],
+                              columnSpacing: 100,
+                              horizontalMargin: 10,
+                              rowsPerPage: 10,
+                              showCheckboxColumn: false,
+                            )
                           ],
                         ),
                       )
@@ -219,7 +289,74 @@ class _AllProfessorsListState extends State<AllProfessorsList> {
                             const SizedBox(
                               height: 24.0,
                             ),
-                            _dynamicTableViewWidget(),
+                            PaginatedDataTable(
+                              source: _data,
+                              columns: const [
+                                DataColumn(
+                                  label: Text(
+                                    'ID',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Profile',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Name',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'department',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Gender',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Degree',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Mobile No',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Email',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Joining Date',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Action',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              ],
+                              horizontalMargin: 50,
+                              rowsPerPage: 10,
+                              showCheckboxColumn: false,
+                            )
                           ],
                         ),
                       )
@@ -498,639 +635,77 @@ class _AllProfessorsListState extends State<AllProfessorsList> {
                             );
                 },
               ),
-              // isLoadingValue == true
-              //     ? Center(
-              //         child: CircularProgressIndicator(),
-              //       )
-              //     : listofData.length <= 0
-              //         ? Center(
-              //             child: Text("No Data Found!"),
-              //           )
-              //         : ListView.builder(
-              //             itemCount: listofData.length,
-              //             itemBuilder: (context, index) {
-              //               return IntrinsicHeight(
-              //                 child: Card(
-              //                   elevation: 2.0,
-              //                   child: Container(
-              //                     padding: EdgeInsets.symmetric(
-              //                       horizontal: 16.0,
-              //                       vertical: 8.0,
-              //                     ),
-              //                     child: Row(
-              //                       crossAxisAlignment:
-              //                           CrossAxisAlignment.center,
-              //                       children: [
-              //                         Card(
-              //                           elevation: 8.0,
-              //                           shape: RoundedRectangleBorder(
-              //                             borderRadius: BorderRadius.circular(
-              //                               50.0,
-              //                             ),
-              //                           ),
-              //                           child: Container(
-              //                             alignment: Alignment.center,
-              //                             height: 42.0,
-              //                             width: 42.0,
-              //                             decoration: BoxDecoration(
-              //                               shape: BoxShape.circle,
-              //                               color: index.isOdd
-              //                                   ? CommonColorConstants
-              //                                       .blueLightColor
-              //                                   : CommonColorConstants
-              //                                       .orangeLightColor,
-              //                               // image: DecorationImage(
-              //                               //   fit: BoxFit.fill,
-              //                               //   image: AssetImage(
-              //                               //     CommonImageConstats.profileImage,
-              //                               //   ),
-              //                               // ),
-              //                             ),
-              //                             child: Text(
-              //                               "${index + 1}",
-              //                               style: TextStyle(
-              //                                 fontSize: 16.0,
-              //                                 color: Colors.white,
-              //                                 fontWeight: FontWeight.bold,
-              //                               ),
-              //                             ),
-              //                           ),
-              //                         ),
-              //                         const SizedBox(
-              //                           width: 16.0,
-              //                         ),
-              //                         Expanded(
-              //                           child: Container(
-              //                             child: Column(
-              //                               mainAxisAlignment:
-              //                                   MainAxisAlignment.spaceEvenly,
-              //                               crossAxisAlignment:
-              //                                   CrossAxisAlignment.start,
-              //                               children: [
-              //                                 Text(
-              //                                   "${listofData[index]['FirstName']}",
-              //                                   style: TextStyle(
-              //                                     fontSize: 14.0,
-              //                                     fontWeight: FontWeight.bold,
-              //                                   ),
-              //                                 ),
-              //                                 Text(
-              //                                   "${listofData[index]['Department']}",
-              //                                   style: TextStyle(
-              //                                     fontSize: 14.0,
-              //                                   ),
-              //                                 ),
-              //                               ],
-              //                             ),
-              //                           ),
-              //                         ),
-              //                         Spacer(),
-              //                         SizedBox(
-              //                           height: 24.0,
-              //                           width: 24.0,
-              //                           child: IconButton(
-              //                             color: Colors.transparent,
-              //                             focusColor: Colors.transparent,
-              //                             highlightColor: Colors.transparent,
-              //                             splashColor: Colors.transparent,
-              //                             hoverColor: Colors.transparent,
-              //                             onPressed: () {
-              //                               showDialog(
-              //                                 context: context,
-              //                                 barrierDismissible: false,
-              //                                 builder: (context) {
-              //                                   return ShowDetailsWidget(
-              //                                     listofMap: listofData[index],
-              //                                   );
-              //                                 },
-              //                               );
-              //                               // dbHelper
-              //                               //     .delete(
-              //                               //   listofData[index]['id'],
-              //                               // )
-              //                               //     .then(
-              //                               //   (value) {
-              //                               //     listofData = value;
-              //                               //     isLoadingValue = false;
-              //                               //     setState(() {});
-              //                               //   },
-              //                               // );
-              //                             },
-              //                             icon: Icon(
-              //                               Icons.visibility,
-              //                               size: 20.0,
-              //                               color: CommonColorConstants
-              //                                   .orangeLightColor,
-              //                             ),
-              //                           ),
-              //                         ),
-              //                         const SizedBox(
-              //                           width: 6.0,
-              //                         ),
-              //                         SizedBox(
-              //                           height: 24.0,
-              //                           width: 24.0,
-              //                           child: IconButton(
-              //                             color: Colors.transparent,
-              //                             focusColor: Colors.transparent,
-              //                             highlightColor: Colors.transparent,
-              //                             splashColor: Colors.transparent,
-              //                             hoverColor: Colors.transparent,
-              //                             onPressed: () {
-              //                               Navigator.push(
-              //                                 context,
-              //                                 MaterialPageRoute(
-              //                                   builder: (context) =>
-              //                                       AdmissionForm(
-              //                                     isEdit: true,
-              //                                     listOfDynamic:
-              //                                         listofData[index],
-              //                                   ),
-              //                                 ),
-              //                               );
-              //                             },
-              //                             icon: Icon(
-              //                               Icons.edit,
-              //                               size: 20.0,
-              //                               color: CommonColorConstants
-              //                                   .blueLightColor,
-              //                             ),
-              //                           ),
-              //                         ),
-              //                         const SizedBox(
-              //                           width: 6.0,
-              //                         ),
-              //                         SizedBox(
-              //                           height: 24.0,
-              //                           width: 24.0,
-              //                           child: IconButton(
-              //                             color: Colors.transparent,
-              //                             focusColor: Colors.transparent,
-              //                             highlightColor: Colors.transparent,
-              //                             splashColor: Colors.transparent,
-              //                             hoverColor: Colors.transparent,
-              //                             onPressed: () {
-              //                               dbHelper
-              //                                   .delete(
-              //                                 listofData[index]['id'],
-              //                               )
-              //                                   .then(
-              //                                 (value) {
-              //                                   listofData = value;
-              //                                   isLoadingValue = false;
-              //                                   setState(() {});
-              //                                 },
-              //                               );
-              //                             },
-              //                             icon: Icon(
-              //                               Icons.delete,
-              //                               size: 20.0,
-              //                               color: CommonColorConstants
-              //                                   .orangeLightColor,
-              //                             ),
-              //                           ),
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   ),
-              //                 ),
-              //               );
-              //             },
-              //           ),
             ),
           ],
         ),
       );
     }
   }
+}
 
-  Widget _dynamicTableViewWidget() {
-    List<Widget> tableRowList = [
-      Divider(
-        thickness: 1,
-        height: 1,
-        color: Colors.grey,
-      ),
-      IntrinsicHeight(
-        child: Row(
+class ProfessorDataTable extends DataTableSource {
+  // Generate some made-up data
+  final List<Map<String, dynamic>> _data = List.generate(200, (index) => {"id": index + 1, "title": "Item $index", "price": Random().nextInt(10000)});
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => _data.length;
+
+  @override
+  int get selectedRowCount => 0;
+
+  @override
+  DataRow getRow(int index) {
+    return DataRow(cells: [
+      DataCell(Text(_data[index]['id'].toString())),
+      DataCell(Text(_data[index]["title"])),
+      DataCell(Text(_data[index]["title"])),
+      DataCell(Text(_data[index]["title"])),
+      DataCell(Text(_data[index]["title"])),
+      DataCell(Text(_data[index]["title"])),
+      DataCell(Text(_data[index]["title"])),
+      DataCell(Text(_data[index]["title"])),
+      DataCell(Text(_data[index]["price"].toString())),
+      DataCell(
+        Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  "No.",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
+            Container(
+              padding: EdgeInsets.all(6.0),
+              decoration: BoxDecoration(
+                color: CommonColorConstants.blueLightColor,
+                borderRadius: BorderRadius.circular(
+                  6.0,
                 ),
               ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  "Profile",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
+              child: Icon(
+                Icons.edit,
+                size: 16.0,
+                color: Colors.white,
               ),
             ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
+            const SizedBox(
+              width: 12.0,
             ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  'Name',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
+            Container(
+              padding: EdgeInsets.all(6.0),
+              decoration: BoxDecoration(
+                color: CommonColorConstants.orangeLightColor,
+                borderRadius: BorderRadius.circular(
+                  6.0,
                 ),
               ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  'Department',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
+              child: Icon(
+                Icons.delete,
+                size: 16.0,
+                color: Colors.white,
               ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  'Gender',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  'Degree',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  'Mobile',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  'Email',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  'Joining Date',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  'Action',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
             ),
           ],
         ),
       ),
-      Divider(
-        thickness: 1,
-        height: 1,
-        color: Colors.grey,
-      ),
-    ];
-
-    Widget tbl = Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: tableRowList,
-    );
-    return tbl;
-  }
-
-  Widget _dynamicTableViewWidgetForWebAndDesktop() {
-    List<Widget> tableRowList = [
-      Divider(
-        thickness: 1,
-        height: 1,
-        color: Colors.grey,
-      ),
-      IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  "No.",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  "Profile",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  'Name',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  'Department',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  'Gender',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  'Degree',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  'Mobile',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  'Email',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  'Joining Date',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Text(
-                  'Action',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              thickness: 1,
-              width: 1,
-              color: Colors.grey,
-            ),
-          ],
-        ),
-      ),
-      Divider(
-        thickness: 1,
-        height: 1,
-        color: Colors.grey,
-      ),
-    ];
-
-    Widget tbl = Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: tableRowList,
-    );
-    return tbl;
+    ]);
   }
 }

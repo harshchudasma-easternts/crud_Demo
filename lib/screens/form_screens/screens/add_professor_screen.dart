@@ -3,16 +3,15 @@ import 'dart:typed_data';
 import 'package:animation_demo/common_widgets/custom_textfield_widget.dart';
 import 'package:animation_demo/common_widgets/header_navbar_widget.dart';
 import 'package:animation_demo/constants/color_constants.dart';
-import 'package:animation_demo/constants/image_constants.dart';
-import 'package:animation_demo/provider_demo.dart/database_provider.dart';
 import 'package:animation_demo/utils/responsive_widget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '../../../provider_demo/database_provider.dart';
 
 class AdmissionForm extends StatefulWidget {
   static const routeName = "/admissionForm";
@@ -43,11 +42,6 @@ class _AdmissionFormState extends State<AdmissionForm> {
     "Male",
     "Female",
   ];
-
-  final picker = ImagePicker();
-  late String filePath;
-  late String fileName;
-  Uint8List webImage = Uint8List(0);
 
   late final TextEditingController _firstNameTextEditingController = TextEditingController();
   late final TextEditingController _lastNameTextEditingController = TextEditingController();
@@ -1264,7 +1258,6 @@ class _AdmissionFormState extends State<AdmissionForm> {
     _educationFocusNode.dispose();
     _genderFocusNode.dispose();
     _mobileNoFocusNode.dispose();
-    _databaseProvider!.dispose();
     super.dispose();
   }
 }
