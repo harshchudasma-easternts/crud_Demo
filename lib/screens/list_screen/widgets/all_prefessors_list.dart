@@ -6,8 +6,6 @@ import 'package:animation_demo/screens/list_screen/widgets/show_details_widget.d
 import 'package:animation_demo/utils/responsive_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../../dbhelper/tables/add_professors.dart';
 import '../../../provider_demo/database_provider.dart';
 
 class AllProfessorsList extends StatefulWidget {
@@ -21,15 +19,14 @@ class _AllProfessorsListState extends State<AllProfessorsList> {
   bool isExpandedProfessorsList = true;
   final DataTableSource _data = ProfessorDataTable();
 
-  final dbHelper = DBHelper.instance;
+  // final dbHelper = DBHelper.instance;
   DatabaseProvider? _databaseProvider;
 
   @override
   void initState() {
     super.initState();
     if (_databaseProvider == null) {
-      _databaseProvider = Provider.of<DatabaseProvider>(context, listen: false)
-          .getDatabaseData();
+      _databaseProvider = Provider.of<DatabaseProvider>(context, listen: false);
     }
   }
 
@@ -422,7 +419,6 @@ class _AllProfessorsListState extends State<AllProfessorsList> {
             Expanded(
               child: Consumer<DatabaseProvider>(
                 builder: (context, providerValue, child) {
-                  providerValue.getDatabaseData();
                   return providerValue.isLoadingValue == true
                       ? Center(
                           child: CircularProgressIndicator(),
@@ -604,19 +600,19 @@ class _AllProfessorsListState extends State<AllProfessorsList> {
                                               splashColor: Colors.transparent,
                                               hoverColor: Colors.transparent,
                                               onPressed: () {
-                                                dbHelper
-                                                    .delete(
-                                                  providerValue
-                                                      .listofData[index]['id'],
-                                                )
-                                                    .then(
-                                                  (value) {
-                                                    providerValue
-                                                        .getDataFromDatabase(
-                                                            listofDataValue:
-                                                                value);
-                                                  },
-                                                );
+                                                // dbHelper
+                                                //     .delete(
+                                                //   providerValue
+                                                //       .listofData[index]['id'],
+                                                // )
+                                                //     .then(
+                                                //   (value) {
+                                                //     providerValue
+                                                //         .getDataFromDatabase(
+                                                //             listofDataValue:
+                                                //                 value);
+                                                //   },
+                                                // );
                                               },
                                               icon: Icon(
                                                 Icons.delete,

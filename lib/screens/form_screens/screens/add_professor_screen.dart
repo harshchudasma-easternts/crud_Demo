@@ -1,8 +1,10 @@
 import 'dart:typed_data';
 
+import 'package:animation_demo/api/api_wrapper.dart';
 import 'package:animation_demo/common_widgets/custom_textfield_widget.dart';
 import 'package:animation_demo/common_widgets/header_navbar_widget.dart';
 import 'package:animation_demo/constants/color_constants.dart';
+import 'package:animation_demo/model/add_professor_data_model.dart';
 import 'package:animation_demo/utils/responsive_widget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:email_validator/email_validator.dart';
@@ -618,6 +620,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                       onPressed: () {
                                         if (_formKey.currentState!.validate()) {
                                           _formKey.currentState!.save();
+                                          addProfessorData();
                                         }
                                       },
                                       child: Padding(
@@ -1201,6 +1204,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                                     //                 .routeName);
                                                     //   },
                                                     // );
+                                                    addProfessorData();
                                                   }
                                                 },
                                                 child: Padding(
@@ -1260,4 +1264,30 @@ class _AdmissionFormState extends State<AdmissionForm> {
     _mobileNoFocusNode.dispose();
     super.dispose();
   }
+
+  void addProfessorData() async {
+    AddProfessorModel addProfessorModel = AddProfessorModel();
+    addProfessorModel.firstName = _firstNameTextEditingController.text;
+    addProfessorModel.lastName = _lastNameTextEditingController.text;
+    addProfessorModel.email = _emailTextEditingController.text;
+    addProfessorModel.joiningDate = _joiningDateTextEditingController.text;
+    addProfessorModel.password = _passwordTextEditingController.text;
+    addProfessorModel.designation = _designationTExtEdtitingcontroller.text;
+    addProfessorModel.department = _databaseProvider!.selectedDepartment;
+    addProfessorModel.gender = _databaseProvider!.selectedGender;
+    addProfessorModel.mobileNo = _mobileNoTextEditingController.text;
+    addProfessorModel.address = _addressTextEditingController.text;
+    addProfessorModel.education = _educationTextEditingController.text;
+
+    bool isSuccess = await ApiWrapper.addProfessorPostData(addProfessorModel).then((value) {
+      return value;
+    });
+    if(isSuccess){
+      print("Professor Added SuccessFully");
+    }else{
+      print("Professor not Added");
+    }
+
+  }
+
 }

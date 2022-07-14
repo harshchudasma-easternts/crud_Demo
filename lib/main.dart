@@ -1,9 +1,12 @@
 import 'package:animation_demo/provider_demo/database_provider.dart';
 import 'package:animation_demo/screens/form_screens/screens/add_professor_screen.dart';
 import 'package:animation_demo/screens/list_screen/screens/list_screen.dart';
+import 'package:animation_demo/utils/log_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_strategy/url_strategy.dart';
+
+import 'api/api_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +21,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    init();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<DatabaseProvider>(
@@ -35,4 +39,10 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+
+  init() {
+    ApiWrapper.init();
+    loggingConfigure();
+  }
+
 }
