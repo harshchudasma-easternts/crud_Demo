@@ -12,15 +12,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
+import 'package:animation_demo/model/get_professor_model.dart' as data;
 import '../../../provider_demo/database_provider.dart';
 
 class AdmissionForm extends StatefulWidget {
   static const routeName = "/admissionForm";
   bool isEdit = false;
-  Map<String, dynamic>? listOfDynamic;
-
-  AdmissionForm({Key? key, required this.isEdit, this.listOfDynamic}) : super(key: key);
+  int? index;
+  List<data.Data>? listofData;
+  AdmissionForm({Key? key, required this.isEdit, this.listofData,this.index}) : super(key: key);
 
   @override
   State<AdmissionForm> createState() => _AdmissionFormState();
@@ -84,14 +84,15 @@ class _AdmissionFormState extends State<AdmissionForm> {
   }
 
   _setDataForUpdate() {
-    _firstNameTextEditingController.text = widget.listOfDynamic!['FirstName'];
-    _lastNameTextEditingController.text = widget.listOfDynamic!['LastName'];
-    _emailTextEditingController.text = widget.listOfDynamic!['EmailAddress'];
-    _designationTExtEdtitingcontroller.text = widget.listOfDynamic!['Designation'];
-    _databaseProvider!.selectedDepartment = widget.listOfDynamic!['Department'];
-    _databaseProvider!.selectedGender = widget.listOfDynamic!['Gender'];
-    _mobileNoTextEditingController.text = widget.listOfDynamic!['MobileNo'];
-    _educationTextEditingController.text = widget.listOfDynamic!['Education'];
+    _firstNameTextEditingController.text = widget.listofData![widget.index!].firstName!;
+    _lastNameTextEditingController.text = widget.listofData![widget.index!].lastName!;
+    _emailTextEditingController.text = widget.listofData![widget.index!].email!;
+    _designationTExtEdtitingcontroller.text = widget.listofData![widget.index!].designation!;
+    _databaseProvider!.selectedDepartment = widget.listofData![widget.index!].department!;
+    _databaseProvider!.selectedGender = widget.listofData![widget.index!].gender!;
+    _mobileNoTextEditingController.text = widget.listofData![widget.index!].mobileNo!;
+    _educationTextEditingController.text = widget.listofData![widget.index!].education!;
+    _joiningDateTextEditingController.text = widget.listofData![widget.index!].joining!;
   }
 
   void _textFieldFocusNode() {
@@ -119,535 +120,543 @@ class _AdmissionFormState extends State<AdmissionForm> {
           child: HeaderNavigationBar(),
         ),
         body: ResponsiveWidget.isLargeScreen(context) || ResponsiveWidget.isMediumScreen(context)
-            ? SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Container(
-                    padding: EdgeInsets.all(28.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "Add Professors",
-                          style: TextStyle(
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.grey.shade700,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16.0,
-                        ),
-                        Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              6.0,
+            ? context.watch<DatabaseProvider>().isLoading == true
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : SingleChildScrollView(
+                    child: Form(
+                      key: _formKey,
+                      child: Container(
+                        padding: EdgeInsets.all(28.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Add Professors",
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.grey.shade700,
+                              ),
                             ),
-                          ),
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  "Basic Information",
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey,
-                                  ),
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                  6.0,
                                 ),
-                                const SizedBox(
-                                  height: 24.0,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                              ),
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(24.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Expanded(
-                                      child: CustomTextFieldWidget(
-                                        controller: _firstNameTextEditingController,
-                                        textfiledFocusNode: _firstNameFocusNode,
-                                        textFieldLableName: "FirstName",
-                                        maximumLengthOfField: 20,
-                                        textFieldCounterText: "",
-                                        textformFieldValidator: (firstNameValue) {
-                                          if (firstNameValue!.isEmpty) {
-                                            return "Please enter the firstname";
-                                          }
-                                          return null;
-                                        },
+                                    Text(
+                                      "Basic Information",
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey,
                                       ),
                                     ),
                                     const SizedBox(
-                                      width: 16.0,
+                                      height: 24.0,
                                     ),
-                                    Expanded(
-                                      child: CustomTextFieldWidget(
-                                        controller: _lastNameTextEditingController,
-                                        textfiledFocusNode: _lastNameFocusNode,
-                                        textFieldLableName: "LastName",
-                                        maximumLengthOfField: 20,
-                                        textFieldCounterText: "",
-                                        textformFieldValidator: (lastNameValue) {
-                                          if (lastNameValue!.isEmpty) {
-                                            return "Please enter the lastname";
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 32.0,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Expanded(
-                                      child: CustomTextFieldWidget(
-                                        controller: _emailTextEditingController,
-                                        textfiledFocusNode: _emailFocusNode,
-                                        textFieldLableName: "Email",
-                                        textformFieldValidator: (String? email) {
-                                          if (email!.isEmpty) {
-                                            return "Please enter the email";
-                                          } else if (!EmailValidator.validate(email)) {
-                                            return "Please enter the valid email";
-                                          }
-                                          return null;
-                                        },
-                                      ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Expanded(
+                                          child: CustomTextFieldWidget(
+                                            controller: _firstNameTextEditingController,
+                                            textfiledFocusNode: _firstNameFocusNode,
+                                            textFieldLableName: "FirstName",
+                                            maximumLengthOfField: 20,
+                                            textFieldCounterText: "",
+                                            textformFieldValidator: (firstNameValue) {
+                                              if (firstNameValue!.isEmpty) {
+                                                return "Please enter the firstname";
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 16.0,
+                                        ),
+                                        Expanded(
+                                          child: CustomTextFieldWidget(
+                                            controller: _lastNameTextEditingController,
+                                            textfiledFocusNode: _lastNameFocusNode,
+                                            textFieldLableName: "LastName",
+                                            maximumLengthOfField: 20,
+                                            textFieldCounterText: "",
+                                            textformFieldValidator: (lastNameValue) {
+                                              if (lastNameValue!.isEmpty) {
+                                                return "Please enter the lastname";
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        )
+                                      ],
                                     ),
                                     const SizedBox(
-                                      width: 16.0,
+                                      height: 32.0,
                                     ),
-                                    Expanded(
-                                      child: CustomTextFieldWidget(
-                                        textFieldOnTap: () async {
-                                          FocusScope.of(context).requestFocus(new FocusNode());
-                                          joiningDate = await showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(1900),
-                                            lastDate: DateTime(2100),
-                                            builder: (BuildContext context, Widget? child) {
-                                              return Theme(
-                                                data: ThemeData(
-                                                  colorScheme: const ColorScheme.light(
-                                                    primary: CommonColorConstants.blueLightColor,
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Expanded(
+                                          child: CustomTextFieldWidget(
+                                            controller: _emailTextEditingController,
+                                            textfiledFocusNode: _emailFocusNode,
+                                            textFieldLableName: "Email",
+                                            textformFieldValidator: (String? email) {
+                                              if (email!.isEmpty) {
+                                                return "Please enter the email";
+                                              } else if (!EmailValidator.validate(email)) {
+                                                return "Please enter the valid email";
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 16.0,
+                                        ),
+                                        Expanded(
+                                          child: CustomTextFieldWidget(
+                                            textFieldOnTap: () async {
+                                              FocusScope.of(context).requestFocus(new FocusNode());
+                                              joiningDate = await showDatePicker(
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime(1900),
+                                                lastDate: DateTime(2100),
+                                                builder: (BuildContext context, Widget? child) {
+                                                  return Theme(
+                                                    data: ThemeData(
+                                                      colorScheme: const ColorScheme.light(
+                                                        primary: CommonColorConstants.blueLightColor,
+                                                      ),
+                                                    ),
+                                                    child: child!,
+                                                  );
+                                                },
+                                              );
+                                              String formatedDate = DateFormat('dd-MM-yyyy').format(joiningDate!);
+                                              _joiningDateTextEditingController.text = formatedDate;
+                                              print("selected Joining Date ${_joiningDateTextEditingController.text}");
+                                            },
+                                            controller: _joiningDateTextEditingController,
+                                            textfiledFocusNode: _joiningDateFocusNode,
+                                            textFieldLableName: "Joining Date",
+                                            textformFieldValidator: (joiningDateValue) {
+                                              if (joiningDateValue!.isEmpty) {
+                                                return "Please enter the joining Date";
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 32.0,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Expanded(
+                                          child: Consumer<DatabaseProvider>(
+                                            builder: (context, providerValue, child) {
+                                              return CustomTextFieldWidget(
+                                                obsecureText: providerValue.password,
+                                                controller: _passwordTextEditingController,
+                                                textfiledFocusNode: _passwordFocusNode,
+                                                textFieldLableName: "Password",
+                                                maximumLengthOfField: 15,
+                                                textFieldCounterText: "",
+                                                textFieldMaximumLines: 1,
+                                                suffixIconWidget: GestureDetector(
+                                                  onTap: () {
+                                                    providerValue.passwordvisible();
+                                                  },
+                                                  child: Icon(
+                                                    providerValue.password ? Icons.visibility : Icons.visibility_off,
+                                                    color: _passwordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
                                                   ),
                                                 ),
-                                                child: child!,
+                                                textformFieldValidator: (passValue) {
+                                                  if (passValue!.isEmpty) {
+                                                    return "password is empty";
+                                                  } else if (passValue.length < 8 || passValue.length > 15) {
+                                                    return "password must be minimum 8 and maximum 15 character required";
+                                                  }
+                                                  return null;
+                                                },
                                               );
                                             },
-                                          );
-                                          String formatedDate = DateFormat('dd-MM-yyyy').format(joiningDate!);
-                                          _joiningDateTextEditingController.text = formatedDate;
-                                          print("selected Joining Date ${_joiningDateTextEditingController.text}");
-                                        },
-                                        controller: _joiningDateTextEditingController,
-                                        textfiledFocusNode: _joiningDateFocusNode,
-                                        textFieldLableName: "Joining Date",
-                                        textformFieldValidator: (joiningDateValue) {
-                                          if (joiningDateValue!.isEmpty) {
-                                            return "Please enter the joining Date";
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 32.0,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Expanded(
-                                      child: Consumer<DatabaseProvider>(
-                                        builder: (context, providerValue, child) {
-                                          return CustomTextFieldWidget(
-                                            obsecureText: providerValue.password,
-                                            controller: _passwordTextEditingController,
-                                            textfiledFocusNode: _passwordFocusNode,
-                                            textFieldLableName: "Password",
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 16.0,
+                                        ),
+                                        Expanded(
+                                          child: Consumer<DatabaseProvider>(
+                                            builder: (context, providerValue, child) {
+                                              return CustomTextFieldWidget(
+                                                obsecureText: providerValue.confirmPassword,
+                                                controller: _confirmTextEditingController,
+                                                textfiledFocusNode: _confirmPasswordFocusNode,
+                                                textFieldMaximumLines: 1,
+                                                textFieldLableName: "Confirm Password",
+                                                textformFieldValidator: (confirmPassValue) {
+                                                  if (confirmPassValue!.isEmpty) {
+                                                    return "confirm password is empty";
+                                                  } else if (confirmPassValue.length < 8 || confirmPassValue.length > 15) {
+                                                    return "password must be minimum 8 and maximum 15 character required";
+                                                  } else if (confirmPassValue != _passwordTextEditingController.text) {
+                                                    return "password must be same as above";
+                                                  }
+                                                  return null;
+                                                },
+                                                suffixIconWidget: GestureDetector(
+                                                  onTap: () {
+                                                    providerValue.changePasswordVisible();
+                                                  },
+                                                  child: Icon(
+                                                    providerValue.confirmPassword ? Icons.visibility : Icons.visibility_off,
+                                                    color: _confirmPasswordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 32.0,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Expanded(
+                                          child: CustomTextFieldWidget(
+                                            controller: _designationTExtEdtitingcontroller,
+                                            textfiledFocusNode: _designationFocusNode,
+                                            textFieldLableName: "Designation",
+                                            textformFieldValidator: (designationValue) {
+                                              if (designationValue!.isEmpty) {
+                                                return "Please enter the designation";
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 16.0,
+                                        ),
+                                        Expanded(
+                                          child: DropdownButtonHideUnderline(
+                                            child: DropdownButtonFormField2(
+                                              icon: Icon(Icons.keyboard_arrow_down_outlined),
+                                              isExpanded: true,
+                                              focusNode: _departmentFocusNode,
+                                              decoration: InputDecoration(
+                                                contentPadding: EdgeInsets.symmetric(vertical: 0.0),
+                                                labelText: "Department",
+                                                labelStyle: TextStyle(
+                                                  fontSize: 16.0,
+                                                  color: _departmentFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                                ),
+                                                focusedBorder: UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: CommonColorConstants.blueLightColor,
+                                                  ),
+                                                ),
+                                              ),
+                                              validator: (departmentValue) {
+                                                if (departmentValue == null) {
+                                                  return "Please select the department";
+                                                }
+                                                return null;
+                                              },
+                                              items: departmentList
+                                                  .map(
+                                                    (item) => DropdownMenuItem<String>(
+                                                      value: item,
+                                                      child: Text(
+                                                        item,
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                        ),
+                                                        overflow: TextOverflow.ellipsis,
+                                                      ),
+                                                    ),
+                                                  )
+                                                  .toList(),
+                                              customItemsHeight: 4,
+                                              value: _databaseProvider!.selectedDepartment,
+                                              onChanged: (value) {
+                                                _databaseProvider!.selectedDepartmentValue(selectedValue: value as String);
+                                                // setState(
+                                                //   () {
+                                                //     selectedDepartment =
+                                                //         value as String;
+                                                //   },
+                                                // );
+                                              },
+                                              buttonHeight: 40,
+                                              buttonWidth: 140,
+                                              itemHeight: 40,
+                                              itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 32.0,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Expanded(
+                                          child: DropdownButtonHideUnderline(
+                                            child: DropdownButtonFormField2(
+                                              focusNode: _genderFocusNode,
+                                              icon: Icon(Icons.keyboard_arrow_down_outlined),
+                                              isExpanded: true,
+                                              decoration: InputDecoration(
+                                                contentPadding: EdgeInsets.symmetric(vertical: 0.0),
+                                                labelText: "Gender",
+                                                labelStyle: TextStyle(
+                                                  fontSize: 16.0,
+                                                  color: _genderFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
+                                                ),
+                                                focusedBorder: UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: CommonColorConstants.blueLightColor,
+                                                  ),
+                                                ),
+                                              ),
+                                              validator: (genderValue) {
+                                                if (genderValue == null) {
+                                                  return "Please select the gender";
+                                                }
+                                                return null;
+                                              },
+                                              hint: Text(
+                                                'Gender',
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              items: genderList
+                                                  .map(
+                                                    (item) => DropdownMenuItem<String>(
+                                                      value: item,
+                                                      child: Text(
+                                                        item,
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                        ),
+                                                        overflow: TextOverflow.ellipsis,
+                                                      ),
+                                                    ),
+                                                  )
+                                                  .toList(),
+                                              customItemsHeight: 4,
+                                              value: _databaseProvider!.selectedGender,
+                                              onChanged: (value) {
+                                                _databaseProvider!.selectedGenderValue(selectedValue: value as String);
+                                              },
+                                              buttonHeight: 40,
+                                              buttonWidth: 140,
+                                              itemHeight: 40,
+                                              itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 16.0,
+                                        ),
+                                        Expanded(
+                                          child: CustomTextFieldWidget(
+                                            controller: _mobileNoTextEditingController,
+                                            textfiledFocusNode: _mobileNoFocusNode,
+                                            textFieldLableName: "Mobile No.",
+                                            textFieldInputFormater: [
+                                              FilteringTextInputFormatter.digitsOnly,
+                                            ],
                                             maximumLengthOfField: 15,
                                             textFieldCounterText: "",
-                                            textFieldMaximumLines: 1,
-                                            suffixIconWidget: GestureDetector(
-                                              onTap: () {
-                                                providerValue.passwordvisible();
-                                              },
-                                              child: Icon(
-                                                providerValue.password ? Icons.visibility : Icons.visibility_off,
-                                                color: _passwordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
-                                              ),
-                                            ),
-                                            textformFieldValidator: (passValue) {
-                                              if (passValue!.isEmpty) {
-                                                return "password is empty";
-                                              } else if (passValue.length < 8 || passValue.length > 15) {
-                                                return "password must be minimum 8 and maximum 15 character required";
+                                            textformFieldValidator: (value) {
+                                              String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+                                              RegExp regExp = new RegExp(patttern);
+                                              if (value!.length == 0) {
+                                                return 'Please enter mobile number';
+                                              } else if (!regExp.hasMatch(value)) {
+                                                return 'Please enter valid mobile number';
                                               }
                                               return null;
                                             },
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 16.0,
-                                    ),
-                                    Expanded(
-                                      child: Consumer<DatabaseProvider>(
-                                        builder: (context, providerValue, child) {
-                                          return CustomTextFieldWidget(
-                                            obsecureText: providerValue.confirmPassword,
-                                            controller: _confirmTextEditingController,
-                                            textfiledFocusNode: _confirmPasswordFocusNode,
-                                            textFieldMaximumLines: 1,
-                                            textFieldLableName: "Confirm Password",
-                                            textformFieldValidator: (confirmPassValue) {
-                                              if (confirmPassValue!.isEmpty) {
-                                                return "confirm password is empty";
-                                              } else if (confirmPassValue.length < 8 || confirmPassValue.length > 15) {
-                                                return "password must be minimum 8 and maximum 15 character required";
-                                              } else if (confirmPassValue != _passwordTextEditingController.text) {
-                                                return "password must be same as above";
-                                              }
-                                              return null;
-                                            },
-                                            suffixIconWidget: GestureDetector(
-                                              onTap: () {
-                                                providerValue.changePasswordVisible();
-                                              },
-                                              child: Icon(
-                                                providerValue.confirmPassword ? Icons.visibility : Icons.visibility_off,
-                                                color: _confirmPasswordFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 32.0,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Expanded(
-                                      child: CustomTextFieldWidget(
-                                        controller: _designationTExtEdtitingcontroller,
-                                        textfiledFocusNode: _designationFocusNode,
-                                        textFieldLableName: "Designation",
-                                        textformFieldValidator: (designationValue) {
-                                          if (designationValue!.isEmpty) {
-                                            return "Please enter the designation";
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 16.0,
-                                    ),
-                                    Expanded(
-                                      child: DropdownButtonHideUnderline(
-                                        child: DropdownButtonFormField2(
-                                          icon: Icon(Icons.keyboard_arrow_down_outlined),
-                                          isExpanded: true,
-                                          focusNode: _departmentFocusNode,
-                                          decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.symmetric(vertical: 0.0),
-                                            labelText: "Department",
-                                            labelStyle: TextStyle(
-                                              fontSize: 16.0,
-                                              color: _departmentFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: CommonColorConstants.blueLightColor,
-                                              ),
-                                            ),
                                           ),
-                                          validator: (departmentValue) {
-                                            if (departmentValue == null) {
-                                              return "Please select the department";
-                                            }
-                                            return null;
-                                          },
-                                          items: departmentList
-                                              .map(
-                                                (item) => DropdownMenuItem<String>(
-                                                  value: item,
-                                                  child: Text(
-                                                    item,
-                                                    style: const TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.black,
-                                                    ),
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-                                              )
-                                              .toList(),
-                                          customItemsHeight: 4,
-                                          value: _databaseProvider!.selectedDepartment,
-                                          onChanged: (value) {
-                                            _databaseProvider!.selectedDepartmentValue(selectedValue: value as String);
-                                            // setState(
-                                            //   () {
-                                            //     selectedDepartment =
-                                            //         value as String;
-                                            //   },
-                                            // );
-                                          },
-                                          buttonHeight: 40,
-                                          buttonWidth: 140,
-                                          itemHeight: 40,
-                                          itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
                                         ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 32.0,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Expanded(
-                                      child: DropdownButtonHideUnderline(
-                                        child: DropdownButtonFormField2(
-                                          focusNode: _genderFocusNode,
-                                          icon: Icon(Icons.keyboard_arrow_down_outlined),
-                                          isExpanded: true,
-                                          decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.symmetric(vertical: 0.0),
-                                            labelText: "Gender",
-                                            labelStyle: TextStyle(
-                                              fontSize: 16.0,
-                                              color: _genderFocusNode.hasFocus ? CommonColorConstants.blueLightColor : Colors.grey,
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: CommonColorConstants.blueLightColor,
-                                              ),
-                                            ),
-                                          ),
-                                          validator: (genderValue) {
-                                            if (genderValue == null) {
-                                              return "Please select the gender";
-                                            }
-                                            return null;
-                                          },
-                                          hint: Text(
-                                            'Gender',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                          items: genderList
-                                              .map(
-                                                (item) => DropdownMenuItem<String>(
-                                                  value: item,
-                                                  child: Text(
-                                                    item,
-                                                    style: const TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.black,
-                                                    ),
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-                                              )
-                                              .toList(),
-                                          customItemsHeight: 4,
-                                          value: _databaseProvider!.selectedGender,
-                                          onChanged: (value) {
-                                            _databaseProvider!.selectedGenderValue(selectedValue: value as String);
-                                          },
-                                          buttonHeight: 40,
-                                          buttonWidth: 140,
-                                          itemHeight: 40,
-                                          itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                        ),
-                                      ),
+                                      ],
                                     ),
                                     const SizedBox(
-                                      width: 16.0,
+                                      height: 32.0,
                                     ),
-                                    Expanded(
-                                      child: CustomTextFieldWidget(
-                                        controller: _mobileNoTextEditingController,
-                                        textfiledFocusNode: _mobileNoFocusNode,
-                                        textFieldLableName: "Mobile No.",
-                                        textFieldInputFormater: [
-                                          FilteringTextInputFormatter.digitsOnly,
-                                        ],
-                                        maximumLengthOfField: 15,
-                                        textFieldCounterText: "",
-                                        textformFieldValidator: (value) {
-                                          String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-                                          RegExp regExp = new RegExp(patttern);
-                                          if (value!.length == 0) {
-                                            return 'Please enter mobile number';
-                                          } else if (!regExp.hasMatch(value)) {
-                                            return 'Please enter valid mobile number';
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 32.0,
-                                ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: CustomTextFieldWidget(
-                                        textFieldOnTap: () async {
-                                          FocusScope.of(context).requestFocus(new FocusNode());
-                                          birthDate = await showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(1900),
-                                            lastDate: DateTime(2100),
-                                            builder: (BuildContext context, Widget? child) {
-                                              return Theme(
-                                                data: ThemeData(
-                                                  colorScheme: const ColorScheme.light(
-                                                    primary: CommonColorConstants.blueLightColor,
-                                                  ),
-                                                ),
-                                                child: child!,
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: CustomTextFieldWidget(
+                                            textFieldOnTap: () async {
+                                              FocusScope.of(context).requestFocus(new FocusNode());
+                                              birthDate = await showDatePicker(
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime(1900),
+                                                lastDate: DateTime(2100),
+                                                builder: (BuildContext context, Widget? child) {
+                                                  return Theme(
+                                                    data: ThemeData(
+                                                      colorScheme: const ColorScheme.light(
+                                                        primary: CommonColorConstants.blueLightColor,
+                                                      ),
+                                                    ),
+                                                    child: child!,
+                                                  );
+                                                },
                                               );
+                                              String formatedDate = DateFormat('dd-MM-yyyy').format(birthDate!);
+                                              _birthDateTextEditingController.text = formatedDate;
+                                              print("selected Joining Date ${_birthDateTextEditingController.text}");
                                             },
-                                          );
-                                          String formatedDate = DateFormat('dd-MM-yyyy').format(birthDate!);
-                                          _birthDateTextEditingController.text = formatedDate;
-                                          print("selected Joining Date ${_birthDateTextEditingController.text}");
-                                        },
-                                        controller: _birthDateTextEditingController,
-                                        textfiledFocusNode: _birthDateFocusNode,
-                                        textFieldLableName: "Date of Birth",
-                                        textformFieldValidator: (birthDateValue) {
-                                          if (birthDateValue!.isEmpty) {
-                                            return "Please enter the Birth Date";
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 16.0,
-                                    ),
-                                    Expanded(
-                                      child: Container(),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 32.0,
-                                ),
-                                CustomTextFieldWidget(
-                                  controller: _addressTextEditingController,
-                                  textfiledFocusNode: _addressFocusNode,
-                                  textFieldLableName: "Address",
-                                  textFieldMaximumLines: 4,
-                                ),
-                                const SizedBox(
-                                  height: 32.0,
-                                ),
-                                CustomTextFieldWidget(
-                                  controller: _educationTextEditingController,
-                                  textfiledFocusNode: _educationFocusNode,
-                                  textFieldLableName: "Education",
-                                  textFieldMaximumLines: 4,
-                                  textformFieldValidator: (educationValue) {
-                                    if (educationValue!.isEmpty) {
-                                      return "Please enter the Education Details";
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(
-                                  height: 40.0,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
-                                        child: Text(
-                                          "Cancel",
-                                          style: TextStyle(
-                                            fontSize: 20.0,
-                                            color: Colors.white,
+                                            controller: _birthDateTextEditingController,
+                                            textfiledFocusNode: _birthDateFocusNode,
+                                            textFieldLableName: "Date of Birth",
+                                            textformFieldValidator: (birthDateValue) {
+                                              if (birthDateValue!.isEmpty) {
+                                                return "Please enter the Birth Date";
+                                              }
+                                              return null;
+                                            },
                                           ),
                                         ),
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        primary: CommonColorConstants.orangeLightColor,
-                                      ),
+                                        const SizedBox(
+                                          width: 16.0,
+                                        ),
+                                        Expanded(
+                                          child: Container(),
+                                        ),
+                                      ],
                                     ),
                                     const SizedBox(
-                                      width: 12.0,
+                                      height: 32.0,
                                     ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        if (_formKey.currentState!.validate()) {
-                                          _formKey.currentState!.save();
-                                          addProfessorData();
+                                    CustomTextFieldWidget(
+                                      controller: _addressTextEditingController,
+                                      textfiledFocusNode: _addressFocusNode,
+                                      textFieldLableName: "Address",
+                                      textFieldMaximumLines: 4,
+                                    ),
+                                    const SizedBox(
+                                      height: 32.0,
+                                    ),
+                                    CustomTextFieldWidget(
+                                      controller: _educationTextEditingController,
+                                      textfiledFocusNode: _educationFocusNode,
+                                      textFieldLableName: "Education",
+                                      textFieldMaximumLines: 4,
+                                      textformFieldValidator: (educationValue) {
+                                        if (educationValue!.isEmpty) {
+                                          return "Please enter the Education Details";
                                         }
+                                        return null;
                                       },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
-                                        child: Text(
-                                          "Submit",
-                                          style: TextStyle(
-                                            fontSize: 20.0,
-                                            color: Colors.white,
+                                    ),
+                                    const SizedBox(
+                                      height: 40.0,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+                                            child: Text(
+                                              "Cancel",
+                                              style: TextStyle(
+                                                fontSize: 20.0,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            primary: CommonColorConstants.orangeLightColor,
                                           ),
                                         ),
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        primary: CommonColorConstants.blueLightColor,
-                                      ),
+                                        const SizedBox(
+                                          width: 12.0,
+                                        ),
+                                        Consumer<DatabaseProvider>(
+                                          builder: (context, providerValue, child) {
+                                            return ElevatedButton(
+                                              onPressed: () {
+                                                if (_formKey.currentState!.validate()) {
+                                                  _formKey.currentState!.save();
+                                                  addProfessorData(context: context);
+                                                }
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+                                                child: Text(
+                                                  "Submit",
+                                                  style: TextStyle(
+                                                    fontSize: 20.0,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                              style: ElevatedButton.styleFrom(
+                                                primary: CommonColorConstants.blueLightColor,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              )
+                  )
             : SingleChildScrollView(
                 child: Form(
                   key: _formKey,
@@ -1159,52 +1168,7 @@ class _AdmissionFormState extends State<AdmissionForm> {
                                                 onPressed: () {
                                                   if (_formKey.currentState!.validate()) {
                                                     _formKey.currentState!.save();
-                                                    // add to local Database
-                                                    // providerValue
-                                                    //     .insertData(
-                                                    //   firstName:
-                                                    //       _firstNameTextEditingController
-                                                    //           .text,
-                                                    //   lastName:
-                                                    //       _lastNameTextEditingController
-                                                    //           .text,
-                                                    //   email:
-                                                    //       _emailTextEditingController
-                                                    //           .text,
-                                                    //   password:
-                                                    //       _passwordTextEditingController
-                                                    //           .text,
-                                                    //   confirmPassword:
-                                                    //       _confirmTextEditingController
-                                                    //           .text,
-                                                    //   designation:
-                                                    //       _designationTExtEdtitingcontroller
-                                                    //           .text,
-                                                    //   department:
-                                                    //       _databaseProvider!
-                                                    //           .selectedDepartment!,
-                                                    //   gender: _databaseProvider!
-                                                    //       .selectedGender!,
-                                                    //   mobileNo:
-                                                    //       _mobileNoTextEditingController
-                                                    //           .text,
-                                                    //   address:
-                                                    //       _addressTextEditingController
-                                                    //           .text,
-                                                    //   education:
-                                                    //       _educationTextEditingController
-                                                    //           .text,
-                                                    // )
-                                                    //     .then(
-                                                    //   (value) {
-                                                    //     Navigator
-                                                    //         .popAndPushNamed(
-                                                    //             context,
-                                                    //             ListScreen
-                                                    //                 .routeName);
-                                                    //   },
-                                                    // );
-                                                    addProfessorData();
+                                                    addProfessorData(context: context);
                                                   }
                                                 },
                                                 child: Padding(
@@ -1238,6 +1202,54 @@ class _AdmissionFormState extends State<AdmissionForm> {
     );
   }
 
+  void addProfessorData({required BuildContext context}) async {
+    AddProfessorModel addProfessorModel = AddProfessorModel();
+    // _databaseProvider!.setLoader(true);
+    addProfessorModel.firstName = _firstNameTextEditingController.text;
+    addProfessorModel.lastName = _lastNameTextEditingController.text;
+    addProfessorModel.email = _emailTextEditingController.text;
+    addProfessorModel.joiningDate = _joiningDateTextEditingController.text;
+    addProfessorModel.password = _passwordTextEditingController.text;
+    addProfessorModel.designation = _designationTExtEdtitingcontroller.text;
+    addProfessorModel.department = _databaseProvider!.selectedDepartment;
+    addProfessorModel.gender = _databaseProvider!.selectedGender;
+    addProfessorModel.mobileNo = _mobileNoTextEditingController.text;
+    addProfessorModel.address = _addressTextEditingController.text;
+    addProfessorModel.education = _educationTextEditingController.text;
+
+    bool isSuccess = await ApiWrapper.addProfessorPostData(addProfessorModel);
+
+    if (isSuccess) {
+      _firstNameTextEditingController.text = '';
+      _lastNameTextEditingController.text = '';
+      _emailTextEditingController.text = '';
+      _joiningDateTextEditingController.text = '';
+      _passwordTextEditingController.text = '';
+      _confirmTextEditingController.text = '';
+      _designationTExtEdtitingcontroller.text = '';
+      _mobileNoTextEditingController.text = '';
+      _birthDateTextEditingController.text = '';
+      _addressTextEditingController.text = '';
+      _educationTextEditingController.text = '';
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Container(
+              height: 200,
+              width: 200,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+              ),
+            ),
+          );
+        },
+      );
+    }
+  }
+
   @override
   void dispose() {
     _firstNameTextEditingController.dispose();
@@ -1264,30 +1276,4 @@ class _AdmissionFormState extends State<AdmissionForm> {
     _mobileNoFocusNode.dispose();
     super.dispose();
   }
-
-  void addProfessorData() async {
-    AddProfessorModel addProfessorModel = AddProfessorModel();
-    addProfessorModel.firstName = _firstNameTextEditingController.text;
-    addProfessorModel.lastName = _lastNameTextEditingController.text;
-    addProfessorModel.email = _emailTextEditingController.text;
-    addProfessorModel.joiningDate = _joiningDateTextEditingController.text;
-    addProfessorModel.password = _passwordTextEditingController.text;
-    addProfessorModel.designation = _designationTExtEdtitingcontroller.text;
-    addProfessorModel.department = _databaseProvider!.selectedDepartment;
-    addProfessorModel.gender = _databaseProvider!.selectedGender;
-    addProfessorModel.mobileNo = _mobileNoTextEditingController.text;
-    addProfessorModel.address = _addressTextEditingController.text;
-    addProfessorModel.education = _educationTextEditingController.text;
-
-    bool isSuccess = await ApiWrapper.addProfessorPostData(addProfessorModel).then((value) {
-      return value;
-    });
-    if(isSuccess){
-      print("Professor Added SuccessFully");
-    }else{
-      print("Professor not Added");
-    }
-
-  }
-
 }

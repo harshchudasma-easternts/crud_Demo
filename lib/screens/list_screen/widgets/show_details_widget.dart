@@ -1,10 +1,11 @@
 import 'package:animation_demo/constants/color_constants.dart';
-import 'package:animation_demo/constants/image_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:animation_demo/model/get_professor_model.dart' as data;
 
 class ShowDetailsWidget extends StatelessWidget {
-  Map<String, dynamic>? listofMap;
-  ShowDetailsWidget({Key? key, this.listofMap}) : super(key: key);
+  final int index;
+  List<data.Data>? listofData;
+  ShowDetailsWidget({Key? key, this.listofData,required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +52,7 @@ class ShowDetailsWidget extends StatelessWidget {
               Align(
                 alignment: Alignment.center,
                 child: Text(
-                  "${listofMap!['FirstName']} ${listofMap!['LastName']}",
+                  "${listofData![index].firstName} ${listofData![index].lastName}",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 20.0,
@@ -65,7 +66,7 @@ class ShowDetailsWidget extends StatelessWidget {
               Align(
                 alignment: Alignment.center,
                 child: Text(
-                  "${listofMap!['Designation']}",
+                  "${listofData![index].designation}",
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 14.0,
@@ -101,7 +102,7 @@ class ShowDetailsWidget extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        "${listofMap!['EmailAddress']}",
+                        "${listofData![index].email}",
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -133,7 +134,7 @@ class ShowDetailsWidget extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        "${listofMap!['MobileNo']}",
+                        "${listofData![index].mobileNo}",
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -165,7 +166,7 @@ class ShowDetailsWidget extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        "${listofMap!['Gender']}",
+                        "${listofData![index].gender}",
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -197,7 +198,7 @@ class ShowDetailsWidget extends StatelessWidget {
                 height: 8.0,
               ),
               Text(
-                "${listofMap!['Education']}",
+                "${listofData![index].education}",
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: 14.0,
@@ -225,7 +226,7 @@ class ShowDetailsWidget extends StatelessWidget {
                 height: 8.0,
               ),
               Text(
-                "${listofMap!['Address']}",
+                "${listofData![index].address}",
                 textAlign: TextAlign.justify,
                 style: TextStyle(
                   color: Colors.grey,

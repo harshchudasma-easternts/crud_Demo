@@ -1,4 +1,6 @@
+import 'package:animation_demo/api/api_wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:animation_demo/model/get_professor_model.dart' as data;
 
 class DatabaseProvider extends ChangeNotifier {
   bool isLoadingValue = true;
@@ -8,9 +10,18 @@ class DatabaseProvider extends ChangeNotifier {
   bool confirmPassword = true;
   String? selectedDepartment;
   String? selectedGender;
+  bool isExpandedList = true;
+  bool isSuccess = false;
+  bool isLoading = false;
+  List<data.Data>? tempList = [];
 
   passwordvisible() {
     password = !password;
+    notifyListeners();
+  }
+
+  isExpandedListValue() {
+    isExpandedList = !isExpandedList;
     notifyListeners();
   }
 
@@ -114,6 +125,22 @@ class DatabaseProvider extends ChangeNotifier {
   getDataFromDatabase({List<Map<String, dynamic>>? listofDataValue}) {
     listofData = listofDataValue!;
     isLoadingValue = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchData() async {
+    isLoading = true;
+    notifyListeners();
+
+    ApiWrapper.getProfessorsList().then((value) {
+      tempList = value!.data;
+      isLoading = false;
+      notifyListeners();
+    });
+  }
+
+  void setLoader(value){
+    isLoading = value;
     notifyListeners();
   }
 }

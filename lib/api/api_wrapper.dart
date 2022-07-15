@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:animation_demo/api/response_wrapper.dart';
 import 'package:animation_demo/model/add_professor_data_model.dart';
+import 'package:animation_demo/model/get_professor_model.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 
@@ -52,9 +53,9 @@ class ApiWrapper {
     try {
       Response response = await dio!.get(
         endPoint,
-        options: buildCacheOptions(
-          Duration(days: 1),
-        ),
+        // options: buildCacheOptions(
+        //   Duration(days: 1),
+        // ),
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         responseWrapper = ResponseWrapper(response: response, message: "SUCCESSFULL", isSuccess: true);
@@ -264,6 +265,24 @@ class ApiWrapper {
       return value;
     });
     return responseWrapper.isSuccess;
+  }
+
+  static Future<bool> deleteProfessorData(int id) async {
+    String endPoint = "professors/$id";
+    ResponseWrapper responseWrapper = await _deleteRequest(endPoint: endPoint).then((value) {
+      return value;
+    });
+    return responseWrapper.isSuccess;;
+  }
+
+  static Future<GetProfessor?> getProfessorsList() async {
+    String endPoint = "professors";
+    ResponseWrapper responseWrapper = await _getRequest(endPoint: endPoint);
+    if(responseWrapper.isSuccess){
+      return GetProfessor.fromJson(responseWrapper.response!.data);
+    }else {
+      return null;
+    }
   }
 
 }
