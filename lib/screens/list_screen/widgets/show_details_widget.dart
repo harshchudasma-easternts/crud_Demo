@@ -5,7 +5,8 @@ import 'package:animation_demo/model/get_professor_model.dart' as data;
 class ShowDetailsWidget extends StatelessWidget {
   final int index;
   List<data.Data>? listofData;
-  ShowDetailsWidget({Key? key, this.listofData,required this.index}) : super(key: key);
+  ShowDetailsWidget({Key? key, this.listofData, required this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

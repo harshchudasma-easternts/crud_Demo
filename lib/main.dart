@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         title: "CRUD Demo",
         debugShowCheckedModeBanner: false,
         routes: {
-          ListScreen.routeName: (context) => ListScreen(),
+          ListScreen.routeName: (context) => ListScreen(),  
           AdmissionForm.routeName: (context) => AdmissionForm(isEdit: false),
         },
       ),

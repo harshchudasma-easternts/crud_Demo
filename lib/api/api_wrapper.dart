@@ -13,7 +13,15 @@ class ApiWrapper {
 
   static Dio? dio;
 
-  static final LogInterceptor _logInterceptor = LogInterceptor(responseBody: true, requestHeader: true, responseHeader: true, request: true, error: true, requestBody: true, logPrint: (obj) => Log.info(obj is Map ? jsonEncode(obj) : obj.toString()));
+  static final LogInterceptor _logInterceptor = LogInterceptor(
+      responseBody: true,
+      requestHeader: true,
+      responseHeader: true,
+      request: true,
+      error: true,
+      requestBody: true,
+      logPrint: (obj) =>
+          Log.info(obj is Map ? jsonEncode(obj) : obj.toString()));
 
   static init() {
     dio = Dio(
@@ -48,7 +56,8 @@ class ApiWrapper {
   }
 
   static Future<ResponseWrapper> _getRequest({required String endPoint}) async {
-    ResponseWrapper responseWrapper = ResponseWrapper(response: null, message: null, isSuccess: false);
+    ResponseWrapper responseWrapper =
+        ResponseWrapper(response: null, message: null, isSuccess: false);
 
     try {
       Response response = await dio!.get(
@@ -58,17 +67,25 @@ class ApiWrapper {
         // ),
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
-        responseWrapper = ResponseWrapper(response: response, message: "SUCCESSFULL", isSuccess: true);
+        responseWrapper = ResponseWrapper(
+            response: response, message: "SUCCESSFULL", isSuccess: true);
       } else if (response.statusCode == 400) {
-        responseWrapper = ResponseWrapper(response: null, message: "BAD REQUEST", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null, message: "BAD REQUEST", isSuccess: false);
       } else if (response.statusCode == 401) {
-        responseWrapper = ResponseWrapper(response: null, message: "UNAUTHORISE", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null, message: "UNAUTHORISE", isSuccess: false);
       } else if (response.statusCode == 404) {
-        responseWrapper = ResponseWrapper(response: null, message: "NOT FOUND", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null, message: "NOT FOUND", isSuccess: false);
       } else if (response.statusCode == 403) {
-        responseWrapper = ResponseWrapper(response: null, message: "FORBIDEN", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null, message: "FORBIDEN", isSuccess: false);
       } else {
-        responseWrapper = ResponseWrapper(response: null, message: "REQUEST GOT FAILED DUE TO : ${response.statusCode}", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null,
+            message: "REQUEST GOT FAILED DUE TO : ${response.statusCode}",
+            isSuccess: false);
       }
       return responseWrapper;
     } on DioError catch (e) {
@@ -91,18 +108,22 @@ class ApiWrapper {
           print(message);
           break;
       }
-      responseWrapper = ResponseWrapper(response: null, message: message, isSuccess: false);
+      responseWrapper =
+          ResponseWrapper(response: null, message: message, isSuccess: false);
       return responseWrapper;
     } catch (e) {
       String message = 'error : ${e.toString()}';
       print(message);
-      responseWrapper = ResponseWrapper(response: null, message: message, isSuccess: false);
+      responseWrapper =
+          ResponseWrapper(response: null, message: message, isSuccess: false);
       return responseWrapper;
     }
   }
 
-  static Future<ResponseWrapper> _postRequest({required String endPoint, required Map<String, dynamic> data}) async {
-    ResponseWrapper responseWrapper = ResponseWrapper(response: null, message: null, isSuccess: false);
+  static Future<ResponseWrapper> _postRequest(
+      {required String endPoint, required Map<String, dynamic> data}) async {
+    ResponseWrapper responseWrapper =
+        ResponseWrapper(response: null, message: null, isSuccess: false);
 
     try {
       Response response = await dio!.post(
@@ -113,17 +134,25 @@ class ApiWrapper {
         data: data,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
-        responseWrapper = ResponseWrapper(response: response, message: "SUCCESSFULL", isSuccess: true);
+        responseWrapper = ResponseWrapper(
+            response: response, message: "SUCCESSFULL", isSuccess: true);
       } else if (response.statusCode == 400) {
-        responseWrapper = ResponseWrapper(response: null, message: "BAD REQUEST", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null, message: "BAD REQUEST", isSuccess: false);
       } else if (response.statusCode == 401) {
-        responseWrapper = ResponseWrapper(response: null, message: "UNAUTHORISE", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null, message: "UNAUTHORISE", isSuccess: false);
       } else if (response.statusCode == 404) {
-        responseWrapper = ResponseWrapper(response: null, message: "NOT FOUND", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null, message: "NOT FOUND", isSuccess: false);
       } else if (response.statusCode == 403) {
-        responseWrapper = ResponseWrapper(response: null, message: "FORBIDEN", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null, message: "FORBIDEN", isSuccess: false);
       } else {
-        responseWrapper = ResponseWrapper(response: null, message: "REQUEST GOT FAILED DUE TO : ${response.statusCode}", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null,
+            message: "REQUEST GOT FAILED DUE TO : ${response.statusCode}",
+            isSuccess: false);
       }
       return responseWrapper;
     } on DioError catch (e) {
@@ -146,18 +175,22 @@ class ApiWrapper {
           print(message);
           break;
       }
-      responseWrapper = ResponseWrapper(response: null, message: message, isSuccess: false);
+      responseWrapper =
+          ResponseWrapper(response: null, message: message, isSuccess: false);
       return responseWrapper;
     } catch (e) {
       String message = 'error : ${e.toString()}';
       print(message);
-      responseWrapper = ResponseWrapper(response: null, message: message, isSuccess: false);
+      responseWrapper =
+          ResponseWrapper(response: null, message: message, isSuccess: false);
       return responseWrapper;
     }
   }
 
-  static Future<ResponseWrapper> _putRequest({required String endPoint, required Map<String, dynamic> data}) async {
-    ResponseWrapper responseWrapper = ResponseWrapper(response: null, message: null, isSuccess: false);
+  static Future<ResponseWrapper> _putRequest(
+      {required String endPoint, required Map<String, dynamic> data}) async {
+    ResponseWrapper responseWrapper =
+        ResponseWrapper(response: null, message: null, isSuccess: false);
 
     try {
       Response response = await dio!.put(endPoint,
@@ -168,17 +201,25 @@ class ApiWrapper {
           ),
           data: data);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        responseWrapper = ResponseWrapper(response: response, message: "SUCCESSFULL", isSuccess: true);
+        responseWrapper = ResponseWrapper(
+            response: response, message: "SUCCESSFULL", isSuccess: true);
       } else if (response.statusCode == 400) {
-        responseWrapper = ResponseWrapper(response: null, message: "BAD REQUEST", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null, message: "BAD REQUEST", isSuccess: false);
       } else if (response.statusCode == 401) {
-        responseWrapper = ResponseWrapper(response: null, message: "UNAUTHORISE", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null, message: "UNAUTHORISE", isSuccess: false);
       } else if (response.statusCode == 404) {
-        responseWrapper = ResponseWrapper(response: null, message: "NOT FOUND", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null, message: "NOT FOUND", isSuccess: false);
       } else if (response.statusCode == 403) {
-        responseWrapper = ResponseWrapper(response: null, message: "FORBIDDEN", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null, message: "FORBIDDEN", isSuccess: false);
       } else {
-        responseWrapper = ResponseWrapper(response: null, message: "REQUEST GOT FAILED DUE TO : ${response.statusCode}", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null,
+            message: "REQUEST GOT FAILED DUE TO : ${response.statusCode}",
+            isSuccess: false);
       }
       return responseWrapper;
     } on DioError catch (e) {
@@ -197,18 +238,22 @@ class ApiWrapper {
           message = "OTHER DIO ERROR";
           break;
       }
-      responseWrapper = ResponseWrapper(response: null, message: message, isSuccess: false);
+      responseWrapper =
+          ResponseWrapper(response: null, message: message, isSuccess: false);
       return responseWrapper;
     } catch (e) {
       String message = 'error : ${e.toString()}';
       print(message);
-      responseWrapper = ResponseWrapper(response: null, message: message, isSuccess: false);
+      responseWrapper =
+          ResponseWrapper(response: null, message: message, isSuccess: false);
       return responseWrapper;
     }
   }
 
-  static Future<ResponseWrapper> _deleteRequest({required String endPoint}) async {
-    ResponseWrapper responseWrapper = ResponseWrapper(response: null, message: null, isSuccess: false);
+  static Future<ResponseWrapper> _deleteRequest(
+      {required String endPoint}) async {
+    ResponseWrapper responseWrapper =
+        ResponseWrapper(response: null, message: null, isSuccess: false);
     try {
       Response response = await dio!.delete(
         endPoint,
@@ -220,22 +265,30 @@ class ApiWrapper {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        responseWrapper = ResponseWrapper(response: response, message: "SUCCESSFULL", isSuccess: true);
+        responseWrapper = ResponseWrapper(
+            response: response, message: "SUCCESSFULL", isSuccess: true);
       } else if (response.statusCode == 400) {
-        responseWrapper = ResponseWrapper(response: null, message: "BAD REQUEST", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null, message: "BAD REQUEST", isSuccess: false);
       } else if (response.statusCode == 401) {
-        responseWrapper = ResponseWrapper(response: null, message: "UNAUTHORISE", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null, message: "UNAUTHORISE", isSuccess: false);
       } else if (response.statusCode == 404) {
-        responseWrapper = ResponseWrapper(response: null, message: "NOT FOUND", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null, message: "NOT FOUND", isSuccess: false);
       } else if (response.statusCode == 403) {
-        responseWrapper = ResponseWrapper(response: null, message: "FORBIDDEN", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null, message: "FORBIDDEN", isSuccess: false);
       } else {
-        responseWrapper = ResponseWrapper(response: null, message: "REQUEST GOT FAILED DUE TO : ${response.statusCode}", isSuccess: false);
+        responseWrapper = ResponseWrapper(
+            response: null,
+            message: "REQUEST GOT FAILED DUE TO : ${response.statusCode}",
+            isSuccess: false);
       }
       return responseWrapper;
-    } on DioError catch(e){
+    } on DioError catch (e) {
       String message = "";
-      switch (e.type){
+      switch (e.type) {
         case DioErrorType.connectTimeout:
           message = "CONNECTION TIMEOUT";
           break;
@@ -249,40 +302,49 @@ class ApiWrapper {
           message = "DIO OTHER ERROR";
           break;
       }
-      responseWrapper = ResponseWrapper(response: null, message: message, isSuccess: false);
+      responseWrapper =
+          ResponseWrapper(response: null, message: message, isSuccess: false);
       return responseWrapper;
     } catch (e) {
       String message = 'error : ${e.toString()}';
       print(message);
-      responseWrapper = ResponseWrapper(response: null, message: message, isSuccess: false);
+      responseWrapper =
+          ResponseWrapper(response: null, message: message, isSuccess: false);
       return responseWrapper;
     }
   }
 
-  static Future<bool> addProfessorPostData(AddProfessorModel addProfessorModel) async {
+  static Future<bool> addProfessorPostData(
+      AddProfessorModel addProfessorModel) async {
     String endPoint = "professors";
-    ResponseWrapper responseWrapper = await _postRequest(endPoint: endPoint, data: addProfessorModel.toJson()).then((value) {
-      return value;
-    });
+    ResponseWrapper responseWrapper =
+        await _postRequest(endPoint: endPoint, data: addProfessorModel.toJson())
+            .then(
+      (value) {
+        return value;
+      },
+    );
     return responseWrapper.isSuccess;
   }
 
   static Future<bool> deleteProfessorData(int id) async {
     String endPoint = "professors/$id";
-    ResponseWrapper responseWrapper = await _deleteRequest(endPoint: endPoint).then((value) {
-      return value;
-    });
-    return responseWrapper.isSuccess;;
+    ResponseWrapper responseWrapper =
+        await _deleteRequest(endPoint: endPoint).then(
+      (value) {
+        return value;
+      },
+    );
+    return responseWrapper.isSuccess;
   }
 
   static Future<GetProfessor?> getProfessorsList() async {
     String endPoint = "professors";
     ResponseWrapper responseWrapper = await _getRequest(endPoint: endPoint);
-    if(responseWrapper.isSuccess){
+    if (responseWrapper.isSuccess) {
       return GetProfessor.fromJson(responseWrapper.response!.data);
-    }else {
+    } else {
       return null;
     }
   }
-
 }

@@ -37,10 +37,12 @@ class _ListScreenState extends State<ListScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: ResponsiveWidget.isLargeScreen(context) || ResponsiveWidget.isMediumScreen(context)
+        child: ResponsiveWidget.isLargeScreen(context) ||
+                ResponsiveWidget.isMediumScreen(context)
             ? SingleChildScrollView(
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 12.0),
                   child: Card(
                     elevation: 0.0,
                     color: Colors.transparent,
@@ -85,17 +87,20 @@ class _ListScreenState extends State<ListScreen> {
                                     const Spacer(),
                                     ElevatedButton(
                                       onPressed: () {
-                                        Navigator.pushNamed(context, AdmissionForm.routeName);
+                                        Navigator.pushNamed(
+                                            context, AdmissionForm.routeName);
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        primary: CommonColorConstants.blueLightColor,
+                                        primary:
+                                            CommonColorConstants.blueLightColor,
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
                                           vertical: 8.0,
                                         ),
                                         child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           mainAxisSize: MainAxisSize.min,
                                           children: const [
                                             Text(
@@ -120,12 +125,19 @@ class _ListScreenState extends State<ListScreen> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        _databaseProvider!.isExpandedListValue();
+                                        _databaseProvider!
+                                            .isExpandedListValue();
                                       },
                                       child: Consumer<DatabaseProvider>(
-                                        builder: (context, providerValue, child) {
+                                        builder:
+                                            (context, providerValue, child) {
                                           return Icon(
-                                            providerValue!.isExpandedList == true ? Icons.keyboard_arrow_down_outlined : Icons.keyboard_arrow_up_outlined,
+                                            providerValue!.isExpandedList ==
+                                                    true
+                                                ? Icons
+                                                    .keyboard_arrow_down_outlined
+                                                : Icons
+                                                    .keyboard_arrow_up_outlined,
                                             size: 32.0,
                                           );
                                         },
@@ -151,61 +163,101 @@ class _ListScreenState extends State<ListScreen> {
                                               DataColumn(
                                                 label: Text(
                                                   'ID',
-                                                  style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Text(
                                                   'Profile',
-                                                  style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Text(
                                                   'Name',
-                                                  style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Text(
                                                   'department',
-                                                  style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Text(
                                                   'Gender',
-                                                  style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Text(
                                                   'Degree',
-                                                  style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Text(
                                                   'Mobile No',
-                                                  style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Text(
                                                   'Email',
-                                                  style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Text(
                                                   'Joining Date',
-                                                  style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Text(
                                                   'Action',
-                                                  style: TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                               )
                                             ],
@@ -229,7 +281,8 @@ class _ListScreenState extends State<ListScreen> {
             : ResponsiveWidget.isSmallScreen(context)
                 ? SingleChildScrollView(
                     child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 12.0),
                       child: Card(
                         elevation: 0.0,
                         color: Colors.transparent,
@@ -277,7 +330,8 @@ class _ListScreenState extends State<ListScreen> {
                           alignment: Alignment.centerLeft,
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, AdmissionForm.routeName);
+                              Navigator.pushNamed(
+                                  context, AdmissionForm.routeName);
                             },
                             style: ElevatedButton.styleFrom(
                               primary: CommonColorConstants.blueLightColor,
@@ -324,7 +378,8 @@ class _ListScreenState extends State<ListScreen> {
                                         )
                                       : ListView.builder(
                                           physics: BouncingScrollPhysics(),
-                                          itemCount: providerValue.tempList!.length,
+                                          itemCount:
+                                              providerValue.tempList!.length,
                                           itemBuilder: (context, index) {
                                             return IntrinsicHeight(
                                               child: Card(
@@ -335,35 +390,44 @@ class _ListScreenState extends State<ListScreen> {
                                                     vertical: 8.0,
                                                   ),
                                                   child: Row(
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
                                                     children: [
                                                       Card(
                                                         elevation: 8.0,
-                                                        shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.circular(
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
                                                             50.0,
                                                           ),
                                                         ),
                                                         child: Container(
-                                                          alignment: Alignment.center,
+                                                          alignment:
+                                                              Alignment.center,
                                                           height: 42.0,
                                                           width: 42.0,
-                                                          decoration: BoxDecoration(
-                                                            shape: BoxShape.circle,
-                                                            color: index.isOdd ? CommonColorConstants.blueLightColor : CommonColorConstants.orangeLightColor,
-                                                            // image: DecorationImage(
-                                                            //   fit: BoxFit.fill,
-                                                            //   image: AssetImage(
-                                                            //     CommonImageConstats.profileImage,
-                                                            //   ),
-                                                            // ),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            color: index.isOdd
+                                                                ? CommonColorConstants
+                                                                    .blueLightColor
+                                                                : CommonColorConstants
+                                                                    .orangeLightColor,
                                                           ),
                                                           child: Text(
                                                             "${index + 1}",
                                                             style: TextStyle(
                                                               fontSize: 16.0,
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.bold,
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
                                                             ),
                                                           ),
                                                         ),
@@ -374,20 +438,30 @@ class _ListScreenState extends State<ListScreen> {
                                                       Expanded(
                                                         child: Container(
                                                           child: Column(
-                                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceEvenly,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
                                                             children: [
                                                               Text(
                                                                 "${providerValue.tempList![index].firstName} ${providerValue.tempList![index].lastName}",
-                                                                style: TextStyle(
-                                                                  fontSize: 14.0,
-                                                                  fontWeight: FontWeight.bold,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize:
+                                                                      14.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
                                                                 ),
                                                               ),
                                                               Text(
                                                                 "lastname",
-                                                                style: TextStyle(
-                                                                  fontSize: 14.0,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize:
+                                                                      14.0,
                                                                 ),
                                                               ),
                                                             ],
@@ -399,18 +473,26 @@ class _ListScreenState extends State<ListScreen> {
                                                         height: 24.0,
                                                         width: 24.0,
                                                         child: IconButton(
-                                                          color: Colors.transparent,
-                                                          focusColor: Colors.transparent,
-                                                          highlightColor: Colors.transparent,
-                                                          splashColor: Colors.transparent,
-                                                          hoverColor: Colors.transparent,
+                                                          color: Colors
+                                                              .transparent,
+                                                          focusColor: Colors
+                                                              .transparent,
+                                                          highlightColor: Colors
+                                                              .transparent,
+                                                          splashColor: Colors
+                                                              .transparent,
+                                                          hoverColor: Colors
+                                                              .transparent,
                                                           onPressed: () {
                                                             showDialog(
-                                                              barrierDismissible: false,
+                                                              barrierDismissible:
+                                                                  false,
                                                               context: context,
                                                               builder: (_) {
                                                                 return ShowDetailsWidget(
-                                                                  listofData: providerValue.tempList!,
+                                                                  listofData:
+                                                                      providerValue
+                                                                          .tempList!,
                                                                   index: index,
                                                                 );
                                                               },
@@ -419,7 +501,8 @@ class _ListScreenState extends State<ListScreen> {
                                                           icon: Icon(
                                                             Icons.visibility,
                                                             size: 20.0,
-                                                            color: CommonColorConstants.orangeLightColor,
+                                                            color: CommonColorConstants
+                                                                .orangeLightColor,
                                                           ),
                                                         ),
                                                       ),
@@ -430,16 +513,22 @@ class _ListScreenState extends State<ListScreen> {
                                                         height: 24.0,
                                                         width: 24.0,
                                                         child: IconButton(
-                                                          color: Colors.transparent,
-                                                          focusColor: Colors.transparent,
-                                                          highlightColor: Colors.transparent,
-                                                          splashColor: Colors.transparent,
-                                                          hoverColor: Colors.transparent,
+                                                          color: Colors
+                                                              .transparent,
+                                                          focusColor: Colors
+                                                              .transparent,
+                                                          highlightColor: Colors
+                                                              .transparent,
+                                                          splashColor: Colors
+                                                              .transparent,
+                                                          hoverColor: Colors
+                                                              .transparent,
                                                           onPressed: () {},
                                                           icon: Icon(
                                                             Icons.edit,
                                                             size: 20.0,
-                                                            color: CommonColorConstants.blueLightColor,
+                                                            color: CommonColorConstants
+                                                                .blueLightColor,
                                                           ),
                                                         ),
                                                       ),
@@ -450,20 +539,32 @@ class _ListScreenState extends State<ListScreen> {
                                                         height: 24.0,
                                                         width: 24.0,
                                                         child: IconButton(
-                                                          color: Colors.transparent,
-                                                          focusColor: Colors.transparent,
-                                                          highlightColor: Colors.transparent,
-                                                          splashColor: Colors.transparent,
-                                                          hoverColor: Colors.transparent,
+                                                          color: Colors
+                                                              .transparent,
+                                                          focusColor: Colors
+                                                              .transparent,
+                                                          highlightColor: Colors
+                                                              .transparent,
+                                                          splashColor: Colors
+                                                              .transparent,
+                                                          hoverColor: Colors
+                                                              .transparent,
                                                           onPressed: () {
-                                                            ApiWrapper.deleteProfessorData(providerValue.tempList![index].id!).then((value) {
-                                                              providerValue.fetchData();
+                                                            ApiWrapper.deleteProfessorData(
+                                                                    providerValue
+                                                                        .tempList![
+                                                                            index]
+                                                                        .id!)
+                                                                .then((value) {
+                                                              providerValue
+                                                                  .fetchData();
                                                             });
                                                           },
                                                           icon: Icon(
                                                             Icons.delete,
                                                             size: 20.0,
-                                                            color: CommonColorConstants.orangeLightColor,
+                                                            color: CommonColorConstants
+                                                                .orangeLightColor,
                                                           ),
                                                         ),
                                                       ),
@@ -487,7 +588,13 @@ class _ListScreenState extends State<ListScreen> {
 
 class ProfessorDataTable extends DataTableSource {
   // Generate some made-up data
-  final List<Map<String, dynamic>> _data = List.generate(200, (index) => {"id": index + 1, "title": "Item $index", "price": Random().nextInt(10000)});
+  final List<Map<String, dynamic>> _data = List.generate(
+      200,
+      (index) => {
+            "id": index + 1,
+            "title": "Item $index",
+            "price": Random().nextInt(10000)
+          });
 
   @override
   bool get isRowCountApproximate => false;
